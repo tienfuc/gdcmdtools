@@ -45,9 +45,14 @@ if __name__ == '__main__':
    
     arg_parser.add_argument('-t', '--target_type', choices=["raw", "ss", "ft"],
             help='define the target file type on Google Drive, could be:\r\
-            raw: the source file will uploaded without touching\r\
-            ss: Spreadsheet, if the source is CSV file\r\
-            ft: Fusion Table, if the source is CSV file')
+            raw: (default) the source file will uploaded without touching\r\
+            ss: Spreadsheet (if source is CSV)\r\
+            ft: Fusion Table (if source is CSV)')
+
+    arg_parser.add_argument('--ft_location_column', 
+            help=
+            'specify the location column header for the fusion table\r\
+                    (if target_type is ft)')
 
     arg_parser.add_argument('-f', '--folder_id', 
             help='the target folder ID on the Google drive')
@@ -65,3 +70,5 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
     logger.debug(args)
+
+
