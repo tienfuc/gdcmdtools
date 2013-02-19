@@ -17,7 +17,11 @@ import httplib2
 import pprint
 
 
-__APP__ = 'gdcmdtools'
+BASE_APP = 'gdcmdtools'
+BASE_DESCRIPTION = 'Google Drive command line tools'
+BASE_VERSION = '0.0.5'
+
+
 __GDAPI_VER__ = 'v2'
 
 class GDBase(object):

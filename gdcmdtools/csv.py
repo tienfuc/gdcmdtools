@@ -16,13 +16,13 @@ class GDCSV(object):
     def __init__(self):
         pass
 
-    def put(self, drive, filename, title=None, folder_id=None):
+    def put(self, drive, filename, title=None, folder_id=None, if_convert=False):
         if filename == None:
             return False
 
         mime = "text/csv"
          
-        media_body = MediaFileUpload(filename, mimetype=mime, resumable=True)
+        media_body = MediaFileUpload(filename, mimetype=mime, resumable=False)
        
         if folder_id == None:
             parents = []
@@ -36,13 +36,14 @@ class GDCSV(object):
                 'mimeType':mime,
                 'parents':parents}
  
+        logger.debug('body=%s' % body)
+
         try:
             service_response = drive.files().insert(
                     body=body,
                     media_body=media_body,
                     # so csv will be converted to spreadsheet
-                    #convert=True if args.to_file == "ss" else False
-                    convert=False
+                    convert=if_convert
                     ).execute()
 
             logger.info("The file is located at: %s" % 
