@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
 
 import argparse
 from argparse import RawTextHelpFormatter
@@ -8,22 +9,6 @@ from gdcmdtools.csv import GDCSV
 from gdcmdtools.base import *
 
 
-'''
-base = GDBase()
-
-
-creds = base.get_credentials(True)
-http = base.get_authorized_http(creds)
-drive = base.get_service()
-
-print(drive)
-
-
-
-csv = GDCSV()
-
-csv.put(drive, "./example.csv")
-'''
 THIS_APP = 'gdput'
 
 if __name__ == '__main__':
@@ -37,7 +22,7 @@ if __name__ == '__main__':
 
     arg_group = arg_parser.add_mutually_exclusive_group()
 
-    arg_group.add_argument('-a', '--auto_type', action='store_true',
+    arg_group.add_argument('-a', '--auto_type', action='store_true', default=True, 
             help='(default) the source file type will be determinted automatically')
 
     arg_group.add_argument('-m', '--mime_type', 
@@ -67,12 +52,39 @@ if __name__ == '__main__':
             help='specify the oauth2 credential file(in JSON format)')
 
     arg_parser.add_argument('-r', '--redirect_uri', choices=["oob", "local"],
+            default="oob",
             help='specify the redirect URI for the oauth2 flow, could be:\r\
             oob: is "urn:ietf:wg:oauth:2.0:oob"\r\
             local: is "http://localhost"\r')
 
-
     args = arg_parser.parse_args()
     logger.debug(args)
+
+    
+    base = GDBase()
+
+
+    if args.redirect_uri == "oob":
+        if_oob = True
+    elif args.redirect_uri == "local":
+        if_oob = False
+    else:
+        logger.error("failed to determine redirect_uri")
+        sys.exit(1)
+
+
+    logger.debug("if_oob=%s" % if_oob)
+
+    creds = base.get_credentials(if_oob)
+    http = base.get_authorized_http(creds)
+
+
+    root = base.get_root()
+    print(root)
+    #print(drive)
+
+
+
+    #csv = GDCSV()
 
 

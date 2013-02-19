@@ -10,7 +10,7 @@ from oauth2client.tools import run
 from apiclient.discovery import build
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger( __name__ )
 
 import httplib2
@@ -28,11 +28,12 @@ class GDBase(object):
     def __init__(self):
         self.drive = None
         self.http = None
+        self.root_folder = None
         pass
 
     def get_credentials(self, if_oob):
         home_path = os.getenv("HOME")
-        storage_file = os.path.abspath('%s/.%s.creds' % (home_path,__APP__))
+        storage_file = os.path.abspath('%s/.%s.creds' % (home_path,BASE_APP))
         logger.debug('storage_file=%s' % storage_file)
 
         storage = Storage(storage_file)
@@ -40,7 +41,7 @@ class GDBase(object):
 
         if credentials is None or credentials.invalid == True:
             credentials_file = os.path.abspath(
-                    '%s/.%s.secrets' % (home_path,__APP__))
+                    '%s/.%s.secrets' % (home_path,BASE_APP))
 
             logger.debug('credentials_file=%s' % credentials_file)
 
@@ -94,10 +95,12 @@ class GDBase(object):
 
     def get_root(self):
         if self.root_folder == None:
+            if self.drive == None:
+                self.get_service()
             about = self.drive.about().get().execute()
-
+       
         self.root_folder = about['rootFolderId']
-    
+        logger.debug("root_folder=%s" % self.root_folder)
         return self.root_folder
 
     def get_service(self):
