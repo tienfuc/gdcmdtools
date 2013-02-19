@@ -58,12 +58,10 @@ if __name__ == '__main__':
     arg_parser.add_argument('-c', '--credential_file', 
             help='specify the oauth2 credential file(in JSON format)')
 
-    arg_parser.add_argument('-r', '--redirect_uri', choices=["oob", "localhost"],
+    arg_parser.add_argument('-r', '--redirect_uri', choices=["oob", "local"],
             help='specify the redirect URI for the oauth2 flow, could be:\r\
             oob: is "urn:ietf:wg:oauth:2.0:oob"\r\
-            localhost: is "http://localhost"\r')
-
-
+            local: is "http://localhost"\r')
 
     args = arg_parser.parse_args()
     logger.debug(args)
