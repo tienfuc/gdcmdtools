@@ -43,6 +43,12 @@ if __name__ == '__main__':
     arg_group.add_argument('-m', '--mime_type', 
             help='define the source file type by MIME, ex: "text/csv"')
    
+    arg_parser.add_argument('-l', '--new_title', 
+            help='specify the title of the target file')
+
+    arg_parser.add_argument('-f', '--folder_id', 
+            help='the target folder ID on the Google drive')
+
     arg_parser.add_argument('-t', '--target_type', choices=["raw", "ss", "ft"],
             help='define the target file type on Google Drive, could be:\r\
             raw: (default) the source file will uploaded without touching\r\
@@ -52,10 +58,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('--ft_location_column', 
             help=
             'specify the location column header for the fusion table\r\
-                    (if target_type is ft)')
-
-    arg_parser.add_argument('-f', '--folder_id', 
-            help='the target folder ID on the Google drive')
+            (if target_type is ft)')
 
     arg_parser.add_argument('-s', '--secret_file', 
             help='specify the oauth2 secret file(in JSON format)')
@@ -67,6 +70,7 @@ if __name__ == '__main__':
             help='specify the redirect URI for the oauth2 flow, could be:\r\
             oob: is "urn:ietf:wg:oauth:2.0:oob"\r\
             local: is "http://localhost"\r')
+
 
     args = arg_parser.parse_args()
     logger.debug(args)
