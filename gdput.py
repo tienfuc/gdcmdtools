@@ -37,8 +37,12 @@ if __name__ == '__main__':
     arg_parser.add_argument('-t', '--target_type', choices=["raw", "ss", "ft"],
             help='define the target file type on Google Drive, could be:\r\
             raw: (default) the source file will uploaded without touching\r\
-            ss: Spreadsheet (if source is CSV)\r\
-            ft: Fusion Table (if source is CSV)')
+            ss: Spreadsheet (for .xls, .xlsx, .ods, .csv, .tsv, .txt, .tab)\r\
+            ft: Fusion Table (for .csv)\r\
+            pt: Presentation (for .ppt, .pps, .pptx)\r\
+            dr: Drawing (for .wmf)\r\
+            ocr: OCR (for .jpg, .gif, .png, .pdf)\r\
+            doc: Document (for .doc, .docx, .html, .htm, .txt, .rtf)')
 
     arg_parser.add_argument('--ft_location_column', 
             help=
@@ -46,16 +50,18 @@ if __name__ == '__main__':
             (if target_type is ft)')
 
     arg_parser.add_argument('-s', '--secret_file', 
-            help='specify the oauth2 secret file(in JSON format)')
+            help='specify the oauth2 secret file')
 
     arg_parser.add_argument('-c', '--credential_file', 
-            help='specify the oauth2 credential file(in JSON format)')
+            help='specify the oauth2 credential file')
 
     arg_parser.add_argument('-r', '--redirect_uri', choices=["oob", "local"],
             default="oob",
             help='specify the redirect URI for the oauth2 flow, could be:\r\
             oob: is "urn:ietf:wg:oauth:2.0:oob"\r\
             local: is "http://localhost"\r')
+
+    
 
     args = arg_parser.parse_args()
     logger.debug(args)
