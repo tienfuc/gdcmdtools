@@ -11,6 +11,21 @@ from gdcmdtools.base import *
 
 THIS_APP = 'gdput'
 
+__CHOICES_TARGET_TYPE = {
+    "raw":"(default) the source file will uploaded without touching",
+    "ss":"Spreadsheet (for .xls, .xlsx, .ods, .csv, .tsv, .txt, .tab)",
+    "ft":"Fusion Table (for .csv)",
+    "pt":"Presentation (for .ppt, .pps, .pptx)",
+    "dr":"Drawing (for .wmf)",
+    "ocr":"OCR (for .jpg, .gif, .png, .pdf)",
+    "doc":"Document (for .doc, .docx, .html, .htm, .txt, .rtf)"
+    }
+
+__CHOICES_REDIRECT_URI = {
+    "oob":"means \"urn:ietf:wg:oauth:2.0:oob\"",
+    "local":"means \"http://localhost\""
+    }
+
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
             description='%s v%s - %s (%s)' % \
@@ -34,7 +49,10 @@ if __name__ == '__main__':
     arg_parser.add_argument('-f', '--folder_id', 
             help='the target folder ID on the Google drive')
 
-    arg_parser.add_argument('-t', '--target_type', choices=["raw", "ss", "ft"],
+    choices_target_type = list(__CHOICES_TARGET_TYPE.keys())
+    help_target_type = None # FIXME
+    arg_parser.add_argument('-t', '--target_type', default="raw",
+            choices=choices_target_type,
             help='define the target file type on Google Drive, could be:\r\
             raw: (default) the source file will uploaded without touching\r\
             ss: Spreadsheet (for .xls, .xlsx, .ods, .csv, .tsv, .txt, .tab)\r\
@@ -55,7 +73,9 @@ if __name__ == '__main__':
     arg_parser.add_argument('-c', '--credential_file', 
             help='specify the oauth2 credential file')
 
-    arg_parser.add_argument('-r', '--redirect_uri', choices=["oob", "local"],
+    choices_redirect_uri = list(__CHOICES_REDIRECT_URI.keys())
+    help_redirect_uri = None # FIXME
+    arg_parser.add_argument('-r', '--redirect_uri', choices=choices_redirect_uri,
             default="oob",
             help='specify the redirect URI for the oauth2 flow, could be:\r\
             oob: is "urn:ietf:wg:oauth:2.0:oob"\r\
