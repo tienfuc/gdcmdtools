@@ -8,7 +8,6 @@ from argparse import RawTextHelpFormatter
 from gdcmdtools.csv import GDCSV
 from gdcmdtools.base import *
 
-
 THIS_APP = 'gdput'
 
 __CHOICES_TARGET_TYPE = {
@@ -22,7 +21,7 @@ __CHOICES_TARGET_TYPE = {
     }
 
 __CHOICES_REDIRECT_URI = {
-    "oob":"means \"urn:ietf:wg:oauth:2.0:oob\"",
+    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
     "local":"means \"http://localhost\""
     }
 
@@ -38,7 +37,7 @@ if __name__ == '__main__':
     arg_group = arg_parser.add_mutually_exclusive_group()
 
     arg_group.add_argument('-a', '--auto_type', action='store_true', default=True, 
-            help='(default) the source file type will be determinted automatically')
+            help='(default) the type of the source file will be determinted automatically')
 
     arg_group.add_argument('-m', '--mime_type', 
             help='define the source file type by MIME, ex: "text/csv"')
@@ -50,22 +49,16 @@ if __name__ == '__main__':
             help='the target folder ID on the Google drive')
 
     choices_target_type = list(__CHOICES_TARGET_TYPE.keys())
-    help_target_type = None # FIXME
+    list_help_target_type = [ (k+": "+__CHOICES_TARGET_TYPE[k]) for k in __CHOICES_TARGET_TYPE ] 
+    help_target_type = '\n'.join(list_help_target_type)
+    
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
-            help='define the target file type on Google Drive, could be:\r\
-            raw: (default) the source file will uploaded without touching\r\
-            ss: Spreadsheet (for .xls, .xlsx, .ods, .csv, .tsv, .txt, .tab)\r\
-            ft: Fusion Table (for .csv)\r\
-            pt: Presentation (for .ppt, .pps, .pptx)\r\
-            dr: Drawing (for .wmf)\r\
-            ocr: OCR (for .jpg, .gif, .png, .pdf)\r\
-            doc: Document (for .doc, .docx, .html, .htm, .txt, .rtf)')
+            help='define the target file type on Google Drive, could be:\n%s' % help_target_type)
 
     arg_parser.add_argument('--ft_location_column', 
             help=
-            'specify the location column header for the fusion table\r\
-            (if target_type is ft)')
+            'specify the location column header for the fusion table (if target_type is ft)')
 
     arg_parser.add_argument('-s', '--secret_file', 
             help='specify the oauth2 secret file')
@@ -74,14 +67,11 @@ if __name__ == '__main__':
             help='specify the oauth2 credential file')
 
     choices_redirect_uri = list(__CHOICES_REDIRECT_URI.keys())
-    help_redirect_uri = None # FIXME
+    list_help_redirect_uri = [ (k+": "+__CHOICES_REDIRECT_URI[k]) for k in __CHOICES_REDIRECT_URI] 
+    help_redirect_uri = '\n'.join(list_help_redirect_uri)
     arg_parser.add_argument('-r', '--redirect_uri', choices=choices_redirect_uri,
             default="oob",
-            help='specify the redirect URI for the oauth2 flow, could be:\r\
-            oob: is "urn:ietf:wg:oauth:2.0:oob"\r\
-            local: is "http://localhost"\r')
-
-    
+            help='specify the redirect URI for the oauth2 flow, could be:\n%s' % help_redirect_uri)
 
     args = arg_parser.parse_args()
     logger.debug(args)
