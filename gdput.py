@@ -126,7 +126,7 @@ if __name__ == '__main__':
         mimetypes.init()
         source_mime_type = mimetypes.guess_type(args.source_file, False)
         logger.debug(source_mime_type)
-     else:
+    else:
         # user define the mime type
         source_mime_type = None
 
