@@ -4,6 +4,8 @@ import sys
 
 import argparse
 from argparse import RawTextHelpFormatter
+import mimetypes
+
 
 from gdcmdtools.csv import GDCSV
 from gdcmdtools.base import *
@@ -40,6 +42,7 @@ __DICT_OF_REDIRECT_URI = {
     "local":"means \"http://localhost\""
     }
 
+
 if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \
@@ -57,7 +60,7 @@ if __name__ == '__main__':
             '(default) the type of the source '+
             'file will be determinted automatically')
 
-    arg_group.add_argument('-m', '--mime_type', 
+    arg_group.add_argument('-m', '--mime_type', default=None,
             help='define the source file type by MIME, ex: "text/csv"')
    
     arg_parser.add_argument('-l', '--new_title', 
@@ -113,13 +116,22 @@ if __name__ == '__main__':
 
     # check source file
     try:
-        with open(args.source_file) as source_file: 
-            
-            pass
+        with open(args.source_file) as source_file: pass
     except IOError as e:
         logger.error(e)
         sys.exit(1)
 
+    if args.mime_type == None:
+        # let's guess
+        mimetypes.init()
+        source_mime_type = mimetypes.guess_type(args.source_file, False)
+        logger.debug(source_mime_type)
+     else:
+        # user define the mime type
+        source_mime_type = None
+
+
+    '''
     base = GDBase()
 
     if args.redirect_uri == "oob":
@@ -141,7 +153,7 @@ if __name__ == '__main__':
     print(root)
     #print(drive)
 
-
+    '''
 
     #csv = GDCSV()
 
