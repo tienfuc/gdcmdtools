@@ -6,10 +6,9 @@ import argparse
 from argparse import RawTextHelpFormatter
 import mimetypes
 
-
-#from gdcmdtools.csv import GDCSV
 from gdcmdtools.put import GDPut 
 from gdcmdtools.put import DICT_OF_CONVERTIBLE_FILE_TYPE
+from gdcmdtools.put import DICT_OF_REDIRECT_URI
 
 from gdcmdtools.base import BASE_INFO
 
@@ -19,12 +18,6 @@ logger.setLevel(logging.DEBUG)
 
 __THIS_APP = 'gdput'
 __THIS_VERSION = '0.0.1'
-
-__DICT_OF_REDIRECT_URI = {
-    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
-    "local":"means \"http://localhost\""
-    }
-
 
 def get_mime_type(filename, source_type):
     # check source_type
@@ -90,9 +83,9 @@ if __name__ == '__main__':
             'specify the location column header for the fusion table '+
             '(if target_type is ft)')
 
-    choices_redirect_uri = list(__DICT_OF_REDIRECT_URI.keys())
+    choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
-            [ (k+": "+__DICT_OF_REDIRECT_URI[k]) for k in __DICT_OF_REDIRECT_URI] 
+            [ (k+": "+DICT_OF_REDIRECT_URI[k]) for k in DICT_OF_REDIRECT_URI] 
     help_redirect_uri = '\n'.join(list_help_redirect_uri)
 
     arg_parser.add_argument('-r', '--redirect_uri', choices=choices_redirect_uri,
@@ -138,7 +131,8 @@ if __name__ == '__main__':
                     if_oob)
 
             response = puter.run()
-            logger.info("The uploaded file is located at: %s" % response["alternateLink"])
+            logger.info("The uploaded file is located at: %s" % 
+                    response["alternateLink"])
 
     except IOError as e:
         logger.error(e)

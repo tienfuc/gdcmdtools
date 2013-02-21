@@ -37,6 +37,12 @@ DICT_OF_CONVERTIBLE_FILE_TYPE = { \
             ['doc', 'docx', 'html', 'htm', 'txt', 'rtf']]
         }
 
+DICT_OF_REDIRECT_URI = {
+    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
+    "local":"means \"http://localhost\""
+    }
+
+
 
 # FIXME: naming
 class GDPut:
