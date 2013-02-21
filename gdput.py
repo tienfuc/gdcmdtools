@@ -53,15 +53,9 @@ if __name__ == '__main__':
     arg_parser.add_argument('source_file', 
             help='The file you\'re going to upload to Google Drive')
 
-    arg_group = arg_parser.add_mutually_exclusive_group()
-
-    arg_group.add_argument('-a', '--auto_type', action='store_true', default=True, 
-            help=
-            '(default) the type of the source '+
-            'file will be determinted automatically')
-
-    arg_group.add_argument('-m', '--mime_type', default=None,
-            help='define the source file type by MIME, ex: "text/csv"')
+    # FIXME: mime_type = auto to replace --auto_type
+    arg_parser.add_argument('-s', '--source_type', default="auto",
+            help='define the source file type by MIME type, ex: "text/csv", or \"auto\" to determine the file type by file name')
    
     arg_parser.add_argument('-l', '--new_title', 
             help='specify the title of the target file')
@@ -92,11 +86,14 @@ if __name__ == '__main__':
             'specify the location column header for the fusion table '+
             '(if target_type is ft)')
 
+    """
     arg_parser.add_argument('-s', '--secret_file', 
             help='specify the oauth2 secret file')
 
     arg_parser.add_argument('-c', '--credential_file', 
             help='specify the oauth2 credential file')
+
+    """
 
     choices_redirect_uri = list(__DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
@@ -121,14 +118,21 @@ if __name__ == '__main__':
         logger.error(e)
         sys.exit(1)
 
-    if args.mime_type == None:
+    # check source_type
+    source_type = args.source_type.lower()
+    mimetypes.init()
+    if source_type == "auto":
         # let's guess
-        mimetypes.init()
-        source_mime_type = mimetypes.guess_type(args.source_file, False)
-        logger.debug(source_mime_type)
+        source_mime_type = mimetypes.guess_type(args.source_file, False)[0]
     else:
         # user define the mime type
-        source_mime_type = None
+        #source_mime_type = source_type
+        source_mime_type = mimetypes.guess_all_extensions(source_type,False)
+        if len(source_mime_type) < 1:
+            logger.error("MIME type invalid: %s" % source_type)
+            sys.exit(1)
+
+    logger.debug("source_mime_type=%s" % source_mime_type)
 
 
     '''
