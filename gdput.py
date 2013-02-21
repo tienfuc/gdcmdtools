@@ -7,35 +7,18 @@ from argparse import RawTextHelpFormatter
 import mimetypes
 
 
-from gdcmdtools.csv import GDCSV
-from gdcmdtools.base import *
+#from gdcmdtools.csv import GDCSV
+from gdcmdtools.put import GDPut 
+from gdcmdtools.put import DICT_OF_CONVERTIBLE_FILE_TYPE
 
+from gdcmdtools.base import base_info
+
+import logging
 logger = logging.getLogger( __name__ )
 logger.setLevel(logging.DEBUG)
 
-THIS_APP = 'gdput'
-THIS_VERSION = '0.0.1'
-
-__DICT_OF_CONVERTIBLE_FILE_TYPE = { \
-        'ss':[
-            "Spreadsheet",
-            ['xls', 'xlsx', 'ods', 'csv', 'tsv', 'tab']],
-        'ft':[
-            "Fusion Table",
-            ['csv']],
-        'pt':[
-            "Presentation",
-            ['ppt', 'pps', 'pptx']],
-        'dr':[
-            "Drawing",
-            ['wmf']],
-        'ocr':[
-            "OCR",
-            ['jpg', 'git', 'png', 'pdf']],
-        'doc':[
-            "Document",
-            ['doc', 'docx', 'html', 'htm', 'txt', 'rtf']]
-        }
+__THIS_APP = 'gdput'
+__THIS_VERSION = '0.0.1'
 
 __DICT_OF_REDIRECT_URI = {
     "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
@@ -43,11 +26,29 @@ __DICT_OF_REDIRECT_URI = {
     }
 
 
+def get_mime_type(filename, source_type):
+    # check source_type
+    source_type = source_type.lower()
+    mimetypes.init()
+    if source_type == "auto":
+        # let's guess
+        source_mime_type = mimetypes.guess_type(filename, False)[0]
+    else:
+        # user define the mime type
+        suffix = mimetypes.guess_all_extensions(source_type, False)
+        if len(suffix) < 1:
+            return (False, None)
+
+        source_mime_type = source_type
+
+    return (True, source_mime_type)
+    
+
 if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \
             description='%s v%s - %s (%s)' % 
-            (THIS_APP, THIS_VERSION, BASE_APP, BASE_DESCRIPTION),
+            (__THIS_APP, __THIS_VERSION, base_info["app"], base_info["description"]),
             formatter_class=RawTextHelpFormatter)
 
     arg_parser.add_argument('source_file', 
@@ -63,15 +64,18 @@ if __name__ == '__main__':
     arg_parser.add_argument('-f', '--folder_id', 
             help='the target folder ID on the Google drive')
 
-    choices_target_type = list(__DICT_OF_CONVERTIBLE_FILE_TYPE.keys())
+    d_file_types = DICT_OF_CONVERTIBLE_FILE_TYPE
+    choices_target_type = list(d_file_types.keys())
+    l_file_types_wo_raw = list(d_file_types.keys())
+    l_file_types_wo_raw.remove("raw") 
 
     # FIXME: readible-----
-    # make the help text from __DICT_OF_CONVERTIBLE_FILE_TYPE
+    # make the help text from DICT_OF_CONVERTIBLE_FILE_TYPE
     list_help_target_type = \
             [ (k+": "+
-                __DICT_OF_CONVERTIBLE_FILE_TYPE[k][0]+ " (for ."+
-                ', .'.join(__DICT_OF_CONVERTIBLE_FILE_TYPE[k][1])+')') \
-                        for k in __DICT_OF_CONVERTIBLE_FILE_TYPE]
+                d_file_types[k][0]+ " (for ."+
+                ', .'.join(d_file_types[k][1])+')') \
+                        for k in l_file_types_wo_raw ]
 
     help_target_type = '\n'.join(list_help_target_type)
     
@@ -86,15 +90,6 @@ if __name__ == '__main__':
             'specify the location column header for the fusion table '+
             '(if target_type is ft)')
 
-    """
-    arg_parser.add_argument('-s', '--secret_file', 
-            help='specify the oauth2 secret file')
-
-    arg_parser.add_argument('-c', '--credential_file', 
-            help='specify the oauth2 credential file')
-
-    """
-
     choices_redirect_uri = list(__DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
             [ (k+": "+__DICT_OF_REDIRECT_URI[k]) for k in __DICT_OF_REDIRECT_URI] 
@@ -106,59 +101,45 @@ if __name__ == '__main__':
             'specify the redirect URI for the oauth2 flow, could be:\n%s' % 
             help_redirect_uri)
 
-
     args = arg_parser.parse_args()
 
     logger.debug(args)
 
-    # check source file
+    # check source file if exists
     try:
-        with open(args.source_file) as source_file: pass
+        with open(args.source_file) as fp_source: 
+            # check source_type
+            (r_mime_type, mime_type) = get_mime_type(
+                    args.source_file, args.source_type)
+
+            if not r_mime_type:
+                logger.error("Invalid MIME type: %s" % args.source_type)
+                sys.exit(1)
+            else:
+                logger.debug("mime_type=%s" % mime_type)
+     
+            # check direct uri
+            if args.redirect_uri == "oob":
+                if_oob = True
+            elif args.redirect_uri == "local":
+                if_oob = False
+            else:
+                logger.error("failed to determine redirect_uri")
+                sys.exit(1)
+
+            # let's put
+            puter = GDPut(
+                    fp_source, 
+                    args.source_file, 
+                    mime_type, 
+                    args.target_type,
+                    args.folder_id,
+                    args.new_title,
+                    if_oob)
+
+            response = puter.run()
+            logger.info("The file is located at: %s" % response["alternateLink"])
+
     except IOError as e:
         logger.error(e)
         sys.exit(1)
-
-    # check source_type
-    source_type = args.source_type.lower()
-    mimetypes.init()
-    if source_type == "auto":
-        # let's guess
-        source_mime_type = mimetypes.guess_type(args.source_file, False)[0]
-    else:
-        # user define the mime type
-        #source_mime_type = source_type
-        source_mime_type = mimetypes.guess_all_extensions(source_type,False)
-        if len(source_mime_type) < 1:
-            logger.error("MIME type invalid: %s" % source_type)
-            sys.exit(1)
-
-    logger.debug("source_mime_type=%s" % source_mime_type)
-
-
-    '''
-    base = GDBase()
-
-    if args.redirect_uri == "oob":
-        if_oob = True
-    elif args.redirect_uri == "local":
-        if_oob = False
-    else:
-        logger.error("failed to determine redirect_uri")
-        sys.exit(1)
-
-
-    logger.debug("if_oob=%s" % if_oob)
-
-    creds = base.get_credentials(if_oob)
-    http = base.get_authorized_http(creds)
-
-
-    root = base.get_root()
-    print(root)
-    #print(drive)
-
-    '''
-
-    #csv = GDCSV()
-
-

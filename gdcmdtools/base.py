@@ -10,17 +10,17 @@ from oauth2client.tools import run
 from apiclient.discovery import build
 
 import logging 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger( __name__ )
+logger.setLevel(logging.INFO)
 
 import httplib2
 import pprint
 
 
-BASE_APP = 'gdcmdtools'
-BASE_DESCRIPTION = 'Google Drive command line tools'
-BASE_VERSION = '0.0.5'
-
+base_info = {
+        "app":"gdcmdtools",
+        "description":'Google Drive command line tools',
+        "version":'0.0.5'}
 
 __GDAPI_VER__ = 'v2'
 
@@ -33,7 +33,7 @@ class GDBase(object):
 
     def get_credentials(self, if_oob):
         home_path = os.getenv("HOME")
-        storage_file = os.path.abspath('%s/.%s.creds' % (home_path,BASE_APP))
+        storage_file = os.path.abspath('%s/.%s.creds' % (home_path,base_info["app"]))
         logger.debug('storage_file=%s' % storage_file)
 
         storage = Storage(storage_file)
