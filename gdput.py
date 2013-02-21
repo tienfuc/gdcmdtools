@@ -11,7 +11,7 @@ import mimetypes
 from gdcmdtools.put import GDPut 
 from gdcmdtools.put import DICT_OF_CONVERTIBLE_FILE_TYPE
 
-from gdcmdtools.base import base_info
+from gdcmdtools.base import BASE_INFO
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \
             description='%s v%s - %s (%s)' % 
-            (__THIS_APP, __THIS_VERSION, base_info["app"], base_info["description"]),
+            (__THIS_APP, __THIS_VERSION, BASE_INFO["app"], BASE_INFO["description"]),
             formatter_class=RawTextHelpFormatter)
 
     arg_parser.add_argument('source_file', 
@@ -138,7 +138,7 @@ if __name__ == '__main__':
                     if_oob)
 
             response = puter.run()
-            logger.info("The file is located at: %s" % response["alternateLink"])
+            logger.info("The uploaded file is located at: %s" % response["alternateLink"])
 
     except IOError as e:
         logger.error(e)
