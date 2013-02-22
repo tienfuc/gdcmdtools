@@ -65,7 +65,6 @@ class GDPut:
         self.http = base.get_authorized_http(creds)
         self.service = base.get_service()
 
-
     def run(self):
         try:
             result = getattr(self, self.target_type+"_put")()
@@ -107,6 +106,18 @@ class GDPut:
         
         return service_response
 
+
+    def chk_CSV(self, fp):
+        DELIMITER = ','
+        dialect = csv.Sniffer().sniff(fp.readline())
+        if dialect.delimiter == DELIMITER:
+            return True 
+
+        csv_file.seek(0)
+        raise csv.Error("The delimiter of the source csv file is not '%s'" % DELIMITER)
+        
+        return False
+             
 
     def ss_put(self):
         pass
