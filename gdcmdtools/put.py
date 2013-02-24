@@ -3,8 +3,6 @@
 
 import csv
 from apiclient.http import MediaFileUpload
-import apiclient.errors
-import apiclient.http
 
 import logging
 logger = logging.getLogger( __name__ )
@@ -100,9 +98,8 @@ class GDPut:
                     # so csv will be converted to spreadsheet
                     convert=False
                     ).execute()
-
-        except apiclient.errors.HttpError, e:
-            logger.error('http error:', e)
+        except: 
+            logger.error('http error while calling drive API: files().insert()' )
         
         return service_response
 
