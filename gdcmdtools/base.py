@@ -1,21 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-
 import os
 from oauth2client.file import Storage
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.tools import run
 from apiclient.discovery import build
 
-import logging 
-logger = logging.getLogger( __name__ )
-logger.setLevel(logging.INFO)
-
 import httplib2
 import pprint
 
+import logging 
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 BASE_INFO = {
         "app":"gdcmdtools",
@@ -23,6 +21,7 @@ BASE_INFO = {
         "version":'0.0.5'}
 
 __GDAPI_VER__ = 'v2'
+
 
 class GDBase(object):
     def __init__(self):

@@ -13,8 +13,8 @@ from gdcmdtools.put import DICT_OF_REDIRECT_URI
 from gdcmdtools.base import BASE_INFO
 
 import logging
-logger = logging.getLogger( __name__ )
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 __THIS_APP = 'gdput'
 __THIS_VERSION = '0.0.1'

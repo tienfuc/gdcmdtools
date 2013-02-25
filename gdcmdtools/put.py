@@ -5,7 +5,7 @@ import csv
 from apiclient.http import MediaFileUpload
 
 import logging
-logger = logging.getLogger( __name__ )
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
@@ -41,7 +41,6 @@ DICT_OF_REDIRECT_URI = {
     }
 
 
-
 # FIXME: naming
 class GDPut:
     def __init__(
@@ -63,12 +62,19 @@ class GDPut:
         self.http = base.get_authorized_http(creds)
         self.service = base.get_service()
 
+        # log
+        
+        
     def run(self):
         try:
             result = getattr(self, self.target_type+"_put")()
         except AttributeError as e:
             logger.error(e)
             raise 
+        except Exception,e:
+            logger.error(e)
+            raise
+            
 
         return result
 
@@ -98,30 +104,61 @@ class GDPut:
                     # so csv will be converted to spreadsheet
                     convert=False
                     ).execute()
-        except: 
-            logger.error('http error while calling drive API: files().insert()' )
+        except Exception,e: 
+            logger.error(e)
         
         return service_response
 
 
-    def chk_CSV(self, fp):
-        DELIMITER = ','
-        dialect = csv.Sniffer().sniff(fp.readline())
-        if dialect.delimiter == DELIMITER:
+    def chk_CSV(self):
+        self.csv_delimiter = ','
+        dialect = csv.Sniffer().sniff(self.fp.readline())
+        if dialect.delimiter == self.csv_delimiter:
             return True 
 
-        csv_file.seek(0)
-        raise csv.Error("The delimiter of the source csv file is not '%s'" % DELIMITER)
-        
+        self.fp.seek(0)
         return False
-             
+
 
     def ss_put(self):
-        pass
+        if not self.chk_CSV():
+            raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
+
+        media_body = MediaFileUpload(
+                self.source_file, 
+                mimetype=self.mime_type, 
+                resumable=False)
+       
+        if self.folder_id == None:
+            parents = []
+        else:
+            parents = [{
+                "kind":"drive#fileLink",
+                "id":self.folder_id}]
+
+        body = {
+                'title':self.title,
+                'mimeType':self.mime_type,
+                'parents':parents}
+ 
+        try:
+            service_response = self.service.files().insert(
+                    body=body,
+                    media_body=media_body,
+                    # so csv will be converted to spreadsheet
+                    convert=True
+                    ).execute()
+        except Exception,e: 
+            logger.error(e)
+        
+        return service_response
+
 
     def ft_put(self):
+        if not self.chk_CSV():
+            raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
         pass
-
+        
     def pt_put(self):
         pass
 
