@@ -20,12 +20,15 @@ BASE_INFO = {
         "description":'Google Drive command line tools',
         "version":'0.0.5'}
 
-__GDAPI_VER__ = 'v2'
+GDAPI_VER = 'v2'
+FTAPI_VER = 'v1'
+DISCOVERY_URL = "https://www.googleapis.com/discovery/v1/apis/{api}/{apiVersion}/rest"
 
 
 class GDBase(object):
     def __init__(self):
-        self.drive = None
+        self.drive_service = None
+        self.ft_service = None
         self.http = None
         self.root_folder = None
         pass
@@ -94,20 +97,24 @@ class GDBase(object):
 
     def get_root(self):
         if self.root_folder == None:
-            if self.drive == None:
-                self.get_service()
-            about = self.drive.about().get().execute()
+            if self.drive_service == None:
+                self.get_drive_service()
+            about = self.drive_service.about().get().execute()
        
         self.root_folder = about['rootFolderId']
         logger.debug("root_folder=%s" % self.root_folder)
         return self.root_folder
 
-    def get_service(self):
-        discovery_url = \
-                "https://www.googleapis.com/discovery/v1/apis/{api}/{apiVersion}/rest"
-        self.drive = build('drive', __GDAPI_VER__, 
-                discoveryServiceUrl=discovery_url, http=self.http)
+    def get_drive_service(self):
+        self.drive_service = build('drive', GDAPI_VER, 
+                discoveryServiceUrl=DISCOVERY_URL, http=self.http)
 
-        return self.drive
+        return self.drive_service
+
+    def get_ft_service(self):
+        self.ft_service = build('fusiontables', FTAPI_VER, 
+                discoveryServiceUrl=DISCOVERY_URL, http=self.http)
+
+        return self.ft_service
 
 

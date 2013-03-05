@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+import os
 
 import argparse
 from argparse import RawTextHelpFormatter
@@ -14,7 +15,7 @@ from gdcmdtools.base import BASE_INFO
 
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 __THIS_APP = 'gdput'
 __THIS_VERSION = '0.0.1'
@@ -51,8 +52,11 @@ if __name__ == '__main__':
     arg_parser.add_argument('-s', '--source_type', default="auto",
             help='define the source file type by MIME type, ex: "text/csv", or \"auto\" to determine the file type by file name')
    
-    arg_parser.add_argument('-l', '--new_title', 
+    arg_parser.add_argument('-l', '--target_title', default='', 
             help='specify the title of the target file')
+
+    arg_parser.add_argument('-d', '--target_description', default='',
+            help='specify the description of the target file')
 
     arg_parser.add_argument('-f', '--folder_id', 
             help='the target folder ID on the Google drive')
@@ -100,40 +104,39 @@ if __name__ == '__main__':
 
     # check source file if exists
     try:
-        with open(args.source_file) as fp_source: 
-            # check source_type
-            (r_mime_type, mime_type) = get_mime_type(
-                    args.source_file, args.source_type)
-
-            if not r_mime_type:
-                logger.error("Invalid MIME type: %s" % args.source_type)
-                sys.exit(1)
-            else:
-                logger.debug("mime_type=%s" % mime_type)
-     
-            # check direct uri
-            if args.redirect_uri == "oob":
-                if_oob = True
-            elif args.redirect_uri == "local":
-                if_oob = False
-            else:
-                logger.error("failed to determine redirect_uri")
-                sys.exit(1)
-
-            # let's put
-            puter = GDPut(
-                    fp_source, 
-                    args.source_file, 
-                    mime_type, 
-                    args.target_type,
-                    args.folder_id,
-                    args.new_title,
-                    if_oob)
-
-            response = puter.run()
-            logger.info("The uploaded file is located at: %s" % 
-                    response["alternateLink"])
-
+        with open(args.source_file) as f: pass
     except IOError as e:
         logger.error(e)
         sys.exit(1)
+
+    # check source_type
+    (r_mime_type, mime_type) = get_mime_type(args.source_file, args.source_type)
+
+    if not r_mime_type:
+        logger.error("Invalid MIME type: %s" % args.source_type)
+        sys.exit(1)
+    else:
+        logger.debug("mime_type=%s" % mime_type)
+
+    # check direct uri
+    if args.redirect_uri == "oob":
+        if_oob = True
+    elif args.redirect_uri == "local":
+        if_oob = False
+    else:
+        logger.error("failed to determine redirect_uri")
+        sys.exit(1)
+
+    # let's put
+    puter = GDPut(
+            args.source_file, 
+            mime_type, 
+            args.target_type,
+            args.folder_id,
+            args.target_title,
+            args.target_description,
+            if_oob)
+
+    target_link = puter.run()
+    logger.info("The uploaded file is located at: %s" % 
+            target_link)
