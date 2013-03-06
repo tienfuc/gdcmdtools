@@ -131,7 +131,7 @@ if __name__ == '__main__':
 
     # check title
     target_title = args.target_title
-    if target_title == None:
+    if (target_title == None) or (target_title == ''):
         target_title = os.path.basename(args.source_file)
     logger.debug("target_title=%s", target_title)
 

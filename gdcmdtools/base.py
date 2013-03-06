@@ -31,7 +31,6 @@ class GDBase(object):
         self.ft_service = None
         self.http = None
         self.root_folder = None
-        pass
 
     def get_credentials(self, if_oob):
         home_path = os.getenv("HOME")
