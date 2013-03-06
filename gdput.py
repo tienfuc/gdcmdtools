@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+from time import localtime, strftime
 
 import argparse
 from argparse import RawTextHelpFormatter
@@ -55,7 +56,8 @@ if __name__ == '__main__':
     arg_parser.add_argument('-l', '--target_title', default='', 
             help='specify the title of the target file')
 
-    arg_parser.add_argument('-d', '--target_description', default='',
+    now = strftime("%Y-%b-%d %H:%M:%S %Z", localtime()) 
+    arg_parser.add_argument('-d', '--target_description', default='uploaded by %s v%s\ndate: %s' % (__THIS_APP, __THIS_VERSION, now),
             help='specify the description of the target file')
 
     arg_parser.add_argument('-f', '--folder_id', 
