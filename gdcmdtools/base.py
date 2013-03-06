@@ -34,7 +34,8 @@ class GDBase(object):
 
     def get_credentials(self, if_oob):
         home_path = os.getenv("HOME")
-        storage_file = os.path.abspath('%s/.%s.creds' % (home_path,BASE_INFO["app"]))
+        storage_file = os.path.abspath(
+                '%s/.%s.creds' % (home_path,BASE_INFO["app"]))
         logger.debug('storage_file=%s' % storage_file)
 
         storage = Storage(storage_file)

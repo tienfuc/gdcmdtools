@@ -210,6 +210,7 @@ class GDPut:
 
         # table columns are created, get tableId
         response = self.ft_service.table().insert(body=body).execute()
+        logger.debug("response=%s" % response)
         table_id = response["tableId"]
 
         # move to target folder
