@@ -201,7 +201,7 @@ class GDPut:
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
 
         body = self.create_ft()
-        logger.debug(body)
+        logger.debug('body=%s' % body)
 
         # table columns are created, get tableId
         response = self.ft_service.table().insert(body=body).execute()
