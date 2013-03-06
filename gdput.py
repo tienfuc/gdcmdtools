@@ -53,7 +53,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('-s', '--source_type', default="auto",
             help='define the source file type by MIME type, ex: "text/csv", or \"auto\" to determine the file type by file name')
    
-    arg_parser.add_argument('-l', '--target_title', default='', 
+    arg_parser.add_argument('-l', '--target_title', default=None, 
             help='specify the title of the target file')
 
     now = strftime("%Y-%b-%d %H:%M:%S %Z", localtime()) 
@@ -129,13 +129,19 @@ if __name__ == '__main__':
         logger.error("failed to determine redirect_uri")
         sys.exit(1)
 
+    # check title
+    target_title = args.target_title
+    if target_title == None:
+        target_title = os.path.basename(args.source_file)
+    logger.debug("target_title=%s", target_title)
+
     # let's put
     puter = GDPut(
             args.source_file, 
             mime_type, 
             args.target_type,
             args.folder_id,
-            args.target_title,
+            target_title,
             args.target_description,
             if_oob)
 
