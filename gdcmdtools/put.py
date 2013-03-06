@@ -131,8 +131,8 @@ class GDPut:
                 dialect = csv.Sniffer().sniff(csv_file.readline())
                 if dialect.delimiter == self.csv_delimiter:
                     return True 
-            except csv.Error,e:
-                logger.error(e)
+            except:
+                logger.error("Failed at calling csv.Sniffer().sniff)")
         
         return False
 
@@ -197,7 +197,7 @@ class GDPut:
 
 
     def ft_put(self):
-        if self.chk_CSV():
+        if not self.chk_CSV():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
 
         body = self.create_ft()
