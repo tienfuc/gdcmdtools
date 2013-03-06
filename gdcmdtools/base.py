@@ -83,6 +83,7 @@ class GDBase(object):
         creds.authorize(self.http)
         wrapped_request = self.http.request
 
+        # FIXME
         def _Wrapper(uri, method="GET", body=None, headers=None, **kw):
             logger.debug('Req: %s %s' % (uri, method))
             logger.debug('Req headers:\n%s' % pprint.pformat(headers))

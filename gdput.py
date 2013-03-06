@@ -145,6 +145,10 @@ if __name__ == '__main__':
             args.target_description,
             if_oob)
 
-    target_link = puter.run()
+    try:
+        target_link = puter.run()
+    except:
+        sys.exit(1)
+
     logger.info("The uploaded file is located at: %s" % 
             target_link)

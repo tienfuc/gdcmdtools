@@ -78,8 +78,6 @@ class GDPut:
         if target_type == "ft":
             self.ft_service = base.get_ft_service()
             logger.debug(self.ft_service)
-        # log
-        
         
     def run(self):
         try:
@@ -87,7 +85,7 @@ class GDPut:
         except AttributeError as e:
             logger.error(e)
             raise 
-        except Exception,e:
+        except Exception, e:
             logger.error(e)
             raise
             
@@ -119,8 +117,10 @@ class GDPut:
                     # so csv will be converted to spreadsheet
                     convert=False
                     ).execute()
-        except Exception,e: 
-            logger.error(e)
+        except: 
+            raise Exception(
+                    "Failed at calling service.files().insert(%s,%s,%s).execute()" 
+                    % (body, media_body, True))
         
         return service_response["alternateLink"]
 
@@ -164,8 +164,10 @@ class GDPut:
                     # so csv will be converted to spreadsheet
                     convert=True
                     ).execute()
-        except Exception,e: 
-            logger.error(e)
+        except: 
+            raise Exception(
+                    "Failed at calling service.files().insert(%s,%s,%s).execute()" 
+                    % (body, media_body, True))
         
         return service_response["alternateLink"]
 
@@ -182,7 +184,7 @@ class GDPut:
             csvreader = csv.reader(csv_file)
             cols = csvreader.next()
 
-            #TODO: sanity check for csv file
+            # FIXME:
             for c in cols:
                 if c == "missingRegion":
                     d = {"type":"LOCATION"}
@@ -195,15 +197,8 @@ class GDPut:
 
 
     def ft_put(self):
-        if not self.chk_CSV():
+        if self.chk_CSV():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
-
-        """
-        ftable = build('fusiontables', 'v1',
-                discoveryServiceUrl=DISCOVERY_URL, http=http)
-        body = create_csv_cols(args.csv_file, TITLE)
-        logger.debug(body)
-        """
 
         body = self.create_ft()
         logger.debug(body)
@@ -220,15 +215,16 @@ class GDPut:
             try:
                 self.service.parents().insert(fileId=table_id, body=new_parent).execute()
             except apiclient.errors.HttpError, error:
-                logger.error('An error occurred: %s' % error)
+                raise Exception('An error occurred: %s' % error)
 
             # remove from root folder
             try:
                 self.service.parents().delete(fileId=table_id, parentId=self.root).execute()
             except apiclient.errors.HttpError, error:
-                logger.error('http error: %s' % error)
+                raise Exception('An error occurred: %s' % error)
 
         # export csv rows to the fusion table
+        # FIXME
         params = urllib.urlencode({'isStrict': "false"})
         URI = "https://www.googleapis.com/upload/fusiontables/v1/tables/%s/import?%s" % (table_id, params)
         METHOD = "POST"
@@ -239,9 +235,13 @@ class GDPut:
             rows = ft_file.read()
             # weird issue here: the URI should be encoded with UTF-8 if body is UTF-8 too.
             utf8_body = rows.decode('utf-8').encode('utf-8')
-            response, content = self.http.request(URI.encode('utf-8'), METHOD, body=utf8_body)
-            content = json.loads(content)
+            try:
+                response, content = self.http.request(URI.encode('utf-8'), METHOD, body=utf8_body)
+            except:
+                raise Exception('Failed at calling http.request(%s, %s, %s)'
+                        % (URI.encode('utf-8'), METHOD, body))
 
+            content = json.loads(content)
 
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 
@@ -249,13 +249,13 @@ class GDPut:
 
 
     def pt_put(self):
-        pass
+        raise Exception("this function is not supported yet")
 
     def dr_put(self):
-        pass
+        raise Exception("this function is not supported yet")
 
     def ocr_put(self):
-        pass
+        raise Exception("this function is not supported yet")
 
     def doc_put(self):
-        pass
+        raise Exception("this function is not supported yet")
