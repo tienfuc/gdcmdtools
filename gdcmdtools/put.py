@@ -236,15 +236,17 @@ class GDPut:
             ft_file.readline()
             # get the rows
             rows = ft_file.read()
+
             # weird issue here: the URI should be encoded with UTF-8 if body is UTF-8 too.
             utf8_body = rows.decode('utf-8').encode('utf-8')
             try:
                 response, content = self.http.request(URI.encode('utf-8'), METHOD, body=utf8_body)
             except:
                 raise Exception('Failed at calling http.request(%s, %s, %s)'
-                        % (URI.encode('utf-8'), METHOD, body))
+                        % (URI.encode('utf-8'), METHOD, utf8_body))
 
             content = json.loads(content)
+            logger.debug(content)
 
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 
