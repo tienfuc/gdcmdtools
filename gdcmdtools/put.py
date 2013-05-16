@@ -70,6 +70,9 @@ class GDPut:
         # base
         base = GDBase()
         creds = base.get_credentials(if_oob)
+        if creds == None:
+            raise Exception("Failed to retrieve credentials")
+
         self.http = base.get_authorized_http(creds)
         self.service = base.get_drive_service()
         self.root = base.get_root()

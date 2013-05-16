@@ -38,12 +38,18 @@ class GDBase(object):
                 '%s/.%s.creds' % (home_path,BASE_INFO["app"]))
         logger.debug('storage_file=%s' % storage_file)
 
+        try:
+            with open(storage_file): pass
+        except IOError:
+            logger.error('storage_file: %s not exists' % storage_file)
+            return None
+
         storage = Storage(storage_file)
         credentials = storage.get()
 
         if credentials is None or credentials.invalid == True:
             credentials_file = os.path.abspath(
-                    '%s/.%s.secrets' % (home_path,BASE_APP))
+                    '%s/.%s.secrets' % (home_path,BASE_INFO["app"]))
 
             logger.debug('credentials_file=%s' % credentials_file)
 
