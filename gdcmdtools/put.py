@@ -55,7 +55,8 @@ class GDPut:
             folder_id, 
             title, 
             description, 
-            if_oob):
+            if_oob,
+            localtion_column):
 
         logger.debug("source_file=%s, mime_type=%s, target_type=%s" % 
                 (source_file, mime_type, target_type))
@@ -66,6 +67,7 @@ class GDPut:
         self.folder_id = folder_id
         self.title = title
         self.description = description
+        self.localtion_column = localtion_column
 
         # base
         base = GDBase()
@@ -189,7 +191,7 @@ class GDPut:
 
             # FIXME:
             for c in cols:
-                if c == "missingRegion":
+                if c == self.localtion_column:
                     d = {"type":"LOCATION"}
                 else:
                     d = {"type":"STRING"}
@@ -233,7 +235,6 @@ class GDPut:
         METHOD = "POST"
         
         with open(self.source_file) as ft_file:
-            ft_file.readline()
             # get the rows
             rows = ft_file.read()
 
@@ -246,7 +247,7 @@ class GDPut:
                         % (URI.encode('utf-8'), METHOD, utf8_body))
 
             content = json.loads(content)
-            logger.debug(content)
+            #logger.debug(content)
 
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 

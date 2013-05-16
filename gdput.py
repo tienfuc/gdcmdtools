@@ -143,7 +143,8 @@ if __name__ == '__main__':
             args.folder_id,
             target_title,
             args.target_description,
-            if_oob)
+            if_oob,
+			args.ft_location_column)
 
     try:
         target_link = puter.run()
