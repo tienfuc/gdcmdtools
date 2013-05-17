@@ -191,23 +191,24 @@ class GDPut:
             csvreader = csv.reader(csv_file)
             cols = csvreader.next()
             
-            cols.append("latlng")
-            
-
-            logger.debug(cols)
-            logger.debug(type(cols))
-
             # FIXME:
             if self.localtion_column and self.latlng_column:
+                if self.latlng_column not in cols:
+                    cols.append(self.latlng_column)
+            
+                for c in cols:
+                    d = {"type":"STRING", "name":c}
+                    table["columns"].append(d)
+
+            elif self.localtion_column and not self.latlng_column: 
                 for c in cols:
                     if c == self.localtion_column:
                         d = {"type":"LOCATION"}
                     else:
                         d = {"type":"STRING"}
                     d["name"] = c
-                    table["columns"].append(d)
-            elif self.localtion_column and not self.latlng_column: 
-                pass
+
+                table["columns"].append(d)
         
         return table 
 
@@ -218,8 +219,6 @@ class GDPut:
 
         body = self.create_ft()
         logger.debug('body=%s' % body)
-
-        return 
 
         # table columns are created, get tableId
         response = self.ft_service.table().insert(body=body).execute()
