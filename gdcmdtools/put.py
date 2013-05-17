@@ -56,7 +56,8 @@ class GDPut:
             title, 
             description, 
             if_oob,
-            localtion_column):
+            localtion_column,
+            latlng_column):
 
         logger.debug("source_file=%s, mime_type=%s, target_type=%s" % 
                 (source_file, mime_type, target_type))
@@ -68,6 +69,7 @@ class GDPut:
         self.title = title
         self.description = description
         self.localtion_column = localtion_column
+        self.latlng_column = latlng_column
 
         # base
         base = GDBase()
@@ -188,16 +190,25 @@ class GDPut:
         with open(self.source_file, 'rb') as csv_file:
             csvreader = csv.reader(csv_file)
             cols = csvreader.next()
+            
+            cols.append("latlng")
+            
+
+            logger.debug(cols)
+            logger.debug(type(cols))
 
             # FIXME:
-            for c in cols:
-                if c == self.localtion_column:
-                    d = {"type":"LOCATION"}
-                else:
-                    d = {"type":"STRING"}
-                d["name"] = c
-                table["columns"].append(d)
-
+            if self.localtion_column and self.latlng_column:
+                for c in cols:
+                    if c == self.localtion_column:
+                        d = {"type":"LOCATION"}
+                    else:
+                        d = {"type":"STRING"}
+                    d["name"] = c
+                    table["columns"].append(d)
+            elif self.localtion_column and not self.latlng_column: 
+                pass
+        
         return table 
 
 
@@ -207,6 +218,8 @@ class GDPut:
 
         body = self.create_ft()
         logger.debug('body=%s' % body)
+
+        return 
 
         # table columns are created, get tableId
         response = self.ft_service.table().insert(body=body).execute()

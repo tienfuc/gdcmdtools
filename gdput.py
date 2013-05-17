@@ -39,6 +39,12 @@ def get_mime_type(filename, source_type):
     return (True, source_mime_type)
     
 
+class verify_location_column(argparse.Action):
+    def __call__(self, parser, args, values, option_string=None):
+        if getattr(args, 'ft_location_column') is None:
+            parser.error('--ft_location_column must be used with --ft_latlng_column')
+        setattr(args, self.dest, values)
+
 if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \
@@ -75,19 +81,29 @@ if __name__ == '__main__':
                 d_file_types[k][0]+ " (for ."+
                 ', .'.join(d_file_types[k][1])+')') \
                         for k in l_file_types_wo_raw ]
-
-    help_target_type = '\n'.join(list_help_target_type)
     
+    help_target_type = '\n'.join(list_help_target_type)
+
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
             help='define the target file type on Google Drive, could be:\n'+
             "raw: (default) the source file will uploaded without touching\n"+
             help_target_type)
 
-    arg_parser.add_argument('--ft_location_column', 
+
+    group = arg_parser.add_argument_group('fusion table geocoding')
+
+    group.add_argument('--ft_location_column', 
             help=
             'specify the location column header for the fusion table '+
             '(if target_type is ft)')
+
+    group.add_argument('--ft_latlng_column', 
+            action=verify_location_column,
+            help=
+            'specify the column header for latitude and longitude for the fusion table'+
+			'(if target_type is ft and --ft_location_column is used)'+
+            ', the column will be created if not present' )
 
     choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
@@ -144,7 +160,8 @@ if __name__ == '__main__':
             target_title,
             args.target_description,
             if_oob,
-			args.ft_location_column)
+			args.ft_location_column,
+			args.ft_latlng_column)
 
     try:
         target_link = puter.run()
