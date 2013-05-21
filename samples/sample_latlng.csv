@@ -1,5 +1,5 @@
 last,first,address,zip,telephone,year,latlng
-Brown,Carl,"Angel Building, 407 St John Street, London EC1V 4AD, UK",MD-945,555-2423,1982, "10.85145, -85.60801"
-Smith,John,"10058台北市中正區杭州北路1號",SH-123,555-4584,1978, "10.87078, -85.60535"
-Underwood,Mary,"日本国东京都港区元麻布3-4-33",OG-345,555-3434,1956, "10.82745, -85.63652"
-Appleby,Anne,"350 Fifth Avenue, 34th floor. New York, NY 10118-3299 USA",SH-124,555-4455,1960, "10.89249, -85.60336"
+Brown,Carl,"Angel Building, 407 St John Street, London EC1V 4AD, UK",MD-945,555-2423,1982,"10,-10"
+Smith,John,"10058台北市中正區杭州北路1號",SH-123,555-4584,1978,"27,-3"
+Underwood,Mary,"日本国东京都港区元麻布3-4-33",OG-345,555-3434,1956,"71,-10"
+Appleby,Anne,"350 Fifth Avenue, 34th floor. New York, NY 10118-3299 USA",SH-124,555-4455,1960,"-23,10"
