@@ -231,11 +231,11 @@ class GDPut:
         if not self.chk_CSV():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
 
-        body = self.create_ft()
+        headers = self.create_ft()
         #logger.debug('body=%s' % body)
 
         # table columns are created, get tableId
-        response = self.ft_service.table().insert(body=body).execute()
+        response = self.ft_service.table().insert(body=headers).execute()
         logger.debug("response=%s" % response)
         table_id = response["tableId"]
 
@@ -279,6 +279,22 @@ class GDPut:
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 
         return ft_url
+
+    
+    @staticmethod
+    def ft_geocoding(address):
+        GEOCODING_HOST = "maps.googleapis.com"
+        GEOCODING_REQUEST = "/maps/api/geocode/json"
+
+        params = urllib.urlencode({'address':address, 'sensor':'false'})
+        conn = httplib.HTTPConnection(GEOCODING_HOST)
+        conn.request('GET', GEOCODING_REQUEST, params)
+        response = conn.getresponse()
+        print response.status
+        print response.read()
+
+        return 
+
 
 
     def pt_put(self):
