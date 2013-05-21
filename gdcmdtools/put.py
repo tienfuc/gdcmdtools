@@ -191,16 +191,23 @@ class GDPut:
             csvreader = csv.reader(csv_file)
             cols = csvreader.next()
             
+            #logger.debug("cols=%s" % cols)
             # FIXME:
             if self.localtion_column and self.latlng_column:
                 if self.latlng_column not in cols:
                     cols.append(self.latlng_column)
-            
+
                 for c in cols:
-                    d = {"type":"STRING", "name":c}
+                    if c == self.latlng_column:
+                        d = {"type":"LOCATION"}
+                    else:
+                        d = {"type":"STRING"}
+                    d["name"] = c
+
                     table["columns"].append(d)
 
             elif self.localtion_column and not self.latlng_column: 
+
                 for c in cols:
                     if c == self.localtion_column:
                         d = {"type":"LOCATION"}
@@ -208,8 +215,15 @@ class GDPut:
                         d = {"type":"STRING"}
                     d["name"] = c
 
-                table["columns"].append(d)
-        
+                    table["columns"].append(d)
+            
+            else:
+
+                for c in cols:
+                    d = {"type":"STRING", "name":c}
+                    table["columns"].append(d)
+               
+
         return table 
 
 
@@ -218,7 +232,7 @@ class GDPut:
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
 
         body = self.create_ft()
-        logger.debug('body=%s' % body)
+        #logger.debug('body=%s' % body)
 
         # table columns are created, get tableId
         response = self.ft_service.table().insert(body=body).execute()
@@ -252,6 +266,7 @@ class GDPut:
 
             # weird issue here: the URI should be encoded with UTF-8 if body is UTF-8 too.
             utf8_body = rows.decode('utf-8').encode('utf-8')
+            logger.debug(utf8_body)
             try:
                 response, content = self.http.request(URI.encode('utf-8'), METHOD, body=utf8_body)
             except:
