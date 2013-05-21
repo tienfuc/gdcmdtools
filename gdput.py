@@ -91,19 +91,21 @@ if __name__ == '__main__':
             help_target_type)
 
 
-    group = arg_parser.add_argument_group('fusion table geocoding')
+    ft_group = arg_parser.add_argument_group('fusion table geocoding')
 
-    group.add_argument('--ft_location_column', 
-            help=
-            'specify the location column header for the fusion table '+
-            '(if target_type is ft)')
 
-    group.add_argument('--ft_latlng_column', 
+    # FIXME: bug, --ft_latlng_column must be after --ft_location_column, or parse fails.
+    ft_group.add_argument('--ft_latlng_column', 
             action=verify_location_column,
             help=
             'specify the column header for latitude and longitude for the fusion table'+
 			'(if target_type is ft and --ft_location_column is used)'+
             ', the column will be created if not present' )
+
+    ft_group.add_argument('--ft_location_column', 
+            help=
+            'specify the location column header for the fusion table '+
+            '(if target_type is ft)')
 
     choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
