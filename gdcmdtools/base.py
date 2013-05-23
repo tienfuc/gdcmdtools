@@ -42,7 +42,7 @@ class GDBase(object):
             with open(storage_file): pass
         except IOError:
             logger.error('storage_file: %s not exists' % storage_file)
-            return None
+            #return None
 
         storage = Storage(storage_file)
         credentials = storage.get()
@@ -51,9 +51,8 @@ class GDBase(object):
             credentials_file = os.path.abspath(
                     '%s/.%s.secrets' % (home_path,BASE_INFO["app"]))
 
-            logger.debug('credentials_file=%s' % credentials_file)
+            #logger.debug('credentials_file=%s' % credentials_file)
 
-            
             if if_oob:
                 redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
             else:
