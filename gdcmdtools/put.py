@@ -5,12 +5,15 @@ import csv
 from apiclient.http import MediaFileUpload
 import apiclient.errors
 import urllib
-import httplib
+import requests
+import json
 
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+import random
+import os
 
 import json
 
@@ -72,6 +75,7 @@ class GDPut:
         self.location_column = location_column
         self.latlng_column = latlng_column
         self.ft_headers = None
+        self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
 
         # base
         base = GDBase()
@@ -145,10 +149,44 @@ class GDPut:
         
         return False
 
+ 
+    def csv_save_latlng(self):
+        rows = []
+        # read csv header 
+        with open(self.source_file, 'rb') as csv_file:
+            csv_reader = csv.reader(csv_file)
+            self.ft_headers = csv_reader.next()
+            
+            if self.location_column and self.latlng_column:
+                self.ft_headers.append(self.latlng_column)
+                rows.append(self.ft_headers)
+
+            index_latlng = self.ft_headers.index(self.latlng_column)
+            index_location = self.ft_headers.index(self.location_column)
+
+            for row in csv_reader:
+                latlng = self.ft_geocoding(row[index_location])
+                row.insert(index_latlng, latlng)
+                rows.append(row)
+ 
+        logger.debug(rows)
+
+        # save new file
+        csv_file_dir = os.path.dirname(self.source_file)    
+        csv_file_basename = os.path.basename(self.source_file)
+        csv_file_noextension = os.path.splitext(csv_file_basename)[0]
+        latlng_file = os.path.join(csv_file_dir, csv_file_noextension + self.csv_latlng_suffix)
+        # write csv header with latlng
+        with open(latlng_file, 'wb+') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerows(rows)
+        
+        return latlng_file
+
+
     def ss_put(self):
         if not self.chk_CSV():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
-
         media_body = MediaFileUpload(
                 self.source_file, 
                 mimetype=self.mime_type, 
@@ -181,7 +219,7 @@ class GDPut:
         return service_response["alternateLink"]
 
     # read csv and convert to the fusion table
-    def create_ft(self):
+    def create_ft(self, target_file):
         table = {
                 "name":self.title,
                 "description":self.description,
@@ -189,17 +227,17 @@ class GDPut:
                 "columns":[]
                 }
 
-        with open(self.source_file, 'rb') as csv_file:
-            csvreader = csv.reader(csv_file)
-            cols = csvreader.next()
+        with open(target_file, 'rb') as csv_file:
+            csv_reader = csv.reader(csv_file)
+            cols = csv_reader.next()
             
             self.ft_headers = cols            
 
             logger.debug("cols=%s" % cols)
             # FIXME:
             if self.location_column and self.latlng_column:
-                if self.latlng_column not in cols:
-                    cols.append(self.latlng_column)
+                #if self.latlng_column not in cols:
+                #cols.append(self.latlng_column)
 
                 for c in cols:
                     if c == self.latlng_column:
@@ -235,7 +273,12 @@ class GDPut:
         if not self.chk_CSV():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
 
-        table = self.create_ft()
+        # save new csv file with latlng data
+        if self.location_column and self.latlng_column:
+            target_file = self.csv_save_latlng()
+            table = self.create_ft(target_file)
+        else:
+            table = self.create_ft(self.source_file)
         #logger.debug('body=%s' % body)
 
         # table columns are created, get tableId
@@ -256,27 +299,24 @@ class GDPut:
             try:
                 self.service.parents().delete(fileId=table_id, parentId=self.root).execute()
             except apiclient.errors.HttpError, error:
-                raise Exception('An error occurred: %s' % error)
-
-        # export csv rows to the fusion table
-        # FIXME
-
+                raise Exception('Atable_idn error occurred: %s' % error)
         
-        #url = self.ft_put_body_entire()
-        url = self.ft_put_body_latlng()
+        if self.location_column and self.latlng_column:
+            url = self.ft_put_body(table_id, target_file)
+        else:
+            url = self.ft_put_body(table_id, self.source_file)
 
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 
         return ft_url
 
-        ##
     
-    def ft_put_body_entire(self):
+    def ft_put_body(self, table_id, target_file):
         params = urllib.urlencode({'isStrict': "false"})
         URI = "https://www.googleapis.com/upload/fusiontables/v1/tables/%s/import?%s" % (table_id, params)
         METHOD = "POST"
 
-        with open(self.source_file) as ft_file:
+        with open(target_file) as ft_file:
             # get the rows
             rows = ft_file.read()
 
@@ -292,46 +332,22 @@ class GDPut:
             content = json.loads(content)
             #logger.debug(content)
 
-        ##
-
-
-    def ft_put_body_latlng(self):
-        columns = []
-
-        with open(self.source_file) as ft_file: 
-            index_latlng = self.ft_headers.index(self.latlng_column)
-            index_location = self.ft_headers.index(self.location_column)
-
-            csvreader = csv.reader(ft_file)
-            for col in csvreader:
-                latlng = self.ft_geocoding(col[index_location])
-                col_w_latlng = col.insert(index_latlng, latlng)
-                columns.append(col_w_latlng)
-            #cols = csvreader.next()
-            #cols.insert(2,"xxx")
-            #for c in cols:
-            #    print c
-
-        print columns
-        
-        pass   
-
-
 
     @staticmethod
     def ft_geocoding(address):
-        GEOCODING_HOST = "maps.googleapis.com"
-        GEOCODING_REQUEST = "/maps/api/geocode/json"
+        GEOCODING_URL = "http://maps.googleapis.com/maps/api/geocode/json"
 
-        params = urllib.urlencode({'address':address, 'sensor':'false'})
-        conn = httplib.HTTPConnection(GEOCODING_HOST)
-        conn.request('GET', GEOCODING_REQUEST, params)
-        response = conn.getresponse()
-        print response.status
-        print response.read()
+        params = {'address':address, 'sensor':'false'}
+        response = requests.get(GEOCODING_URL, params=params)
+        response_json = (response.json())
 
-        return 
+        # FIXME
+        lat = response_json["results"][0]["geometry"]["location"]["lat"]
+        lng = response_json["results"][0]["geometry"]["location"]["lng"]
 
+        latlng = str(lat)+","+str(lng)
+
+        return latlng
 
 
     def pt_put(self):
