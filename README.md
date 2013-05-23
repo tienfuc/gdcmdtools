@@ -3,7 +3,19 @@ gdcmdtools
 Google drive command-line tools
 
 
-# gdput
+# Install
+
+ * Get the API client secrect file from your Google API console.(https://code.google.com/apis/console#:access)
+ * Check the section "Client ID for installed applications", at the right side, click at the "Download JSON".
+ * Save the json file as .gdcmdtools.secrets in your home directory.
+ * Execute any tools from gdcmdtools tool set in a console, like: % ./gdput.py -t ft samples/sample.csv 
+ * You will see message like: INFO:gdcmdtools.base:Please visit the URL in your browser: https://accounts.google.com/o/oauth2/auth?scope=....
+ * Visit the URL with browser and allow access from the app.
+ * Copy the code you see in your browser, then back to the console, input the code and hit enter.
+ * Done, you won't be asked for the code again unless the credential expired.
+
+
+## gdput
 
 ### Usage
 <pre>
@@ -60,6 +72,6 @@ fusion table geocoding:
 
 
 
-# gdget
+## gdget
 
 get files from google drive
