@@ -178,7 +178,7 @@ class GDPut:
         latlng_file = os.path.join(csv_file_dir, csv_file_noextension + self.csv_latlng_suffix)
         # write csv header with latlng
         with open(latlng_file, 'wb+') as csv_file:
-            csv_writer = csv.writer(csv_file)
+            csv_writer = csv.writer(csv_file, lineterminator='\n')
             csv_writer.writerows(rows)
         
         return latlng_file
