@@ -78,6 +78,10 @@ fusion table geocoding:
 get files from google drive
 
 
+## Packages
+  * ubuntu PPA: https://launchpad.net/~ctf/+archive/gdcmdtools
+
+
 
 ## License
 BSD License.
