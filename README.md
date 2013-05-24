@@ -16,6 +16,7 @@ Google drive command-line tools
 
 
 ## gdput
+This tool can be used to upload files to Google drive as Spreadsheet,csv,fusion table,doc, etc.
 
 ### Usage
 <pre>
