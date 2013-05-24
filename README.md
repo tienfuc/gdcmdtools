@@ -10,7 +10,7 @@ Google drive command-line tools
  * Save the json file as .gdcmdtools.secrets in your home directory.
  * Execute any tools from gdcmdtools tool set in a console, like: % ./gdput.py -t ft samples/sample.csv 
  * You will see message like: INFO:gdcmdtools.base:Please visit the URL in your browser: https://accounts.google.com/o/oauth2/auth?scope=....
- * Visit the URL with browser and allow access from the app.
+ * Visit the URL with browser and allow the app accessing your Google Drive.
  * Copy the code you see in your browser, then back to the console, input the code and hit enter.
  * Done, you won't be asked for the code again unless the credential expired.
 
