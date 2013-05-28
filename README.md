@@ -10,12 +10,13 @@ Google drive command-line tools
  * Save the json file as .gdcmdtools.secrets in your home directory.
  * Execute any tools from gdcmdtools tool set in a console, like: % ./gdput.py -t ft samples/sample.csv 
  * You will see message like: INFO:gdcmdtools.base:Please visit the URL in your browser: https://accounts.google.com/o/oauth2/auth?scope=....
- * Visit the URL with browser and allow access from the app.
+ * Visit the URL with browser and allow the app accessing your Google Drive.
  * Copy the code you see in your browser, then back to the console, input the code and hit enter.
  * Done, you won't be asked for the code again unless the credential expired.
 
 
 ## gdput
+This tool can be used to upload files to Google drive as Spreadsheet,csv,fusion table,doc, etc.
 
 ### Usage
 <pre>
@@ -64,7 +65,7 @@ fusion table geocoding:
 </pre>
 
 ### Example
-
+    % ./gdput.py photo.jpg                    # upload photo.jpg to gd without changing the format
     % ./gdput.py -t ft samples/sample.csv     # upload a csv file to gd as fusion table
     % ./gdput.py -t ss samples/sample.csv     # upload a csv file to gd as spreadsheet
     % ./gdput.py -t ft --ft_location_column address  --ft_latlng_column latlng  samples/sample.csv 
@@ -75,3 +76,12 @@ fusion table geocoding:
 ## gdget
 
 get files from google drive
+
+
+## Packages
+  * ubuntu PPA: https://launchpad.net/~ctf/+archive/gdcmdtools
+
+
+
+## License
+BSD License.
