@@ -65,7 +65,7 @@ fusion table geocoding:
 </pre>
 
 ### Example
-    % ./gdput.py -t raw photo.jpg             # upload photo.jpg to gd without changing the format
+    % ./gdput.py photo.jpg                    # upload photo.jpg to gd without changing the format
     % ./gdput.py -t ft samples/sample.csv     # upload a csv file to gd as fusion table
     % ./gdput.py -t ss samples/sample.csv     # upload a csv file to gd as spreadsheet
     % ./gdput.py -t ft --ft_location_column address  --ft_latlng_column latlng  samples/sample.csv 
