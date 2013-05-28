@@ -349,9 +349,42 @@ class GDPut:
 
         return latlng
 
+    def convert_put(self):
+        media_body = MediaFileUpload(
+                self.source_file, 
+                mimetype=self.mime_type, 
+                resumable=False)
+       
+        if self.folder_id == None:
+            parents = []
+        else:
+            parents = [{
+                "kind":"drive#fileLink",
+                "id":self.folder_id}]
+
+        body = {
+                'title':self.title,
+                'description':self.description,
+                'mimeType':self.mime_type,
+                'parents':parents}
+ 
+        try:
+            service_response = self.service.files().insert(
+                    body=body,
+                    media_body=media_body,
+                    # so csv will be converted to spreadsheet
+                    convert=True,
+                    ).execute()
+        except: 
+            raise Exception(
+                    "Failed at calling service.files().insert(%s,%s,%s).execute()" 
+                    % (body, media_body, True))
+        
+        return service_response["alternateLink"]
+
 
     def pt_put(self):
-        raise Exception("this function is not supported yet")
+        return self.convert_put()
 
     def dr_put(self):
         raise Exception("this function is not supported yet")
