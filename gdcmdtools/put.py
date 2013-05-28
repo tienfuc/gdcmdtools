@@ -105,37 +105,7 @@ class GDPut:
         return result
 
     def raw_put(self):
-        media_body = MediaFileUpload(
-                self.source_file, 
-                mimetype=self.mime_type, 
-                resumable=False)
-       
-        if self.folder_id == None:
-            parents = []
-        else:
-            parents = [{
-                "kind":"drive#fileLink",
-                "id":self.folder_id}]
-
-        body = {
-                'title':self.title,
-                'description':self.description,
-                'mimeType':self.mime_type,
-                'parents':parents}
- 
-        try:
-            service_response = self.service.files().insert(
-                    body=body,
-                    media_body=media_body,
-                    # so csv will be converted to spreadsheet
-                    convert=False
-                    ).execute()
-        except: 
-            raise Exception(
-                    "Failed at calling service.files().insert(%s,%s,%s).execute()" 
-                    % (body, media_body, True))
-        
-        return service_response["alternateLink"]
+        return self.generic_put(False)
 
     def chk_CSV(self):
         self.csv_delimiter = ','
@@ -349,7 +319,7 @@ class GDPut:
 
         return latlng
 
-    def convert_put(self):
+    def generic_put(self, if_convert):
         media_body = MediaFileUpload(
                 self.source_file, 
                 mimetype=self.mime_type, 
@@ -373,7 +343,7 @@ class GDPut:
                     body=body,
                     media_body=media_body,
                     # so csv will be converted to spreadsheet
-                    convert=True,
+                    convert=if_convert,
                     ).execute()
         except: 
             raise Exception(
@@ -382,9 +352,8 @@ class GDPut:
         
         return service_response["alternateLink"]
 
-
     def pt_put(self):
-        return self.convert_put()
+        return self.generic_put(True)
 
     def dr_put(self):
         raise Exception("this function is not supported yet")
