@@ -63,7 +63,7 @@ fusion table geocoding:
   --ft_latlng_column FT_LATLNG_COLUMN
                         specify the column header for latitude and longitude for the fusion table(if target_type is ft and --ft_location_column is used), the column will be created if not present
   --ft_location_column FT_LOCATION_COLUMN
-                        specify the location column header for the fusion table (if target_type is ft)
+                        specify the location column header for geocoding (if target_type is ft)
 
 </pre>
 
@@ -72,7 +72,7 @@ fusion table geocoding:
     % ./gdput.py -t ft samples/sample.csv     # upload a csv file to gd as fusion table
     % ./gdput.py -t ss samples/sample.csv     # upload a csv file to gd as spreadsheet
     % ./gdput.py -t ft --ft_location_column address  --ft_latlng_column latlng  samples/sample.csv 
-                                              # upload a csv to gd as fusion table with latitude longitude data(will be generated automatically)
+                                              # upload a csv to gd as fusion table with geocoding the latitude longitude data according to the address rows
 
 
 
