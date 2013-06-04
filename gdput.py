@@ -84,6 +84,19 @@ if __name__ == '__main__':
     
     help_target_type = '\n'.join(list_help_target_type)
 
+    choices_permission_types = ["private", "public_read", "public_write"]
+    help_permission_types = [
+            "(default) can only be accessed by file owner",
+            "public readable, everyone can read the file",
+            "public writable, everyone can write the file"]
+
+    help_permission = [(j+": "+k) for j,k in zip(choices_permission_types, help_permission_types)]
+
+    arg_parser.add_argument('-p', '--permissions', default = choices_permission_types[0],
+            choices = choices_permission_types,
+            help = "set the permission the uploaded file, could be:\n" + \
+            '\n'.join(help_permission))
+
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
             help='define the target file type on Google Drive, could be:\n'+
