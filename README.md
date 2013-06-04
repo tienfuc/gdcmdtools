@@ -3,16 +3,19 @@ gdcmdtools
 Google drive command-line tools
 
 
-# Install
-
- * Get the API client secrect file from your Google API console.(https://code.google.com/apis/console#:access)
- * Check the section "Client ID for installed applications", at the right side, click at the "Download JSON".
- * Save the json file as .gdcmdtools.secrets in your home directory.
- * Execute any tools from gdcmdtools tool set in a console, like: % ./gdput.py -t ft samples/sample.csv 
- * You will see message like: INFO:gdcmdtools.base:Please visit the URL in your browser: https://accounts.google.com/o/oauth2/auth?scope=....
- * Visit the URL with browser and allow the app accessing your Google Drive.
- * Copy the code you see in your browser, then back to the console, input the code and hit enter.
- * Done, you won't be asked for the code again unless the credential expired.
+# Installation
+ * Enable Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
+   * Enable Drive API
+   * Enable Fusion Tables API
+ * Grant access to Google Drive
+   1. Get the API client secrect file from your Google API console(https://code.google.com/apis/console#:access)
+   1. Check the section "Client ID for installed applications", at the right side, click at the "Download JSON".
+   1. Save the json file as .gdcmdtools.secrets in your home directory.
+   1. Execute any tools from gdcmdtools tool set in a terminal, like: % ./gdput.py -t ft samples/sample.csv 
+   1. You will see message like: INFO:gdcmdtools.base:Please visit the URL in your browser: https://accounts.google.com/o/oauth2/auth?scope=....
+   1. Visit the URL with browser and allow the app accessing your Google Drive.
+   1. Copy the code you see in your browser, then back to the terminal, input the code and hit enter.
+   1. Done, you won't be asked for the code again unless the credential expired.
 
 
 ## gdput
@@ -60,7 +63,7 @@ fusion table geocoding:
   --ft_latlng_column FT_LATLNG_COLUMN
                         specify the column header for latitude and longitude for the fusion table(if target_type is ft and --ft_location_column is used), the column will be created if not present
   --ft_location_column FT_LOCATION_COLUMN
-                        specify the location column header for the fusion table (if target_type is ft)
+                        specify the location column header for geocoding (if target_type is ft)
 
 </pre>
 
@@ -69,7 +72,7 @@ fusion table geocoding:
     % ./gdput.py -t ft samples/sample.csv     # upload a csv file to gd as fusion table
     % ./gdput.py -t ss samples/sample.csv     # upload a csv file to gd as spreadsheet
     % ./gdput.py -t ft --ft_location_column address  --ft_latlng_column latlng  samples/sample.csv 
-                                              # upload a csv to gd as fusion table with latitude longitude data(will be generated automatically)
+                                              # upload a csv to gd as fusion table with geocoding the latitude longitude data according to the address rows
 
 
 
