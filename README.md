@@ -4,9 +4,9 @@ Google drive command-line tools
 
 
 # Installation
- * Enable Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
-   * Enable Drive API
-   * Enable Fusion Tables API
+ * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
+   * Drive API
+   * Fusion Tables API
  * Grant access to Google Drive
    1. Get the API client secrect file from your Google API console(https://code.google.com/apis/console#:access)
    1. Check the section "Client ID for installed applications", at the right side, click at the "Download JSON".
