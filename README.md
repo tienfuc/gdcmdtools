@@ -2,6 +2,8 @@ gdcmdtools
 =========
 Google drive command-line tools
 
+Tools can be used to maintain the files on Google Drive.
+
 
 # Installation
  * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
