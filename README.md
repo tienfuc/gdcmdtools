@@ -4,9 +4,9 @@ Google drive command-line tools
 
 
 # Installation
- * Enable Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
-   * Enable Drive API
-   * Enable Fusion Tables API
+ * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
+   * Drive API
+   * Fusion Tables API
  * Grant access to Google Drive
    1. Get the API client secrect file from your Google API console(https://code.google.com/apis/console#:access)
    1. Check the section "Client ID for installed applications", at the right side, click at the "Download JSON".
@@ -14,7 +14,7 @@ Google drive command-line tools
    1. Execute any tools from gdcmdtools tool set in a terminal, like: % ./gdput.py -t ft samples/sample.csv 
    1. You will see message like: INFO:gdcmdtools.base:Please visit the URL in your browser: https://accounts.google.com/o/oauth2/auth?scope=....
    1. Visit the URL with browser and allow the app accessing your Google Drive.
-   1. Copy the code you see in your browser, then back to the terminal, input the code and hit enter.
+   1. Copy the code you see in your browser, then back to the terminal, paste the code and hit enter.
    1. Done, you won't be asked for the code again unless the credential expired.
 
 
