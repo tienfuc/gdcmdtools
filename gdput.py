@@ -90,12 +90,12 @@ if __name__ == '__main__':
             "public readable, everyone can read the file",
             "public writable, everyone can write the file"]
 
-    help_permission = [(j+": "+k) for j,k in zip(choices_permission_types, help_permission_types)]
+    help_permission_text = [(j+": "+k) for j, k in zip(choices_permission_types, help_permission_types)]
 
-    arg_parser.add_argument('-p', '--permissions', default = choices_permission_types[0],
+    arg_parser.add_argument('-p', '--permission', default = choices_permission_types[0],
             choices = choices_permission_types,
-            help = "set the permission the uploaded file, could be:\n" + \
-            '\n'.join(help_permission))
+            help = "set the permission of the uploaded file, could be:\n" + \
+            '\n'.join(help_permission_text))
 
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
