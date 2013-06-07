@@ -38,12 +38,11 @@ def get_mime_type(filename, source_type):
 
     return (True, source_mime_type)
     
-
-class verify_location_column(argparse.Action):
+class split_ft_arguments(argparse.Action):
     def __call__(self, parser, args, values, option_string=None):
-        if getattr(args, 'ft_location_column') is None:
-            parser.error('--ft_location_column must be used with --ft_latlng_column')
-        setattr(args, self.dest, values)
+        if len(values) == 2:
+            setattr(args, 'ft_location_column', values[0])
+            setattr(args, 'ft_latlng_column', values[1])
 
 if __name__ == '__main__':
 
@@ -103,21 +102,12 @@ if __name__ == '__main__':
             "raw: (default) the source file will uploaded without touching\n"+
             help_target_type)
 
-
-    ft_group = arg_parser.add_argument_group('fusion table geocoding')
-
-
-    # FIXME: bug, --ft_latlng_column must be after --ft_location_column, or parse fails.
-    ft_group.add_argument('--ft_latlng_column', 
-            action=verify_location_column,
+    arg_parser.add_argument('--ft_location_latlng_column', 
+            action=split_ft_arguments,
+            nargs=2,
+            metavar=("LOCATION", "LATLNG"),
             help=
-            'specify the column header for latitude and longitude for the fusion table'+
-			'(if target_type is ft and --ft_location_column is used)'+
-            ', the column will be created if not present' )
-
-    ft_group.add_argument('--ft_location_column', 
-            help=
-            'specify the location column header for the fusion table '+
+            'specify the LOCATION(location) and LATLNG(latutude, longitude) column header for geocoding of the fusion table '+
             '(if target_type is ft)')
 
     choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
