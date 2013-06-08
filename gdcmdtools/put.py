@@ -61,7 +61,8 @@ class GDPut:
             description, 
             if_oob,
             location_column,
-            latlng_column):
+            latlng_column,
+            permission):
 
         logger.debug("source_file=%s, mime_type=%s, target_type=%s" % 
                 (source_file, mime_type, target_type))
@@ -74,6 +75,8 @@ class GDPut:
         self.description = description
         self.location_column = location_column
         self.latlng_column = latlng_column
+        self.permission = permission
+
         self.ft_headers = None
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
 

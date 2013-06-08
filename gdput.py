@@ -42,10 +42,10 @@ def get_mime_type(filename, source_type):
     
 class split_ft_arguments(argparse.Action):
     def __call__(self, parser, args, values, option_string=None):
-        if len(values) == 2:
+        if len(values) == 2:    # FIXME
             setattr(args, 'ft_location_column', values[0])
             setattr(args, 'ft_latlng_column', values[1])
-
+ 
 if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \
@@ -87,9 +87,12 @@ if __name__ == '__main__':
 
     help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
 
+
+    PERMISSION_METAVAR = ('ROLE', 'TYPE', 'VALUE')
     arg_parser.add_argument('-p', '--permission',
-            metavar=('ROLE', 'TYPE', 'VALUE'),
-            nargs=3,
+            #action=split_permission_arguments,
+            metavar=PERMISSION_METAVAR,
+            nargs=len(PERMISSION_METAVAR),
             help = "set the permission of the uploaded file, could be:\n" + '\n'.join(help_permission_text) + \
                     '\nvalue: user or group e-mail address, or \'me\' to refer to the current authorized user')
 
@@ -99,13 +102,15 @@ if __name__ == '__main__':
             "raw: (default) the source file will uploaded without touching\n"+
             help_target_type)
 
+    FT_METAVAR = ("LOCATION", "LATLNG")
     arg_parser.add_argument('--ft_location_latlng_column', 
             action=split_ft_arguments,
-            nargs=2,
-            metavar=("LOCATION", "LATLNG"),
+            nargs=len(FT_METAVAR),
+            metavar=FT_METAVAR,
             help=
             'specify the LOCATION(location) and LATLNG(latutude, longitude) column header for geocoding of the fusion table '+
             '(if target_type is ft)')
+
 
     choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
@@ -119,6 +124,11 @@ if __name__ == '__main__':
             help_redirect_uri)
 
     args = arg_parser.parse_args()
+
+    ft_location_column = getattr(args, 'ft_location_column', None)
+    ft_latlng_column = getattr(args, 'ft_latlng_column', None)
+
+    permission = getattr(args, 'permission', None)
 
     logger.debug(args)
 
@@ -162,8 +172,9 @@ if __name__ == '__main__':
             target_title,
             args.target_description,
             if_oob,
-			args.ft_location_column,
-			args.ft_latlng_column)
+			ft_location_column,
+			ft_latlng_column,
+            permission)
 
     try:
         target_link = puter.run()
