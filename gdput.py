@@ -88,7 +88,7 @@ if __name__ == '__main__':
     help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
 
 
-    PERMISSION_METAVAR = ('ROLE', 'TYPE', 'VALUE')
+    PERMISSION_METAVAR = ('TYPE', 'ROLE', 'VALUE')
     arg_parser.add_argument('-p', '--permission',
             #action=split_permission_arguments,
             metavar=PERMISSION_METAVAR,
