@@ -13,6 +13,8 @@ from gdcmdtools.put import DICT_OF_CONVERTIBLE_FILE_TYPE
 from gdcmdtools.put import DICT_OF_REDIRECT_URI
 
 from gdcmdtools.base import BASE_INFO
+from gdcmdtools.perm import permission_resource_properties
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -83,18 +85,13 @@ if __name__ == '__main__':
     
     help_target_type = '\n'.join(list_help_target_type)
 
-    choices_permission_types = ["private", "public_read", "public_write"]
-    help_permission_types = [
-            "(default) can only be accessed by file owner",
-            "public readable, everyone can read the file",
-            "public writable, everyone can write the file"]
+    help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
 
-    help_permission_text = [(j+": "+k) for j, k in zip(choices_permission_types, help_permission_types)]
-
-    arg_parser.add_argument('-p', '--permission', default = choices_permission_types[0],
-            choices = choices_permission_types,
-            help = "set the permission of the uploaded file, could be:\n" + \
-            '\n'.join(help_permission_text))
+    arg_parser.add_argument('-p', '--permission',
+            metavar=('ROLE', 'TYPE', 'VALUE'),
+            nargs=3,
+            help = "set the permission of the uploaded file, could be:\n" + '\n'.join(help_permission_text) + \
+                    '\nvalue: user or group e-mail address, or \'me\' to refer to the current authorized user')
 
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
