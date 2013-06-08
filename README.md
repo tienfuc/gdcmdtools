@@ -25,10 +25,11 @@ This tool can be used to upload files to Google drive as Spreadsheet,csv,fusion 
 
 ### Usage
 <pre>
-usage: gdput.py [-h] [-s SOURCE_TYPE] [-l TARGET_TITLE]
-                [-d TARGET_DESCRIPTION] [-f FOLDER_ID] [-p ROLE TYPE VALUE]
+usage: gdput.py [-h] [-s SOURCE_TYPE] [-l TARGET_TITLE]                                                                                                                              [2/1801]
+                [-d TARGET_DESCRIPTION] [-f FOLDER_ID] [-p TYPE ROLE VALUE]
                 [-t {ft,pt,ss,doc,raw,ocr,dr}]
-                [--ft_location_latlng_column LOCATION LATLNG] [-r {local,oob}]
+                [--ft_latlng_column FT_LATLNG_COLUMN]
+                [--ft_location_column FT_LOCATION_COLUMN] [-r {local,oob}]
                 source_file
 
 gdput v0.0.1 - gdcmdtools (Google Drive command line tools)
@@ -60,13 +61,17 @@ optional arguments:
                         doc: Document (for .doc, .docx, .html, .htm, .txt, .rtf)
                         ocr: OCR (for .jpg, .git, .png, .pdf)
                         dr: Drawing (for .wmf)
-  --ft_location_latlng_column LOCATION LATLNG
-                        specify the LOCATION(location) and LATLNG(latutude, longitude) column header for geocoding of the fusion table 
-(if target_type is ft)
   -r {local,oob}, --redirect_uri {local,oob}
                         specify the redirect URI for the oauth2 flow, could be:
                         local: means "http://localhost"
-                        oob: (default) means "urn:ietf:wg:oauth:2.0:oob"                        
+                        oob: (default) means "urn:ietf:wg:oauth:2.0:oob"
+
+fusion table geocoding:
+  --ft_latlng_column FT_LATLNG_COLUMN
+                        specify the column header for latitude and longitude for the fusion table(if target_type is ft and --ft_location_column is used), the column will be created automati
+cally
+  --ft_location_column FT_LOCATION_COLUMN
+                        specify the location column header for the fusion table (if target_type is ft)
 </pre>
 
 ### Example
