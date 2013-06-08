@@ -18,6 +18,7 @@ import os
 import json
 
 from gdcmdtools.base import GDBase
+from gdcmdtools.perm import GDPerm
 
 DICT_OF_CONVERTIBLE_FILE_TYPE = { \
         'raw':[
@@ -93,7 +94,6 @@ class GDPut:
         # ft service
         if target_type == "ft":
             self.ft_service = base.get_ft_service()
-            logger.debug(self.ft_service)
         
     def run(self):
         try:
@@ -142,7 +142,7 @@ class GDPut:
                 row.insert(index_latlng, latlng)
                 rows.append(row)
  
-        logger.debug(rows)
+        # logger.debug(rows)
 
         # save new file
         csv_file_dir = os.path.dirname(self.source_file)    
@@ -188,6 +188,9 @@ class GDPut:
             raise Exception(
                     "Failed at calling service.files().insert(%s,%s,%s).execute()" 
                     % (body, media_body, True))
+
+        if self.permission != None:
+            GDPerm.insert(self.service, service_response['id'], self.permission)
         
         return service_response["alternateLink"]
 
@@ -206,7 +209,6 @@ class GDPut:
             
             self.ft_headers = cols            
 
-            logger.debug("cols=%s" % cols)
             # FIXME:
             if self.location_column and self.latlng_column:
                 #if self.latlng_column not in cols:
@@ -255,9 +257,9 @@ class GDPut:
         #logger.debug('body=%s' % body)
 
         # table columns are created, get tableId
-        response = self.ft_service.table().insert(body=table).execute()
-        logger.debug("response=%s" % response)
-        table_id = response["tableId"]
+        service_response = self.ft_service.table().insert(body=table).execute()
+        #logger.debug("service_response=%s" % service_response)
+        table_id = service_response["tableId"]
 
         # move to target folder
         if self.folder_id != None:
@@ -279,6 +281,9 @@ class GDPut:
         else:
             url = self.ft_put_body(table_id, self.source_file)
 
+        if self.permission != None:
+            GDPerm.insert(self.service, service_response['tableId'], self.permission)
+
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 
         return ft_url
@@ -295,7 +300,7 @@ class GDPut:
 
             # weird issue here: the URI should be encoded with UTF-8 if body is UTF-8 too.
             utf8_body = rows.decode('utf-8').encode('utf-8')
-            logger.debug(utf8_body)
+            #logger.debug(utf8_body)
             try:
                 response, content = self.http.request(URI.encode('utf-8'), METHOD, body=utf8_body)
             except:
@@ -352,7 +357,10 @@ class GDPut:
             raise Exception(
                     "Failed at calling service.files().insert(%s,%s,%s).execute()" 
                     % (body, media_body, True))
-        
+ 
+        if self.permission != None:
+            GDPerm.insert(self.service, service_response['id'], self.permission)
+
         return service_response["alternateLink"]
 
     def pt_put(self):
