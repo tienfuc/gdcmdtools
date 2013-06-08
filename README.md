@@ -81,7 +81,7 @@ cally
     % python ./gdput.py -t ft --ft_location_column address  --ft_latlng_column latlng  samples/sample.csv 
                                               # upload a csv to gd as fusion table with geocoding the latitude longitude data according to the address rows
     % python ./gdput.py -p anyone reader me samples/sample.csv     
-                                              # upload a csv file and set the file public-read
+                                              # upload a csv file as Spreadsheet and set the file public-read
 
 
 
