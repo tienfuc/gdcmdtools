@@ -2,7 +2,7 @@ gdcmdtools
 =========
 Google drive command-line tools
 
-Tools can be used to maintain the files on Google Drive.
+Tools can be used to maintain files on Google Drive.
 
 
 # Installation
