@@ -133,7 +133,8 @@ class GDPut:
             if self.location_column and self.latlng_column:
                 self.ft_headers.append(self.latlng_column)
                 rows.append(self.ft_headers)
-
+            
+            # TODO: check if location in the list
             index_latlng = self.ft_headers.index(self.latlng_column)
             index_location = self.ft_headers.index(self.location_column)
 
@@ -211,8 +212,8 @@ class GDPut:
 
             # FIXME:
             if self.location_column and self.latlng_column:
-                #if self.latlng_column not in cols:
-                #cols.append(self.latlng_column)
+                if self.location_column not in cols:
+                    raise Exception("Column %s not found in the csv file" % self.location_column)
 
                 for c in cols:
                     if c == self.latlng_column:
@@ -224,6 +225,8 @@ class GDPut:
                     table["columns"].append(d)
 
             elif self.location_column and not self.latlng_column: 
+                if self.location_column not in cols:
+                    raise Exception("Column %s not found in the csv file" % self.location_column)
 
                 for c in cols:
                     if c == self.location_column:
