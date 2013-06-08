@@ -2,43 +2,37 @@
 # -*- coding: utf-8 -*-
 
 from apiclient import errors
-# ...
 
 permission_resource_properties = {
         "role":["owner", "reader", "writer"],
         "type":["user", "group", "domain", "anyone"]}
 
+class GDPerm:
+    def __init__(self, permission):
+        # base
+        base = GDBase()
+        creds = base.get_credentials(if_oob)
+        if creds == None:
+            raise Exception("Failed to retrieve credentials")
 
-# permission text
-# private
-# anyone_w_link_read
-# anyone_w_link_write
-# public_read
-# public_write
-
+        self.http = base.get_authorized_http(creds)
+        self.service = base.get_drive_service()
+ 
+        pass
 
  
-def insert_permission(service, file_id, value, perm_type, role):
-  """Insert a new permission.
+    @staticmethod 
+    def insert(service, file_id, permission):
 
-  Args:
-    service: Drive API service instance.
-    file_id: ID of the file to insert permission for.
-    value: User or group e-mail address, domain name or None for 'default'
-           type.
-    perm_type: The value 'user', 'group', 'domain' or 'default'.
-    role: The value 'owner', 'writer' or 'reader'.
-  Returns:
-    The inserted permission if successful, None otherwise.
-  """
-  new_permission = {
-          'value': value,
-          'type': perm_type,
-          'role': role
-          }
-  try:
-      return service.permissions().insert(
-              fileId=file_id, body=new_permission).execute()
-  except errors.HttpError, error:
-      print 'An error occurred: %s' % error
-  return None
+        new_permission = {
+                'type': permission[0],
+                'role': permission[1], 
+                'value': permission[2],
+                }
+
+        try:
+            return service.permissions().insert(
+                    fileId=file_id, body=new_permission).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error
+            return None
