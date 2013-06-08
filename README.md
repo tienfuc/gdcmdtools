@@ -46,7 +46,7 @@ optional arguments:
                         specify the description of the target file
   -f FOLDER_ID, --folder_id FOLDER_ID
                         the target folder ID on the Google drive
-  -p ROLE TYPE VALUE, --permission ROLE TYPE VALUE
+  -p TYPE ROLE VALUE, --permission TYPE ROLE VALUE
                         set the permission of the uploaded file, could be:
                         type: user, group, domain, anyone
                         role: owner, reader, writer
