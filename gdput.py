@@ -40,12 +40,7 @@ def get_mime_type(filename, source_type):
 
     return (True, source_mime_type)
     
-class split_ft_arguments(argparse.Action):
-    def __call__(self, parser, args, values, option_string=None):
-        if len(values) == 2:    # FIXME
-            setattr(args, 'ft_location_column', values[0])
-            setattr(args, 'ft_latlng_column', values[1])
- 
+
 if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \
@@ -90,7 +85,6 @@ if __name__ == '__main__':
 
     PERMISSION_METAVAR = ('TYPE', 'ROLE', 'VALUE')
     arg_parser.add_argument('-p', '--permission',
-            #action=split_permission_arguments,
             metavar=PERMISSION_METAVAR,
             nargs=len(PERMISSION_METAVAR),
             help = "set the permission of the uploaded file, could be:\n" + '\n'.join(help_permission_text) + \
@@ -102,13 +96,17 @@ if __name__ == '__main__':
             "raw: (default) the source file will uploaded without touching\n"+
             help_target_type)
 
-    FT_METAVAR = ("LOCATION", "LATLNG")
-    arg_parser.add_argument('--ft_location_latlng_column', 
-            action=split_ft_arguments,
-            nargs=len(FT_METAVAR),
-            metavar=FT_METAVAR,
+    ft_group = arg_parser.add_argument_group('fusion table geocoding')
+
+    ft_group.add_argument('--ft_latlng_column', 
             help=
-            'specify the LOCATION(location) and LATLNG(latutude, longitude) column header for geocoding of the fusion table '+
+            'specify the column header for latitude and longitude for the fusion table'+
+            '(if target_type is ft and --ft_location_column is used)'+
+            ', the column will be created automatically' )
+
+    ft_group.add_argument('--ft_location_column', 
+            help=
+            'specify the location column header for the fusion table '+
             '(if target_type is ft)')
 
 
@@ -125,13 +123,13 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
 
-    ft_location_column = getattr(args, 'ft_location_column', None)
-    ft_latlng_column = getattr(args, 'ft_latlng_column', None)
+    #logger.debug(args)
 
-    permission = getattr(args, 'permission', None)
-
-    logger.debug(args)
-
+    if getattr(args, 'ft_latlng_column', None):
+        if getattr(args, 'ft_location_column', None) == None:
+             logger.error("must supply --ft_location_column with --ft_latlng_column")
+             sys.exit(1)
+            
     # check source file if exists
     try:
         with open(args.source_file) as f: pass
@@ -172,9 +170,9 @@ if __name__ == '__main__':
             target_title,
             args.target_description,
             if_oob,
-			ft_location_column,
-			ft_latlng_column,
-            permission)
+			args.ft_location_column,
+			args.ft_latlng_column,
+            args.permission)
 
     try:
         target_link = puter.run()
