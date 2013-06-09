@@ -63,7 +63,8 @@ class GDPut:
             if_oob,
             location_column,
             latlng_column,
-            permission):
+            permission,
+            csv_column_define):
 
         logger.debug("source_file=%s, mime_type=%s, target_type=%s" % 
                 (source_file, mime_type, target_type))
@@ -77,6 +78,7 @@ class GDPut:
         self.location_column = location_column
         self.latlng_column = latlng_column
         self.permission = permission
+        self.csv_column_define = csv_column_define 
 
         self.ft_headers = None
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
@@ -195,6 +197,14 @@ class GDPut:
         
         return service_response["alternateLink"]
 
+    def user_define_column(self, cols, csv_column_define):
+        return_cols = []
+        for (col,col_type) in zip(cols, self.csv_column_define):
+            d = {"type":col_type, "name":col}
+            return_cols.append(d)
+        
+        return return_cols
+
     # read csv and convert to the fusion table
     def create_ft(self, target_file):
         table = {
@@ -215,34 +225,42 @@ class GDPut:
                 if self.location_column not in cols:
                     raise Exception("Column %s not found in the csv file" % self.location_column)
 
-                for c in cols:
-                    if c == self.latlng_column:
-                        d = {"type":"LOCATION"}
-                    else:
-                        d = {"type":"STRING"}
-                    d["name"] = c
+                if self.csv_column_define == None: 
+                    for c in cols:
+                        if c == self.latlng_column:
+                            d = {"type":"LOCATION"}
+                        else:
+                            d = {"type":"STRING"}
+                        d["name"] = c
 
-                    table["columns"].append(d)
+                        table["columns"].append(d)
+                else:
+                    table["columns"] = self.user_define_column(cols, self.csv_column_define)
 
             elif self.location_column and not self.latlng_column: 
                 if self.location_column not in cols:
                     raise Exception("Column %s not found in the csv file" % self.location_column)
+                if self.csv_column_define == None:
+                    for c in cols:
+                        if c == self.location_column:
+                            d = {"type":"LOCATION"}
+                        else:
+                            d = {"type":"STRING"}
+                        d["name"] = c
 
-                for c in cols:
-                    if c == self.location_column:
-                        d = {"type":"LOCATION"}
-                    else:
-                        d = {"type":"STRING"}
-                    d["name"] = c
+                        table["columns"].append(d)
+                else:
+                    table["columns"] = self.user_define_column(cols, self.csv_column_define)
+                        
 
-                    table["columns"].append(d)
-            
             else:
 
-                for c in cols:
-                    d = {"type":"STRING", "name":c}
-                    table["columns"].append(d)
-               
+                if self.csv_column_define == None: 
+                    for c in cols:
+                        d = {"type":"STRING", "name":c}
+                        table["columns"].append(d)
+                else:
+                    table["columns"] = self.user_define_column(cols, self.csv_column_define)
 
         return table 
 

@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # check column type
     if args.csv_column_define != None: 
         # FIXME: if the column contain '_' character?
-        csv_column_define = args.csv_column_define.split('_')
+        csv_column_define = args.csv_column_define.upper().split('_')
         if check_column_type(args.source_file, csv_column_define) != True: 
             arg_parser.error('Check option --csv_column_define')
     else:
@@ -200,7 +200,8 @@ if __name__ == '__main__':
             if_oob,
 			args.ft_location_column,
 			args.ft_latlng_column,
-            args.permission)
+            args.permission,
+            csv_column_define)
 
     try:
         target_link = puter.run()
