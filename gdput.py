@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     # FIXME: mime_type = auto to replace --auto_type
     arg_parser.add_argument('-s', '--source_type', default="auto",
-            help='define the source file type by MIME type, ex: "text/csv", or \"auto\" to determine the file type by file name')
+            help='define the source file type by MIME type,\nex: "text/csv", or \"auto\" to determine the file type by file name')
    
     arg_parser.add_argument('-l', '--target_title', default=None, 
             help='specify the title of the target file')
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     l_file_types_wo_raw = list(d_file_types.keys())
     l_file_types_wo_raw.remove("raw") 
 
-    # FIXME: readible-----
+    # FIXME: it's hard to read..
     # make the help text from DICT_OF_CONVERTIBLE_FILE_TYPE
     list_help_target_type = \
             [ (k+": "+
@@ -88,7 +88,7 @@ if __name__ == '__main__':
             metavar=PERMISSION_METAVAR,
             nargs=len(PERMISSION_METAVAR),
             help = "set the permission of the uploaded file, could be:\n" + '\n'.join(help_permission_text) + \
-                    '\nvalue: user or group e-mail address, or \'me\' to refer to the current authorized user')
+                    '\nvalue: user or group e-mail address,\nor \'me\' to refer to the current authorized user')
 
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
@@ -96,19 +96,21 @@ if __name__ == '__main__':
             "raw: (default) the source file will uploaded without touching\n"+
             help_target_type)
 
-    ft_group = arg_parser.add_argument_group('fusion table geocoding')
+
+    ft_group = arg_parser.add_argument_group('fusion table support (--target_type ft)')
 
     ft_group.add_argument('--ft_latlng_column', 
             help=
-            'specify the column header for latitude and longitude for the fusion table'+
-            '(if target_type is ft and --ft_location_column is used)'+
-            ', the column will be created automatically' )
+            'specify the column header for latitude and longitude for the fusion table,\n'+
+            'the column will be created automatically' )
 
     ft_group.add_argument('--ft_location_column', 
             help=
-            'specify the location column header for the fusion table '+
-            '(if target_type is ft)')
+            'specify the location column header for the fusion table')
 
+    ft_group.add_argument('--csv_column_define',
+            metavar='COLUMN_DEFINE1 CLOUMN_DEFINE2 ...',
+            help = 'define the columns type for each column of the csv file,\ncan be "string", "number", "datetime", or "location".\nex: has 4 columns in the csv file: "name", "age", "birthday", "address".\nyou can set --csv_column_define string number datetime location')
 
     choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
