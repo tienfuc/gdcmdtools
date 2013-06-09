@@ -4,7 +4,9 @@ Google drive command-line tools
 
 Tools can be used to maintain files on Google Drive.
 
-# OS-specified Installation
+# Installation
+  * Check your system has Python installed
+    * gdcmdtools are developed under Python 2.7.3, I would suggest users to run the tools with Python 2.7.3.
   * For Mac OSX
     1. sudo easy_install pip
     1. sudo pip install --upgrade google-api-python-client
