@@ -29,8 +29,7 @@ def check_column_type(source_file, csv_column_define):
     with open(source_file, 'rb') as csv_file:
         csv_reader = csv.reader(csv_file)
         csv_lines = len(csv_reader.next())
-        # FIXME: if the column contain '_' character?
-        column_numbers = len(csv_column_define.split('_'))
+        column_numbers = len(csv_column_define)
         
         if csv_lines == column_numbers:
             return True
@@ -155,11 +154,16 @@ if __name__ == '__main__':
         logger.error(e)
         sys.exit(1)
 
-    # check column type        
+    # check column type
     if args.csv_column_define != None: 
-        if check_column_type(args.source_file, args.csv_column_define) != True: 
+        # FIXME: if the column contain '_' character?
+        csv_column_define = args.csv_column_define.split('_')
+        if check_column_type(args.source_file, csv_column_define) != True: 
             arg_parser.error('Check option --csv_column_define')
+    else:
+        csv_column_define = None
             
+
 
     # check source_type
     (r_mime_type, mime_type) = get_mime_type(args.source_file, args.source_type)
