@@ -103,6 +103,8 @@ fusion table support (--target_type ft):
                                               # upload a csv to gd as fusion table with geocoding the latitude longitude data according to the address rows
     % python ./gdput.py -p anyone reader me samples/sample.csv     
                                               # upload a csv file as Spreadsheet and set the file public-read
+    % python ./gdput.py -t ft --csv_column_define string_string_location_string_string_number samples/sample.csv
+                                              # upload a csv file as ft with specifed column type
 
 
 
