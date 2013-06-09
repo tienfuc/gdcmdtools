@@ -4,8 +4,17 @@ Google drive command-line tools
 
 Tools can be used to maintain files on Google Drive.
 
+# OS-specified Installation
+  * For Mac
+    1. sudo easy_install pip
+    1. sudo pip install --upgrade google-api-python-client
+    1. sudo pip install --upgrade requests
+  * For Ubuntu Linux
+    1. sudo apt-get install python-pip
+    1. sudo pip install --upgrade google-api-python-client
+    1. sudo pip install --upgrade requests
 
-# Installation
+# API Setup
  * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
    * Drive API
    * Fusion Tables API
