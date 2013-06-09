@@ -5,7 +5,7 @@ Google drive command-line tools
 Tools can be used to maintain files on Google Drive.
 
 # OS-specified Installation
-  * For Mac
+  * For Mac OSX
     1. sudo easy_install pip
     1. sudo pip install --upgrade google-api-python-client
     1. sudo pip install --upgrade requests
