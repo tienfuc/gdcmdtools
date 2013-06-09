@@ -16,12 +16,27 @@ from gdcmdtools.base import BASE_INFO
 from gdcmdtools.perm import permission_resource_properties
 
 
+import csv
+
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 __THIS_APP = 'gdput'
 __THIS_VERSION = '0.0.1'
+
+def check_column_type(source_file, csv_column_define):
+    with open(source_file, 'rb') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        csv_lines = len(csv_reader.next())
+        # FIXME: if the column contain '_' character?
+        column_numbers = len(csv_column_define.split('_'))
+        
+        if csv_lines == column_numbers:
+            return True
+        else:
+            return False   
+
 
 def get_mime_type(filename, source_type):
     # check source_type
@@ -88,14 +103,14 @@ if __name__ == '__main__':
             metavar=PERMISSION_METAVAR,
             nargs=len(PERMISSION_METAVAR),
             help = "set the permission of the uploaded file, could be:\n" + '\n'.join(help_permission_text) + \
-                    '\nvalue: user or group e-mail address,\nor \'me\' to refer to the current authorized user')
+                    '\nvalue: user or group e-mail address,\nor \'me\' to refer to the current authorized user\n'+
+                    'ex: -p anyone reader me # set the uploaded file public-read')
 
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
             help='define the target file type on Google Drive, could be:\n'+
             "raw: (default) the source file will uploaded without touching\n"+
             help_target_type)
-
 
     ft_group = arg_parser.add_argument_group('fusion table support (--target_type ft)')
 
@@ -109,8 +124,8 @@ if __name__ == '__main__':
             'specify the location column header for the fusion table')
 
     ft_group.add_argument('--csv_column_define',
-            metavar='COLUMN_DEFINE1 CLOUMN_DEFINE2 ...',
-            help = 'define the columns type for each column of the csv file,\ncan be "string", "number", "datetime", or "location".\nex: has 4 columns in the csv file: "name", "age", "birthday", "address".\nyou can set --csv_column_define string number datetime location')
+            metavar='DEFINE1_DEFINE2_DEFINE3...',
+            help = 'define the columns type for each column of the csv file,\ncan be "string", "number", "datetime", or "location".\nex: has 4 columns in the csv file: "name", "age", "birthday", "address".\nyou can set --csv_column_define string_number_datetime_location')
 
     choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
     list_help_redirect_uri = \
@@ -127,17 +142,24 @@ if __name__ == '__main__':
 
     #logger.debug(args)
 
+    ## post-processing of argument parsing
+    # 
     if getattr(args, 'ft_latlng_column', None):
         if getattr(args, 'ft_location_column', None) == None:
-             logger.error("must supply --ft_location_column with --ft_latlng_column")
-             sys.exit(1)
-            
+             arg_parser.error("must supply --ft_location_column with --ft_latlng_column")
+
     # check source file if exists
     try:
         with open(args.source_file) as f: pass
     except IOError as e:
         logger.error(e)
         sys.exit(1)
+
+    # check column type        
+    if args.csv_column_define != None: 
+        if check_column_type(args.source_file, args.csv_column_define) != True: 
+            arg_parser.error('Check option --csv_column_define')
+            
 
     # check source_type
     (r_mime_type, mime_type) = get_mime_type(args.source_file, args.source_type)

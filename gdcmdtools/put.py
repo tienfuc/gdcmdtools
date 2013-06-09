@@ -110,7 +110,7 @@ class GDPut:
     def raw_put(self):
         return self.generic_put(False)
 
-    def chk_CSV(self):
+    def check_csv(self):
         self.csv_delimiter = ','
         with open(self.source_file, 'rb') as csv_file:
             try:    
@@ -159,7 +159,7 @@ class GDPut:
 
 
     def ss_put(self):
-        if not self.chk_CSV():
+        if not self.check_csv():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
         media_body = MediaFileUpload(
                 self.source_file, 
@@ -248,7 +248,7 @@ class GDPut:
 
 
     def ft_put(self):
-        if not self.chk_CSV():
+        if not self.check_csv():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
 
         # save new csv file with latlng data
