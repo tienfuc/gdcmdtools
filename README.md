@@ -41,7 +41,7 @@ usage: gdput.py [-h] [-s SOURCE_TYPE] [-l TARGET_TITLE]
                 [-t {ft,pt,ss,doc,raw,ocr,dr}]
                 [--ft_latlng_column FT_LATLNG_COLUMN]
                 [--ft_location_column FT_LOCATION_COLUMN]
-                [--csv_column_define DEFINE1_DEFINE2_DEFINE3...]
+                [--csv_column_define define1_define2_defineN...]
                 [-r {local,oob}]
                 source_file
 
@@ -88,7 +88,7 @@ fusion table support (--target_type ft):
                         the column will be created automatically
   --ft_location_column FT_LOCATION_COLUMN
                         specify the location column header for the fusion table
-  --csv_column_define DEFINE1_DEFINE2_DEFINE3...
+  --csv_column_define define1_define2_defineN...
                         define the columns type for each column of the csv file,
                         can be "string", "number", "datetime", or "location".
                         ex: has 4 columns in the csv file: "name", "age", "birthday", "address".
