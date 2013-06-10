@@ -120,3 +120,10 @@ get files from google drive
 
 ## License
 BSD License.
+
+## Bug
+Please report bugs via https://github.com/timchen86/gdcmdtools/issues
+
+## Author
+Tim Chen <tim.chen.86@gmail.com>
+irc: ctf_ @ freenode
