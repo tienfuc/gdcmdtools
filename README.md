@@ -4,8 +4,19 @@ Google drive command-line tools
 
 Tools can be used to maintain files on Google Drive.
 
-
 # Installation
+  * Check your system has Python installed
+    * gdcmdtools are developed under Python 2.7.3, I would suggest users to run the tools with Python 2.7.3.(OK: 2.7.2)
+  * For Mac OSX
+    1. sudo easy_install pip
+    1. sudo pip install --upgrade google-api-python-client
+    1. sudo pip install --upgrade requests
+  * For Ubuntu Linux
+    1. sudo apt-get install python-pip
+    1. sudo pip install --upgrade google-api-python-client
+    1. sudo pip install --upgrade requests
+
+# API Setup
  * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
    * Drive API
    * Fusion Tables API
@@ -25,11 +36,13 @@ This tool can be used to upload files to Google drive as Spreadsheet,csv,fusion 
 
 ### Usage
 <pre>
-usage: gdput.py [-h] [-s SOURCE_TYPE] [-l TARGET_TITLE]                                                                                                                              [2/1801]
+usage: gdput.py [-h] [-s SOURCE_TYPE] [-l TARGET_TITLE]
                 [-d TARGET_DESCRIPTION] [-f FOLDER_ID] [-p TYPE ROLE VALUE]
                 [-t {ft,pt,ss,doc,raw,ocr,dr}]
                 [--ft_latlng_column FT_LATLNG_COLUMN]
-                [--ft_location_column FT_LOCATION_COLUMN] [-r {local,oob}]
+                [--ft_location_column FT_LOCATION_COLUMN]
+                [--csv_column_define DEFINE1_DEFINE2_DEFINE3...]
+                [-r {local,oob}]
                 source_file
 
 gdput v0.0.1 - gdcmdtools (Google Drive command line tools)
@@ -40,7 +53,8 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -s SOURCE_TYPE, --source_type SOURCE_TYPE
-                        define the source file type by MIME type, ex: "text/csv", or "auto" to determine the file type by file name
+                        define the source file type by MIME type,
+                        ex: "text/csv", or "auto" to determine the file type by file name
   -l TARGET_TITLE, --target_title TARGET_TITLE
                         specify the title of the target file
   -d TARGET_DESCRIPTION, --target_description TARGET_DESCRIPTION
@@ -51,7 +65,9 @@ optional arguments:
                         set the permission of the uploaded file, could be:
                         type: user, group, domain, anyone
                         role: owner, reader, writer
-                        value: user or group e-mail address, or 'me' to refer to the current authorized user
+                        value: user or group e-mail address,
+                        or 'me' to refer to the current authorized user
+                        ex: -p anyone reader me # set the uploaded file public-read
   -t {ft,pt,ss,doc,raw,ocr,dr}, --target_type {ft,pt,ss,doc,raw,ocr,dr}
                         define the target file type on Google Drive, could be:
                         raw: (default) the source file will uploaded without touching
@@ -66,12 +82,17 @@ optional arguments:
                         local: means "http://localhost"
                         oob: (default) means "urn:ietf:wg:oauth:2.0:oob"
 
-fusion table geocoding:
+fusion table support (--target_type ft):
   --ft_latlng_column FT_LATLNG_COLUMN
-                        specify the column header for latitude and longitude for the fusion table(if target_type is ft and --ft_location_column is used), the column will be created automati
-cally
+                        specify the column header for latitude and longitude for the fusion table,
+                        the column will be created automatically
   --ft_location_column FT_LOCATION_COLUMN
-                        specify the location column header for the fusion table (if target_type is ft)
+                        specify the location column header for the fusion table
+  --csv_column_define DEFINE1_DEFINE2_DEFINE3...
+                        define the columns type for each column of the csv file,
+                        can be "string", "number", "datetime", or "location".
+                        ex: has 4 columns in the csv file: "name", "age", "birthday", "address".
+                        you can set --csv_column_define string_number_datetime_location
 </pre>
 
 ### Example
@@ -82,6 +103,8 @@ cally
                                               # upload a csv to gd as fusion table with geocoding the latitude longitude data according to the address rows
     % python ./gdput.py -p anyone reader me samples/sample.csv     
                                               # upload a csv file as Spreadsheet and set the file public-read
+    % python ./gdput.py -t ft --csv_column_define string_string_location_string_string_number samples/sample.csv
+                                              # upload a csv file as ft with specifed column type
 
 
 
