@@ -123,7 +123,7 @@ if __name__ == '__main__':
             'specify the location column header for the fusion table')
 
     ft_group.add_argument('--csv_column_define',
-            metavar='DEFINE1_DEFINE2_DEFINE3...',
+            metavar='define1_define2_defineN...',
             help = 'define the columns type for each column of the csv file,\ncan be "string", "number", "datetime", or "location".\nex: has 4 columns in the csv file: "name", "age", "birthday", "address".\nyou can set --csv_column_define string_number_datetime_location')
 
     choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
