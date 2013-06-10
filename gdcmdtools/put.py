@@ -163,39 +163,8 @@ class GDPut:
     def ss_put(self):
         if not self.check_csv():
             raise Exception("The delimiter of the source csv file is not '%s'" % self.csv_delimiter)
-        media_body = MediaFileUpload(
-                self.source_file, 
-                mimetype=self.mime_type, 
-                resumable=False)
-       
-        if self.folder_id == None:
-            parents = []
-        else:
-            parents = [{
-                "kind":"drive#fileLink",
-                "id":self.folder_id}]
-
-        body = {
-                'title':self.title,
-                'mimeType':self.mime_type,
-                'parents':parents}
- 
-        try:
-            service_response = self.service.files().insert(
-                    body=body,
-                    media_body=media_body,
-                    # so csv will be converted to spreadsheet
-                    convert=True
-                    ).execute()
-        except: 
-            raise Exception(
-                    "Failed at calling service.files().insert(%s,%s,%s).execute()" 
-                    % (body, media_body, True))
-
-        if self.permission != None:
-            GDPerm.insert(self.service, service_response['id'], self.permission)
         
-        return service_response["alternateLink"]
+        return self.generic_put(True)
 
     def user_define_column(self, cols, csv_column_define):
         return_cols = []
