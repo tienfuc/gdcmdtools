@@ -125,6 +125,8 @@ BSD License.
 Please report bugs via https://github.com/timchen86/gdcmdtools/issues
 
 ## Author
-Tim Chen <tim.chen.86@gmail.com>
+Tim Chen
+
+Email: tim.chen.86 @ gmail.com
 
 irc: ctf_ @ freenode
