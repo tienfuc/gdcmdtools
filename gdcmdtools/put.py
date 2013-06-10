@@ -388,10 +388,11 @@ class GDPut:
         return self.generic_put(True)
 
     def dr_put(self):
-        raise Exception("this function is not supported yet")
+        return self.generic_put(True)
 
     def ocr_put(self):
-        raise Exception("this function is not supported yet")
+        return self.generic_put(True)
 
     def doc_put(self):
-        raise Exception("this function is not supported yet")
+        return self.generic_put(True)
+        #raise Exception("this function is not supported yet")
