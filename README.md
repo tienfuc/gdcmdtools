@@ -119,7 +119,7 @@ get files from google drive
 
 
 ## License
-BSD License.
+BSD 2-Clause License
 
 ## Bug
 Please report bugs via https://github.com/timchen86/gdcmdtools/issues
