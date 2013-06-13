@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 __THIS_APP = 'gdput'
+__THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
 __THIS_VERSION = '0.0.1'
 
 def check_column_type(source_file, csv_column_define):
@@ -58,8 +59,8 @@ def get_mime_type(filename, source_type):
 if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \
-            description='%s v%s - %s (%s)' % 
-            (__THIS_APP, __THIS_VERSION, BASE_INFO["app"], BASE_INFO["description"]),
+            description='%s v%s - %s - %s (%s)' % 
+            (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),
             formatter_class=RawTextHelpFormatter)
 
     arg_parser.add_argument('source_file', 
