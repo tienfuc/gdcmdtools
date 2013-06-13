@@ -2,26 +2,29 @@
 # -*- coding: utf-8 -*-
 
 from apiclient import errors
+from base import GDBase
 
 permission_resource_properties = {
         "role":["owner", "reader", "writer"],
         "type":["user", "group", "domain", "anyone"]}
 
 class GDPerm:
-    def __init__(self, permission):
+    def __init__(self, file_id, action):
         # base
         base = GDBase()
-        creds = base.get_credentials(if_oob)
+        creds = base.get_credentials(True)#if_oob)
         if creds == None:
             raise Exception("Failed to retrieve credentials")
 
         self.http = base.get_authorized_http(creds)
         self.service = base.get_drive_service()
- 
-        pass
+        
+        
+        # action
+        self.action = action
 
- 
-    @staticmethod 
+        print action
+
     def insert(service, file_id, permission):
 
         new_permission = {

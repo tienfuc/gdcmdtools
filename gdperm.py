@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+
+from gdcmdtools.perm import GDPerm
 from gdcmdtools.perm import permission_resource_properties
 import argparse
 from argparse import RawTextHelpFormatter
 
-
+import copy
 from gdcmdtools.base import BASE_INFO
 
 import logging
@@ -29,15 +32,19 @@ if __name__ == '__main__':
     mutex_group = arg_parser.add_mutually_exclusive_group(required=False)
 
     mutex_group.add_argument('--list', action='store_true', help='list the permission resource of the file') 
-    mutex_group.add_argument('--get', metavar='RESOURCE_ID', help='get the permission resource of the file') 
+    mutex_group.add_argument('--get', metavar='PERMISSION_ID', help='get the permission resource by id') 
 
-    mutex_group.add_argument('--insert', nargs=3, metavar=('TYPE', 'ROLE', 'VALUE'), help='insert the permission to the file')
+    mutex_group.add_argument('--insert', nargs=3, metavar=('TYPE', 'ROLE', 'VALUE'), help='insert the permission to the file by id')
 
-    mutex_group.add_argument('--delete', action='store_true', help='delete the permission of the file')
+    mutex_group.add_argument('--delete', metavar='PERMISSION_ID', help='delete the permission of the file by id')
 
     args = arg_parser.parse_args()
- 
 
+    action = copy.copy(args.__dict__)
+    del action['file_id']
 
-
-    # xor insert delete 
+    # check which action is given by argument
+    for act in action:
+        if action[act] != mutex_group.get_default(act):
+            file_id = args.file_id
+            perm = GDPerm(file_id, action)
