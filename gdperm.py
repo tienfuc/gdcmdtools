@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-
 from gdcmdtools.perm import GDPerm
 from gdcmdtools.perm import permission_resource_properties
 import argparse
 from argparse import RawTextHelpFormatter
-
-import copy
 from gdcmdtools.base import BASE_INFO
 
 import logging
@@ -40,7 +36,7 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
 
-    action = copy.copy(args.__dict__)
+    action = args.__dict__.copy()
     del action['file_id']
 
     # check which action is given by argument
