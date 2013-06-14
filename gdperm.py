@@ -7,6 +7,8 @@ import argparse
 from argparse import RawTextHelpFormatter
 from gdcmdtools.base import BASE_INFO
 
+from pprint import pprint
+
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -45,4 +47,5 @@ if __name__ == '__main__':
             pass_action = {"name":act, "param": action[act]}
             file_id = args.file_id
             perm = GDPerm(file_id, pass_action)
-            perm.run()
+            result = perm.run()
+            pprint(result)

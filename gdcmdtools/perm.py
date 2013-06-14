@@ -34,6 +34,8 @@ class GDPerm:
             logger.error(e)
             raise
 
+        return result
+
     def insert(self):
 
         new_permission = {
@@ -46,8 +48,31 @@ class GDPerm:
             return self.service.permissions().insert(
                     fileId=self.file_id, body=new_permission).execute()
         except errors.HttpError, error:
-            print 'An error occurred: %s' % error
-            return None
+            logger.error('An error occurred: %s' % error)
+        return None
 
+    def list(self):
+        try:
+            permissions = self.service.permissions().list(fileId=self.file_id).execute()
+            return permissions.get('items', [])
+        except errors.HttpError, error:
+            logger.error('An error occurred: %s' % error)
+        return None
+
+    def get(self):
+        try:
+            permissions = self.service.permissions().get(fileId=self.file_id, permissionId=self.param).execute()
+            return permissions
+        except errors.HttpError, error:
+            logger.error('An error occurred: %s' % error)
+        return None
+
+    def delete(self):
+        try:
+            permissions = self.service.permissions().delete(fileId=self.file_id, permissionId=self.param).execute()
+            return permissions
+        except errors.HttpError, error:
+            logger.error('An error occurred: %s' % error)
+        return None
 
 
