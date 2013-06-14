@@ -95,7 +95,7 @@ fusion table support (--target_type ft):
                         you can set --csv_column_define string_number_datetime_location
 </pre>
 
-### Example
+### Examples for gdput
     % python ./gdput.py photo.jpg                    # upload photo.jpg to gd without changing the format
     % python ./gdput.py -t ft samples/sample.csv     # upload a csv file to gd as fusion table
     % python ./gdput.py -t ss samples/sample.csv     # upload a csv file to gd as spreadsheet
@@ -107,7 +107,37 @@ fusion table support (--target_type ft):
                                               # upload a csv file as ft with specifed column type
 
 
+## gdperm
+This tool can be used to set up file's permission
 
+### Usage
+<pre>
+usage: gdperm.py [-h]
+                 [--list | --get PERMISSION_ID | --insert TYPE ROLE VALUE | --delete PERMISSION_ID]
+                 file_id
+
+gdperm v0.0.1 - Tool to change file's permission on Google Drive - gdcmdtools (Google Drive command line tools)
+
+positional arguments:
+  file_id               The id of file you're going to change permission
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --list                list the permission resource of the file
+  --get PERMISSION_ID   get the permission resource by id
+  --insert TYPE ROLE VALUE
+                        insert the permission to the file by id
+  --delete PERMISSION_ID
+                        delete the permission of the file by id
+</pre>
+
+### Examples for gdperm
+    % python ./gdput.py 0B_XXXXXXXXXX --insert anyone reader me   # set the file as public-read
+    % python ./gdput.py 0B_XXXXXXXXXX --list                      # list the permissions by file id,0B_XXXXXXXXXX
+    % python ./gdput.py 0B_XXXXXXXXXX --get 5566520               # list the permissions by permission id,5566520
+    % python ./gdput.py 0B_XXXXXXXXXX --delete 5566520            # delete the permissions by permission id,5566520
+    
+    
 ## gdget
 
 get files from google drive
