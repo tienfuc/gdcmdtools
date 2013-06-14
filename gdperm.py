@@ -9,6 +9,8 @@ from gdcmdtools.base import BASE_INFO
 
 from pprint import pprint
 
+import sys
+
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -48,4 +50,11 @@ if __name__ == '__main__':
             file_id = args.file_id
             perm = GDPerm(file_id, pass_action)
             result = perm.run()
-            pprint(result)
+
+            if result == None:
+                sys.exit(1)
+            else:
+                sys.exit(0)
+                
+    logger.error('unexpected error')
+    sys.exit(1)

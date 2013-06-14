@@ -74,5 +74,3 @@ class GDPerm:
         except errors.HttpError, error:
             logger.error('An error occurred: %s' % error)
         return None
-
-
