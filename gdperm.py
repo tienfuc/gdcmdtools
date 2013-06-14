@@ -50,6 +50,7 @@ if __name__ == '__main__':
             file_id = args.file_id
             perm = GDPerm(file_id, pass_action)
             result = perm.run()
+            pprint(result)
 
             if result == None:
                 sys.exit(1)
