@@ -27,7 +27,7 @@ if __name__ == '__main__':
             (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),
             formatter_class=RawTextHelpFormatter)
 
-    arg_parser.add_argument('file_id', help='The id of file you\'re going to change permission') 
+    arg_parser.add_argument('file_id', help='The id for the file you\'re going to change permission') 
  
     mutex_group = arg_parser.add_mutually_exclusive_group(required=False)
 
