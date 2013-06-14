@@ -32,7 +32,7 @@ class GDBase(object):
         self.http = None
         self.root_folder = None
 
-    def get_credentials(self, if_oob):
+    def get_credentials(self, if_oob=True):
         home_path = os.getenv("HOME")
         storage_file = os.path.abspath(
                 '%s/.%s.creds' % (home_path,BASE_INFO["app"]))

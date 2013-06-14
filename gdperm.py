@@ -42,5 +42,7 @@ if __name__ == '__main__':
     # check which action is given by argument
     for act in action:
         if action[act] != mutex_group.get_default(act):
+            pass_action = {"name":act, "param": action[act]}
             file_id = args.file_id
-            perm = GDPerm(file_id, action)
+            perm = GDPerm(file_id, pass_action)
+            perm.run()
