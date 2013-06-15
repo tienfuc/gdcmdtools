@@ -69,7 +69,7 @@ class GDGet:
                 m = re.match(r'^.*exportFormat=(.*)$',link)
                 return_format[m.group(1)] = link
 
-        title = result.get('title',[]) + '.' + m.group(1)
+        title = result.get('title',[]) + '.' + self.format
 
         return title, return_format
             
@@ -77,8 +77,8 @@ class GDGet:
         resp, content = self.service._http.request(link)
 
         if resp.status == 200:
-          print 'Status: %s' % resp
+          logger.debug('Status: %s' % resp)
           return content
         else:
-          print 'An error occurred: %s' % resp
+          logger.debug('An error occurred: %s' % resp)
           return None
