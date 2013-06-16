@@ -42,4 +42,4 @@ if __name__ == '__main__':
 
     get = GDGet(args.file_id, args.export_format, args.save_as)
     result = get.run()
-    pprint(result)
+    #pprint(result)

@@ -33,9 +33,14 @@ class GDGet:
 
     def run(self):
         try: 
-            result = self.get()
-            title, result_exports = self.get_title_format(result)
-            file_content = self.get_by_format(result_exports[self.format])
+            service_response = self.get()
+            result_title_format = self.get_title_format(service_response)
+            if result_title_format == None:
+                raise Exception("The specified format \'%s\' is not allowed, please correct option: --export_format" % self.format)
+            else:
+                title, return_exports = result_title_format
+
+            file_content = self.get_by_format(return_exports[self.format])
 
             if self.save_as == None:
                self.save_as = title 
@@ -47,11 +52,10 @@ class GDGet:
             logger.error(e)
             raise
 
-        return result_exports
+        return return_exports
 
 
     def get(self):
-
         try:
             return self.service.files().get(fileId=self.file_id).execute()
         except errors.HttpError, error:
@@ -59,8 +63,12 @@ class GDGet:
         return None
 
 
-    def get_title_format(self, result):
-        export_links = result.get('exportLinks',[])  # FIXME
+    def get_title_format(self, service_response):
+        if service_response == None:
+            return None
+        else: 
+            export_links = service_response.get('exportLinks',[])
+
         export_link_values = export_links.values()
 
         return_format = {}
@@ -69,9 +77,12 @@ class GDGet:
                 m = re.match(r'^.*exportFormat=(.*)$',link)
                 return_format[m.group(1)] = link
 
-        title = result.get('title',[]) + '.' + self.format
+        if self.format in return_format.keys():
+            title = service_response.get('title',[]) + '.' + self.format
+            return title, return_format
+        else:
+            return None
 
-        return title, return_format
             
     def get_by_format(self, link):
         resp, content = self.service._http.request(link)
@@ -80,5 +91,5 @@ class GDGet:
           logger.debug('Status: %s' % resp)
           return content
         else:
-          logger.debug('An error occurred: %s' % resp)
+          logger.error('An error occurred: %s' % resp)
           return None
