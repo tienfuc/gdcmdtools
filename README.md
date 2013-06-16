@@ -139,9 +139,27 @@ optional arguments:
     
     
 ## gdget
-
 get files from google drive
 
+### Usage
+<pre>
+usage: gdget.py [-h] -f FORMAT [-s NEW_FILE_NAME] file_id
+
+gdget v0.0.1 - Tool to download file from Google Drive - gdcmdtools (Google Drive command line tools)
+
+positional arguments:
+  file_id               The id for the file you're going to download
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FORMAT, --export_format FORMAT
+                        specify the format for downloading
+  -s NEW_FILE_NAME, --save_as NEW_FILE_NAME
+                        save the downloaded file as 
+</pre>
+
+### Examples for gdperm
+    % python ./gdget.py 0B_XXXXXXXXXX --export_format pdf -s /tmp/myfile.pdf # export the file as pdf and save as /tmp/myfile.pdf
 
 ## Packages
   * ubuntu PPA: https://launchpad.net/~ctf/+archive/gdcmdtools
