@@ -19,6 +19,7 @@ import json
 
 from gdcmdtools.base import GDBase
 from gdcmdtools.perm import GDPerm
+from gdcmdtools.auth import GDAuth
 
 DICT_OF_CONVERTIBLE_FILE_TYPE = { \
         'raw':[
@@ -43,11 +44,6 @@ DICT_OF_CONVERTIBLE_FILE_TYPE = { \
             "Document",
             ['doc', 'docx', 'html', 'htm', 'txt', 'rtf']]
         }
-
-DICT_OF_REDIRECT_URI = {
-    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
-    "local":"means \"http://localhost\""
-    }
 
 
 # FIXME: naming
@@ -84,13 +80,14 @@ class GDPut:
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
 
         # base
-        base = GDBase()
-        creds = base.get_credentials(if_oob)
+        auth = GDAuth()
+        creds = auth.get_credentials()
         if creds == None:
             raise Exception("Failed to retrieve credentials")
+        self.http = auth.get_authorized_http()
 
-        self.http = base.get_authorized_http(creds)
-        self.service = base.get_drive_service()
+        base = GDBase()
+        self.service = base.get_drive_service(self.http)
         self.root = base.get_root()
 
         # ft service

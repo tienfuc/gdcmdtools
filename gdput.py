@@ -10,7 +10,7 @@ import mimetypes
 
 from gdcmdtools.put import GDPut 
 from gdcmdtools.put import DICT_OF_CONVERTIBLE_FILE_TYPE
-from gdcmdtools.put import DICT_OF_REDIRECT_URI
+from gdcmdtools.base import DICT_OF_REDIRECT_URI
 
 from gdcmdtools.base import BASE_INFO
 from gdcmdtools.perm import permission_resource_properties

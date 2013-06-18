@@ -4,7 +4,6 @@
 
 import sys
 from gdcmdtools.base import BASE_INFO
-#https://docs.google.com/document/d/1MNFK2buHdqw/export?format=pdf
 
 from gdcmdtools.get import GDGet
 
@@ -16,7 +15,7 @@ from pprint import pprint
 
 import logging
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 __THIS_APP = 'gdget'
 __THIS_DESCRIPTION = 'Tool to download file from Google Drive'
@@ -30,7 +29,7 @@ if __name__ == '__main__':
             (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),
             formatter_class=RawTextHelpFormatter)
 
-    arg_parser.add_argument('file_id', help='The id for the file you\'re going to download')
+    arg_parser.add_argument('FILE_ID', help='The id for the file you\'re going to download')
     
     arg_parser.add_argument('-f', '--export_format', metavar='FORMAT', required=True, help='specify the format for downloading') 
     arg_parser.add_argument('-s', '--save_as', metavar='NEW_FILE_NAME', help='save the downloaded file as ') 
@@ -38,8 +37,10 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
 
-    print args
+    logger.debug(args)
 
     get = GDGet(args.file_id, args.export_format, args.save_as)
     result = get.run()
-    #pprint(result)
+    
+
+    sys.exit(0)

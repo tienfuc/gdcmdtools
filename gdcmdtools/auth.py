@@ -7,41 +7,43 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.tools import run
 from apiclient.discovery import build
 
+from gdcmdtools.base import BASE_INFO
+
 import httplib2
 import pprint
+
+import shutil
 
 import logging 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-DICT_OF_REDIRECT_URI = {
-    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
-    "local":"means \"http://localhost\""
-    }
+class GDAuth(object):
+    def __init__(self, secret_file=None, if_oob=True):
+        default_secret_file = os.path.expanduser('~/.%s.secrets' % BASE_INFO["app"])
 
+        if secret_file == None:
+            self.secret_file = default_secret_file
+        else:
+            try:
+                shutil.copyfile(secret_file, default_secret_file)
+            except:
+                logger.error('failed to copy secret file')
 
-BASE_INFO = {
-        "app":"gdcmdtools",
-        "description":'Google Drive command line tools',
-        "version":'0.0.5'}
+            self.secret_file = default_secret_file
 
-GDAPI_VER = 'v2'
-FTAPI_VER = 'v1'
-DISCOVERY_URL = "https://www.googleapis.com/discovery/v1/apis/{api}/{apiVersion}/rest"
+        self.if_oob = if_oob 
 
+    def run(self):
+        self.get_credentials()
+        #self.get_authorized_http()
 
-class GDBase(object):
-    def __init__(self):
-        self.drive_service = None
-        self.ft_service = None
-        self.http = None
-        self.root_folder = None
-
-    def Gget_credentials(self, if_oob=True):
-        home_path = os.getenv("HOME")
-        storage_file = os.path.abspath(
-                '%s/.%s.creds' % (home_path,BASE_INFO["app"]))
+    def get_credentials(self):
+        #home_path = os.getenv("HOME")
+        #storage_file = os.path.abspath(
+        #        '%s/.%s.creds' % (home_path,BASE_INFO["app"]))
+        storage_file = os.path.expanduser('~/.%s.creds' % BASE_INFO["app"])
         logger.debug('storage_file=%s' % storage_file)
 
         try:
@@ -54,12 +56,13 @@ class GDBase(object):
         credentials = storage.get()
 
         if credentials is None or credentials.invalid == True:
-            credentials_file = os.path.abspath(
-                    '%s/.%s.secrets' % (home_path,BASE_INFO["app"]))
+            #credentials_file = os.path.abspath(
+            #        '%s/.%s.secrets' % (home_path,BASE_INFO["app"]))
+            credentials_file = self.secret_file
 
             #logger.debug('credentials_file=%s' % credentials_file)
 
-            if if_oob:
+            if self.if_oob:
                 redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
             else:
                 redirect_uri = None
@@ -75,7 +78,7 @@ class GDBase(object):
                     ],
                 redirect_uri=redirect_uri)
 
-            if if_oob:
+            if self.if_oob:
                 auth_uri = flow.step1_get_authorize_url()
                 logger.info('Please visit the URL in your browser: %s' % auth_uri)
                 code = raw_input('Insert the given code: ')
@@ -87,11 +90,13 @@ class GDBase(object):
             else:
                 credentials = run(flow, storage)
 
-        return credentials
+        self.credentials = credentials
+        
+        return self.credentials
 
-    def Gget_authorized_http(self, creds):
+    def get_authorized_http(self):
         self.http =  httplib2.Http()
-        creds.authorize(self.http)
+        self.credentials.authorize(self.http)
         wrapped_request = self.http.request
 
         # FIXME
@@ -106,27 +111,5 @@ class GDBase(object):
 
         self.http.request = _Wrapper
         return self.http
-
-    def get_root(self):
-        if self.root_folder == None:
-            if self.drive_service == None:
-                self.get_drive_service()
-            about = self.drive_service.about().get().execute()
-       
-        self.root_folder = about['rootFolderId']
-        logger.debug("root_folder=%s" % self.root_folder)
-        return self.root_folder
-
-    def get_drive_service(self, http):
-        self.drive_service = build('drive', GDAPI_VER, 
-                discoveryServiceUrl=DISCOVERY_URL, http=http)
-
-        return self.drive_service
-
-    def get_ft_service(self, http):
-        self.ft_service = build('fusiontables', FTAPI_VER, 
-                discoveryServiceUrl=DISCOVERY_URL, http=http)
-
-        return self.ft_service
 
 
