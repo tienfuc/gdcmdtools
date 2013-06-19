@@ -15,12 +15,6 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-DICT_OF_REDIRECT_URI = {
-    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
-    "local":"means \"http://localhost\""
-    }
-
-
 BASE_INFO = {
         "app":"gdcmdtools",
         "description":'Google Drive command line tools',
@@ -29,7 +23,6 @@ BASE_INFO = {
 GDAPI_VER = 'v2'
 FTAPI_VER = 'v1'
 DISCOVERY_URL = "https://www.googleapis.com/discovery/v1/apis/{api}/{apiVersion}/rest"
-
 
 class GDBase(object):
     def __init__(self):
