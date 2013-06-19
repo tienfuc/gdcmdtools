@@ -50,6 +50,9 @@ optional arguments:
                         oob: (default) means "urn:ietf:wg:oauth:2.0:oob"
 </pre>
 
+### Examples for gdauth
+    % python ./gdauth.py /tmp/client_secrets.json   # Use the /tmp/client_secrets.json as secret file
+
 ## gdput
 This tool can be used to upload files to Google drive as Spreadsheet,csv,fusion table,doc, etc.
 
