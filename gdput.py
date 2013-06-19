@@ -164,15 +164,6 @@ if __name__ == '__main__':
     else:
         logger.debug("mime_type=%s" % mime_type)
 
-    # check direct uri
-    if args.redirect_uri == "oob":
-        if_oob = True
-    elif args.redirect_uri == "local":
-        if_oob = False
-    else:
-        logger.error("failed to determine redirect_uri")
-        sys.exit(1)
-
     # check title
     target_title = args.target_title
     if (target_title == None) or (target_title == ''):
@@ -187,7 +178,6 @@ if __name__ == '__main__':
             args.folder_id,
             target_title,
             args.target_description,
-            if_oob,
 			args.ft_location_column,
 			args.ft_latlng_column,
             args.permission,

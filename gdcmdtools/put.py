@@ -56,7 +56,6 @@ class GDPut:
             folder_id, 
             title, 
             description, 
-            if_oob,
             location_column,
             latlng_column,
             permission,
