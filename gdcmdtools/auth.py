@@ -38,6 +38,8 @@ class GDAuth(object):
                 logger.error('failed to copy secret file')
 
             self.secret_file = default_secret_file
+            
+        os.chmod(self.secret_file, 0600)
 
         self.if_oob = if_oob 
 
