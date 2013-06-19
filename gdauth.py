@@ -41,7 +41,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('-r', '--redirect_uri', choices=choices_redirect_uri,
             default="oob",
             help=
-            'specify the redirect URI for the oauth2 flow, could be:\n%s' % 
+            'specify the redirect URI for the oauth2 flow, can be:\n%s' % 
             help_redirect_uri)
 
 

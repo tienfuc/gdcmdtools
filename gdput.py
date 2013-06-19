@@ -102,13 +102,13 @@ if __name__ == '__main__':
     arg_parser.add_argument('-p', '--permission',
             metavar=PERMISSION_METAVAR,
             nargs=len(PERMISSION_METAVAR),
-            help = "set the permission of the uploaded file, could be:\n" + '\n'.join(help_permission_text) + \
+            help = "set the permission of the uploaded file, can be:\n" + '\n'.join(help_permission_text) + \
                     '\nvalue: user or group e-mail address,\nor \'me\' to refer to the current authorized user\n'+
                     'ex: -p anyone reader me # set the uploaded file public-read')
 
     arg_parser.add_argument('-t', '--target_type', default="raw",
             choices=choices_target_type,
-            help='define the target file type on Google Drive, could be:\n'+
+            help='define the target file type on Google Drive, can be:\n'+
             "raw: (default) the source file will uploaded without touching\n"+
             help_target_type)
 
@@ -126,17 +126,6 @@ if __name__ == '__main__':
     ft_group.add_argument('--csv_column_define',
             metavar='define1_define2_defineN...',
             help = 'define the columns type for each column of the csv file,\ncan be "string", "number", "datetime", or "location".\nex: has 4 columns in the csv file: "name", "age", "birthday", "address".\nyou can set --csv_column_define string_number_datetime_location')
-
-    choices_redirect_uri = list(DICT_OF_REDIRECT_URI.keys())
-    list_help_redirect_uri = \
-            [ (k+": "+DICT_OF_REDIRECT_URI[k]) for k in DICT_OF_REDIRECT_URI] 
-    help_redirect_uri = '\n'.join(list_help_redirect_uri)
-
-    arg_parser.add_argument('-r', '--redirect_uri', choices=choices_redirect_uri,
-            default="oob",
-            help=
-            'specify the redirect URI for the oauth2 flow, could be:\n%s' % 
-            help_redirect_uri)
 
     args = arg_parser.parse_args()
 
