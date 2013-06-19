@@ -29,7 +29,7 @@ if __name__ == '__main__':
             (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),
             formatter_class=RawTextHelpFormatter)
 
-    arg_parser.add_argument('FILE_ID', help='The id for the file you\'re going to download')
+    arg_parser.add_argument('file_id', help='The id for the file you\'re going to download')
     
     arg_parser.add_argument('-f', '--export_format', metavar='FORMAT', required=True, help='specify the format for downloading') 
     arg_parser.add_argument('-s', '--save_as', metavar='NEW_FILE_NAME', help='save the downloaded file as ') 

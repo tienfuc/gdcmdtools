@@ -7,6 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+from gdcmdtools.auth import GDAuth
 
 import requests
 import re
@@ -15,13 +16,15 @@ import os
 class GDGet:
     def __init__(self, file_id, format, save_as):
         # base
-        base = GDBase()
-        creds = base.get_credentials()
+        auth = GDAuth()
+        creds = auth.get_credentials()
         if creds == None:
             raise Exception("Failed to retrieve credentials")
 
-        self.http = base.get_authorized_http(creds)
-        self.service = base.get_drive_service()
+        self.http = auth.get_authorized_http()
+
+        base = GDBase()
+        self.service = base.get_drive_service(self.http)
         
         self.file_id = file_id
         self.format = format
