@@ -19,6 +19,12 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+DICT_OF_REDIRECT_URI = {
+    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
+    "local":"means \"http://localhost\""
+    }
+
+
 class GDAuth(object):
     def __init__(self, secret_file=None, if_oob=True):
         default_secret_file = os.path.expanduser('~/.%s.secrets' % BASE_INFO["app"])
@@ -36,8 +42,8 @@ class GDAuth(object):
         self.if_oob = if_oob 
 
     def run(self):
-        self.get_credentials()
-        #self.get_authorized_http()
+        credentials = self.get_credentials()
+        return credentials
 
     def get_credentials(self):
         #home_path = os.getenv("HOME")
@@ -67,28 +73,44 @@ class GDAuth(object):
             else:
                 redirect_uri = None
 
-            flow = flow_from_clientsecrets(
-                credentials_file,
-                scope=[
-                    # if using /drive.file instead of /drive,
-                    # then the fusion table is not seen by drive.files.list()
-                    # also, drive.parents.insert() fails.
-                    'https://www.googleapis.com/auth/drive',
-                    'https://www.googleapis.com/auth/fusiontables'
-                    ],
-                redirect_uri=redirect_uri)
 
+            try: 
+                flow = flow_from_clientsecrets(
+                    credentials_file,
+                    scope=[
+                        # if using /drive.file instead of /drive,
+                        # then the fusion table is not seen by drive.files.list()
+                        # also, drive.parents.insert() fails.
+                        'https://www.googleapis.com/auth/drive',
+                        'https://www.googleapis.com/auth/fusiontables'
+                        ],
+                    redirect_uri=redirect_uri)
+            except:
+                logger.error("failed on flow_from_clientsecrets()")
+                return None
+
+
+                        
             if self.if_oob:
                 auth_uri = flow.step1_get_authorize_url()
                 logger.info('Please visit the URL in your browser: %s' % auth_uri)
                 code = raw_input('Insert the given code: ')
 
-                credentials = flow.step2_exchange(code)
+                try:
+                    credentials = flow.step2_exchange(code)
+                except:
+                    logger.error("failed on flow.step2_exchange()")
+                    return None
+
                 storage.put(credentials)
                 credentials.set_store(storage)
 
             else:
-                credentials = run(flow, storage)
+                try:
+                    credentials = run(flow, storage)
+                except:
+                    logger.error("failed on oauth2client.tools.run()")
+                    return None
 
         self.credentials = credentials
         

@@ -11,7 +11,7 @@ import argparse
 from argparse import RawTextHelpFormatter
 
 
-from gdcmdtools.base import DICT_OF_REDIRECT_URI
+from gdcmdtools.auth import DICT_OF_REDIRECT_URI
 
 import logging
 logger = logging.getLogger(__name__)
@@ -57,3 +57,10 @@ if __name__ == '__main__':
     auth = GDAuth(args.secret_file, if_oob)
 
     result = auth.run()
+
+    if result == None:
+        logger.error("Failed to pass OAuth2 authentication")
+        sys.exit(1)
+    else:
+        logger.info("The OAuth2 authentication has completed")
+        sys.exit(0)
