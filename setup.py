@@ -5,11 +5,11 @@ setup(
     name = "gdcmdtools",
     version = "0.1",
     packages = find_packages(),
-    # scripts = ['say_hello.py'],
+    scripts = ['py'],
 
     # Project uses reStructuredText, so ensure that the docutils get
     # installed or upgraded on the target machine
-    install_requires = ['requests>=1.2.3'],
+    install_requires = ['requests>=1.2.3','google_api_python_client>=1.1'],
 
     package_data = {
         # If any package contains *.txt or *.rst files, include them:
@@ -23,7 +23,5 @@ setup(
     author_email = "tim.chen.86@gmail.com",
     description = "Google drive command-line tools",
     license = "BSD",
-    url = "https://github.com/timchen86/gdcmdtools",   # project home page, if any
-
-    # could also include long_description, download_url, classifiers, etc.
+    dependency_links = ['https://github.com/timchen86/gdcmdtools/tarball/master#egg=gdcmdtools-0.0.1']
 )
