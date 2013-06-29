@@ -13,14 +13,14 @@ from gdcmdtools.put import DICT_OF_CONVERTIBLE_FILE_TYPE
 from gdcmdtools.auth import DICT_OF_REDIRECT_URI
 
 from gdcmdtools.base import BASE_INFO
+from gdcmdtools.base import DEBUG_LEVEL
 from gdcmdtools.perm import permission_resource_properties
 
 
 import csv
 
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger()
 
 __THIS_APP = 'gdput'
 __THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
@@ -77,8 +77,14 @@ if __name__ == '__main__':
     arg_parser.add_argument('-d', '--target_description', default='uploaded by %s v%s\ndate: %s' % (__THIS_APP, __THIS_VERSION, now),
             help='specify the description of the target file')
 
+    arg_parser.add_argument('--print_id', action='store_true', 
+            help='set if you like to print the file id after file being uploaded')
+
     arg_parser.add_argument('-f', '--folder_id', 
             help='the target folder ID on the Google drive')
+
+    arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
+            help='define the debug level')
 
     d_file_types = DICT_OF_CONVERTIBLE_FILE_TYPE
     choices_target_type = list(d_file_types.keys())
@@ -129,7 +135,10 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
 
-    #logger.debug(args)
+    # set debug devel
+    logger.setLevel(getattr(logging, args.debug.upper()))
+
+    logger.debug(args)
 
     ## post-processing of argument parsing
     # 
@@ -184,9 +193,14 @@ if __name__ == '__main__':
             csv_column_define)
 
     try:
-        target_link = puter.run()
+        response = puter.run()
     except:
         sys.exit(1)
 
     logger.info("The uploaded file is located at: %s" % 
-            target_link)
+            response['alternateLink'])
+
+    if args.print_id:
+        print response['id']
+
+    sys.exit(0)

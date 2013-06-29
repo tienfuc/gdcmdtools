@@ -4,8 +4,8 @@
 from apiclient import errors
 from base import GDBase
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = logging.getLogger()
+logger.setLevel(logging.ERROR)
 
 from gdcmdtools.auth import GDAuth
 
@@ -84,6 +84,7 @@ class GDGet:
             title = service_response.get('title',[]) + '.' + self.format
             return title, return_format
         else:
+            logger.error("format \'%s\' is invalid, available format are %s" % (self.format, ', '.join(return_format.keys())))
             return None
 
             

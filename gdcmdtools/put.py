@@ -9,8 +9,8 @@ import requests
 import json
 
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger()
+logger.setLevel(logging.ERROR)
 
 import random
 import os
@@ -347,7 +347,7 @@ class GDPut:
         if self.permission != None:
             GDPerm.insert(self.service, service_response['id'], self.permission)
 
-        return service_response["alternateLink"]
+        return service_response
 
     def pt_put(self):
         return self.generic_put(True)

@@ -24,6 +24,8 @@ GDAPI_VER = 'v2'
 FTAPI_VER = 'v1'
 DISCOVERY_URL = "https://www.googleapis.com/discovery/v1/apis/{api}/{apiVersion}/rest"
 
+DEBUG_LEVEL = ('debug', 'info', 'warning', 'error', 'critical')
+
 class GDBase(object):
     def __init__(self):
         self.drive_service = None

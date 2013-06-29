@@ -4,6 +4,7 @@
 import sys
 import os
 from gdcmdtools.base import BASE_INFO
+from gdcmdtools.base import DEBUG_LEVEL
 
 from gdcmdtools.auth import GDAuth
 
@@ -43,6 +44,9 @@ if __name__ == '__main__':
             help=
             'specify the redirect URI for the oauth2 flow, can be:\n%s' % 
             help_redirect_uri)
+
+    arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
+            help='define the debug level')
 
 
     args = arg_parser.parse_args()

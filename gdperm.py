@@ -6,14 +6,14 @@ from gdcmdtools.perm import permission_resource_properties
 import argparse
 from argparse import RawTextHelpFormatter
 from gdcmdtools.base import BASE_INFO
+from gdcmdtools.base import DEBUG_LEVEL 
 
 from pprint import pprint
 
 import sys
 
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger()
 
 __THIS_APP = 'gdperm'
 __THIS_DESCRIPTION = 'Tool to change file\'s permission on Google Drive'
@@ -38,7 +38,14 @@ if __name__ == '__main__':
 
     mutex_group.add_argument('--delete', metavar='PERMISSION_ID', help='delete the permission of the file by id')
 
+    arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
+            help='define the debug level')
+
+
     args = arg_parser.parse_args()
+
+    # set debug devel
+    logger.setLevel(getattr(logging, args.debug.upper()))
 
     action = args.__dict__.copy()
     del action['file_id']

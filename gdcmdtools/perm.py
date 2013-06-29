@@ -4,9 +4,10 @@
 from apiclient import errors
 from base import GDBase
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger()
+logger.setLevel(logging.ERROR)
 
+from auth import GDAuth
 
 permission_resource_properties = {
         "role":["owner", "reader", "writer"],
@@ -15,14 +16,16 @@ permission_resource_properties = {
 class GDPerm:
     def __init__(self, file_id, action):
         # base
-        base = GDBase()
-        creds = base.get_credentials()
+        auth = GDAuth()
+        creds = auth.get_credentials()
         if creds == None:
             raise Exception("Failed to retrieve credentials")
+        self.http = auth.get_authorized_http()
 
-        self.http = base.get_authorized_http(creds)
-        self.service = base.get_drive_service()
-        
+        base = GDBase()
+        self.service = base.get_drive_service(self.http)
+        self.root = base.get_root()
+
         self.file_id = file_id
         self.action = action['name']
         self.param = action['param']

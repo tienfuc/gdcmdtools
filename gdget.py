@@ -4,6 +4,7 @@
 
 import sys
 from gdcmdtools.base import BASE_INFO
+from gdcmdtools.base import DEBUG_LEVEL 
 
 from gdcmdtools.get import GDGet
 
@@ -14,8 +15,7 @@ from argparse import RawTextHelpFormatter
 from pprint import pprint
 
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = logging.getLogger()
 
 __THIS_APP = 'gdget'
 __THIS_DESCRIPTION = 'Tool to download file from Google Drive'
@@ -34,8 +34,14 @@ if __name__ == '__main__':
     arg_parser.add_argument('-f', '--export_format', metavar='FORMAT', required=True, help='specify the format for downloading') 
     arg_parser.add_argument('-s', '--save_as', metavar='NEW_FILE_NAME', help='save the downloaded file as ') 
 
+    arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
+            help='define the debug level')
+
 
     args = arg_parser.parse_args()
+
+    # set debug devel
+    logger.setLevel(getattr(logging, args.debug.upper()))
 
     logger.debug(args)
 
