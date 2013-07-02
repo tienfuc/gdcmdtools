@@ -15,8 +15,7 @@ from argparse import RawTextHelpFormatter
 from gdcmdtools.auth import DICT_OF_REDIRECT_URI
 
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger()
 
 __THIS_APP = 'gdauth'
 __THIS_DESCRIPTION = 'Google Drive OAuth2 authentication tool'
@@ -51,7 +50,9 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
     logger.debug(args)
-    
+
+    # set debug devel
+    logger.setLevel(getattr(logging, args.debug.upper()))
 
     if args.redirect_uri == 'oob':
         if_oob = True
@@ -63,8 +64,8 @@ if __name__ == '__main__':
     result = auth.run()
 
     if result == None:
-        logger.error("Failed to pass OAuth2 authentication")
+        print("Failed to pass OAuth2 authentication")
         sys.exit(1)
     else:
-        logger.info("The OAuth2 authentication has completed")
+        print("The OAuth2 authentication has completed")
         sys.exit(0)
