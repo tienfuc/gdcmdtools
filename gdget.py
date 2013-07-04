@@ -22,6 +22,9 @@ __THIS_DESCRIPTION = 'Tool to download file from Google Drive'
 __THIS_VERSION = '0.0.1'
 
 
+def test():
+    assert True
+
 if __name__ == '__main__':
 
     arg_parser = argparse.ArgumentParser( \

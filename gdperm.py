@@ -19,6 +19,8 @@ __THIS_APP = 'gdperm'
 __THIS_DESCRIPTION = 'Tool to change file\'s permission on Google Drive'
 __THIS_VERSION = '0.0.1'
 
+def test():
+    assert True
 
 if __name__ == '__main__':
 

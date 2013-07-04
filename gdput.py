@@ -26,6 +26,9 @@ __THIS_APP = 'gdput'
 __THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
 __THIS_VERSION = '0.0.1'
 
+def test():
+    assert True
+
 def check_column_type(source_file, csv_column_define):
     with open(source_file, 'rb') as csv_file:
         csv_reader = csv.reader(csv_file)

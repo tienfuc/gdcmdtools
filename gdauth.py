@@ -22,6 +22,8 @@ __THIS_DESCRIPTION = 'Google Drive OAuth2 authentication tool'
 __THIS_VERSION = '0.0.1'
 
 
+def test():
+    assert True
 
 if __name__ == '__main__':
 
