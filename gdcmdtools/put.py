@@ -91,7 +91,7 @@ class GDPut:
 
         # ft service
         if target_type == "ft":
-            self.ft_service = base.get_ft_service()
+            self.ft_service = base.get_ft_service(self.http)
         
     def run(self):
         try:
@@ -282,8 +282,10 @@ class GDPut:
 
         with open(target_file) as ft_file:
             # get the rows
+            #ft_file.next()
             rows = ft_file.read()
-
+            i_newline = rows.index('\n')+1
+            rows = rows[i_newline:]
             # weird issue here: the URI should be encoded with UTF-8 if body is UTF-8 too.
             utf8_body = rows.decode('utf-8').encode('utf-8')
             #logger.debug(utf8_body)
