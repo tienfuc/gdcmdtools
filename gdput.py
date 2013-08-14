@@ -26,7 +26,7 @@ __THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
 __THIS_VERSION = '0.0.1'
 
 def test():
-
+    """
     puter = GDPut(
             args.source_file, 
             mime_type, 
@@ -49,7 +49,7 @@ def test():
 
     if args.print_id:
         print response['id']
-
+    """
     assert True
 
 def check_column_type(source_file, csv_column_define):
