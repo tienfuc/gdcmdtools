@@ -121,7 +121,7 @@ class GDAuth(object):
     def get_authorized_http(self):
         self.http =  httplib2.Http()
         self.credentials.authorize(self.http)
-        wrapped_request = self.http.request
+        #wrapped_request = self.http.request
 
         # FIXME
         def _Wrapper(uri, method="GET", body=None, headers=None, **kw):
@@ -133,7 +133,7 @@ class GDAuth(object):
             logger.debug('Rsp body:\n%s' % pprint.pformat(content))
             return resp, content
 
-        self.http.request = _Wrapper
+        #self.http.request = _Wrapper
         return self.http
 
 
