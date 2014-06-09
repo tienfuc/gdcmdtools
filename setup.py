@@ -3,9 +3,9 @@
 from setuptools import setup, find_packages
 setup(
     name = "gdcmdtools",
-    version = "0.1",
+    version = "0.2",
     packages = find_packages(),
-    scripts = ['py'],
+    scripts = ['gdput.py','gdget.py'],
 
     # Project uses reStructuredText, so ensure that the docutils get
     # installed or upgraded on the target machine
@@ -20,6 +20,7 @@ setup(
 
     # metadata for upload to PyPI
     author = "ctf",
+    url = "https://github.com/timchen86/gdcmdtools",
     author_email = "tim.chen.86@gmail.com",
     description = "Google drive command-line tools",
     license = "BSD",
