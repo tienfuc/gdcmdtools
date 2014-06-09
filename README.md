@@ -1,5 +1,5 @@
 ## Status
-[![Build Status](https://travis-ci.org/timchen86/gdcmdtools.svg?branch=master)](https://github.com/timchen86/gdcmdtools)
+[![Build Status](https://travis-ci.org/timchen86/gdcmdtools.svg?branch=master)]
 
 gdcmdtools
 =========
