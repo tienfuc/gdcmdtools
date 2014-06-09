@@ -319,7 +319,7 @@ class GDPut:
         media_body = MediaFileUpload(
                 self.source_file, 
                 mimetype=self.mime_type, 
-                resumable=False)
+                resumable=True)
        
         if self.folder_id == None:
             parents = []
@@ -334,17 +334,14 @@ class GDPut:
                 'mimeType':self.mime_type,
                 'parents':parents}
  
-        try:
-            service_response = self.service.files().insert(
-                    body=body,
-                    media_body=media_body,
-                    # so csv will be converted to spreadsheet
-                    convert=if_convert,
-                    ).execute()
-        except: 
-            raise Exception(
-                    "Failed at calling service.files().insert(%s,%s,%s).execute()" 
-                    % (body, media_body, True))
+
+        request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
+        service_response = None
+
+        while service_response is None:
+            status, service_response = request.next_chunk()
+            if status:
+               logger.info("Uploaded %.2f%%." % (status.progress() * 100))
  
         if self.permission != None:
             GDPerm.insert(self.service, service_response['id'], self.permission)
