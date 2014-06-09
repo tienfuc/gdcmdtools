@@ -71,6 +71,8 @@ def get_mime_type(filename, source_type):
     if source_type == "auto":
         # let's guess
         source_mime_type = mimetypes.guess_type(filename, False)[0]
+        if source_mime_type == None:
+            source_mime_type = "application/octet-stream"
     else:
         # user define the mime type
         suffix = mimetypes.guess_all_extensions(source_type, False)
