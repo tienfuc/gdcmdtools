@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     arg_parser.add_argument('file_id', help='The id for the file you\'re going to download')
     
-    arg_parser.add_argument('-f', '--export_format', metavar='FORMAT', required=True, help='specify the format for downloading') 
+    arg_parser.add_argument('-f', '--export_format', metavar='FORMAT', default='raw', required=False, help='specify the format for downloading') 
     arg_parser.add_argument('-s', '--save_as', metavar='NEW_FILE_NAME', help='save the downloaded file as ') 
 
     arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],

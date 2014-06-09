@@ -13,6 +13,8 @@ import requests
 import re
 import os
 
+import pprint
+
 class GDGet:
     def __init__(self, file_id, format, save_as):
         # base
@@ -33,17 +35,22 @@ class GDGet:
             self.save_as = None
         else:
             self.save_as = os.path.abspath(save_as)
-
+ 
     def run(self):
         try: 
             service_response = self.get()
-            result_title_format = self.get_title_format(service_response)
-            if result_title_format == None:
-                raise Exception("The specified format \'%s\' is not allowed, please correct option: --export_format" % self.format)
-            else:
-                title, return_exports = result_title_format
 
-            file_content = self.get_by_format(return_exports[self.format])
+            result_title_format = self.get_title_format(service_response)
+            logger.debug(result_title_format)
+
+            title, return_format = result_title_format
+            if self.format != "raw":
+                title = title +"." +self.format
+
+            if self.format not in return_format.keys():
+                raise Exception("The specified format \'%s\' is not allowed, available format are \"%s\", please correct option: --export_format" % (self.format, ', '.join(return_format.keys())))
+
+            file_content = self.get_by_format(return_format[self.format])
 
             if self.save_as == None:
                self.save_as = title 
@@ -55,39 +62,39 @@ class GDGet:
             logger.error(e)
             raise
 
-        return return_exports
+        return return_format
 
 
     def get(self):
         try:
-            return self.service.files().get(fileId=self.file_id).execute()
+            response = self.service.files().get(fileId=self.file_id).execute()
+            logger.debug(pprint.pformat(response))
+            return response
+
         except errors.HttpError, error:
             logger.error('An error occurred: %s' % error)
         return None
 
 
     def get_title_format(self, service_response):
-        if service_response == None:
-            return None
-        else: 
-            export_links = service_response.get('exportLinks',[])
-
-        export_link_values = export_links.values()
-
+        export_links = service_response.get('exportLinks', None)
         return_format = {}
-        if len(export_link_values) > 0 :
-            for link in export_link_values:
-                m = re.match(r'^.*exportFormat=(.*)$',link)
-                return_format[m.group(1)] = link
 
-        if self.format in return_format.keys():
-            title = service_response.get('title',[]) + '.' + self.format
-            return title, return_format
+        title = service_response.get('title',None)
+
+        if export_links == None:
+            download_link = service_response.get(u'downloadUrl', None)
+            return_format["raw"] = download_link
         else:
-            logger.error("format \'%s\' is invalid, available format are %s" % (self.format, ', '.join(return_format.keys())))
-            return None
+            export_link_values = export_links.values()
 
-            
+            if len(export_link_values) > 0 :
+                for link in export_link_values:
+                    m = re.match(r'^.*exportFormat=(.*)$',link)
+                    return_format[m.group(1)] = link
+
+        return title, return_format
+        
     def get_by_format(self, link):
         resp, content = self.service._http.request(link)
 

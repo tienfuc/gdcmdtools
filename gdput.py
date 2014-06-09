@@ -26,31 +26,8 @@ __THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
 __THIS_VERSION = '0.0.1'
 
 def test():
-    """
-    puter = GDPut(
-            args.source_file, 
-            mime_type, 
-            args.target_type,
-            args.folder_id,
-            target_title,
-            args.target_description,
-			args.ft_location_column,
-			args.ft_latlng_column,
-            args.permission,
-            csv_column_define)
-
-    try:
-        response = puter.run()
-    except:
-        sys.exit(1)
-
-    logger.info("The uploaded file is located at: %s" % 
-            response['alternateLink'])
-
-    if args.print_id:
-        print response['id']
-    """
     assert True
+
 
 def check_column_type(source_file, csv_column_define):
     with open(source_file, 'rb') as csv_file:
