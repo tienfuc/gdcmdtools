@@ -62,7 +62,6 @@ def get_mime_type(filename, source_type):
     
 
 if __name__ == '__main__':
-
     arg_parser = argparse.ArgumentParser( \
             description='%s v%s - %s - %s (%s)' % 
             (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),

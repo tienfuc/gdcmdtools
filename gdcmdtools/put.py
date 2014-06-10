@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import csv
+import sys
 from apiclient.http import MediaFileUpload
 import apiclient.errors
 import urllib
@@ -341,8 +342,14 @@ class GDPut:
         while service_response is None:
             status, service_response = request.next_chunk()
             if status:
-               logger.info("Uploaded %.2f%%." % (status.progress() * 100))
- 
+                sys.stdout.write("\rCompleted: %.2f%%" % (status.progress() * 100))
+                sys.stdout.flush()
+            else:
+                return None
+
+        sys.stdout.write("\rCompleted: 100.00%%\n" % (status.progress() * 100))
+        sys.stdout.flush()
+
         if self.permission != None:
             GDPerm.insert(self.service, service_response['id'], self.permission)
 

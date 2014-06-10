@@ -16,6 +16,7 @@ Tools can be used to maintain files on Google Drive.
   * For Ubuntu Linux
     1. sudo apt-get install python-pip
     1. sudo pip install gdcmdtools
+  * After the installation, you will see gd\*.py under /usr/local/bin.
 
 # API Setup
  * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
