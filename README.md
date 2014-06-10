@@ -1,6 +1,9 @@
 ## Status
 [![Build Status](https://travis-ci.org/timchen86/gdcmdtools.svg?branch=master)](https://travis-ci.org/timchen86/gdcmdtools)
 
+## pypi
+  * https://pypi.python.org/pypi/gdcmdtools
+
 gdcmdtools
 =========
 Google drive command-line tools

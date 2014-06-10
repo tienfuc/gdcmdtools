@@ -338,7 +338,8 @@ class GDPut:
 
         request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
         service_response = None
-
+    
+        print "asdfsdf"
         while service_response is None:
             status, service_response = request.next_chunk()
             if status:
@@ -347,8 +348,15 @@ class GDPut:
             else:
                 return None
 
-        sys.stdout.write("\rCompleted: 100.00%%\n" % (status.progress() * 100))
+        sys.stdout.reset()
+        sys.stdout.write("\nCompleted!\n")
         sys.stdout.flush()
+        print("Completed!")
+        sys.stdout.flush()
+        print("Completed!")
+        print("Completed!")
+        print("Completed!")
+        print("Completed!")
 
         if self.permission != None:
             GDPerm.insert(self.service, service_response['id'], self.permission)
