@@ -19,7 +19,7 @@ setup(
     },
 
     # metadata for upload to PyPI
-    author = "ctf",
+    author = "ctf <tim.chen.86@gmail.com>",
     url = "https://github.com/timchen86/gdcmdtools",
     author_email = "tim.chen.86@gmail.com",
     description = "Google drive command-line tools",
