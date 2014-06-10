@@ -155,10 +155,10 @@ optional arguments:
 </pre>
 
 ### Examples for gdperm
-    % python ./gdput.py 0B_XXXXXXXXXX --insert anyone reader me   # set the file as public-read
-    % python ./gdput.py 0B_XXXXXXXXXX --list                      # list the permissions by file id: 0B_XXXXXXXXXX
-    % python ./gdput.py 0B_XXXXXXXXXX --get 5566520               # get the permissions by permission id: 5566520
-    % python ./gdput.py 0B_XXXXXXXXXX --delete 5566520            # delete the permissions by permission id: 5566520
+    % python ./gdperm.py 0B_XXXXXXXXXX --insert anyone reader me   # set the file as public-read
+    % python ./gdperm.py 0B_XXXXXXXXXX --list                      # list the permissions by file id: 0B_XXXXXXXXXX
+    % python ./gdperm.py 0B_XXXXXXXXXX --get 5566520               # get the permissions by permission id: 5566520
+    % python ./gdperm.py 0B_XXXXXXXXXX --delete 5566520            # delete the permissions by permission id: 5566520
     
     
 ## gdget
