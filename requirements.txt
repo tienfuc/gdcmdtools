@@ -1,0 +1,2 @@
+google_api_python_client>=1.1
+requests>=1.2.3
