@@ -23,7 +23,7 @@ logger = logging.getLogger()
 
 __THIS_APP = 'gdput'
 __THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
-__THIS_VERSION = '0.0.1'
+__THIS_VERSION = '0.0.2'
 
 def test():
     assert True
@@ -81,8 +81,8 @@ if __name__ == '__main__':
     arg_parser.add_argument('-d', '--target_description', default='uploaded by %s v%s\ndate: %s' % (__THIS_APP, __THIS_VERSION, now),
             help='specify the description of the target file')
 
-    arg_parser.add_argument('--print_id', action='store_true', 
-            help='set if you like to print the file id after file being uploaded')
+    arg_parser.add_argument('--no_print_id', action='store_true', 
+            help='set if you like not to print the file id after file being uploaded')
 
     arg_parser.add_argument('-f', '--folder_id', 
             help='the target folder ID on the Google drive')
@@ -153,8 +153,8 @@ if __name__ == '__main__':
     # check source file if exists
     try:
         with open(args.source_file) as f: pass
-    except IOError as e:
-        logger.error(e)
+    except:
+        raise
         sys.exit(1)
 
     # check column type
@@ -199,12 +199,14 @@ if __name__ == '__main__':
     try:
         response = puter.run()
     except:
+        raise
         sys.exit(1)
 
-    logger.info("The uploaded file is located at: %s" % 
-            response)
-
-    if args.print_id:
-        print response['id']
+    logger.debug(response)
+    
+    if not args.no_print_id:
+        print "id: %s" % response['id']
+        print "drive url: %s" % response[u'alternateLink']
+        print "download url: %s" % response[u'webContentLink']
 
     sys.exit(0)
