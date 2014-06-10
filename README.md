@@ -22,14 +22,20 @@ Tools can be used to maintain files on Google Drive.
   * After the installation, you will see gd\*.py under /usr/local/bin.
 
 # API Setup
- * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
+ * Create a new project for this tool to access your Google drive
+   * Visit https://console.developers.google.com/ , create project, name it anything you like, ex: gdcmdtools.
+   
+ * Enable the following Google APIs in "APIs & auth/APIs"
    * Drive API
    * Fusion Tables API
- * Grant access to Google Drive
-   1. Get the API client secrect file from your Google API console(https://code.google.com/apis/console#:access)
-   1. Check the section "Client ID for installed applications", at the right side, click at the "Download JSON".
-   1. Save the json file as .gdcmdtools.secrets in your home directory.
-   1. Execute gdauth.py in a terminal and give the downloaded secret file as parameter: % python ./gdauth.py client_secrets.json
+
+ * Make sure your application has an application name in "APIs & auth/Consent screen"
+   1. Find "PRODUCT NAME" field. Make sure it's not blank.
+
+ * Grant access to Google Drive for gdcmdtools in "APIs & auth/Credentials"
+   1. Click "Create new Client ID", APPLICATION TYPE: Installed application, INSTALLED APPLICATION TYPE: Other
+   1. Check the section "Client ID for native application", click at the "Download JSON".
+   1. Execute gdauth.py in a terminal and give the downloaded secret file just downloaded as parameter: $ gdauth.py client_secrets.json
    1. You will see message like: INFO:gdcmdtools.base:Please visit the URL in your browser: https://accounts.google.com/o/oauth2/auth?scope=....
    1. Visit the URL with browser and allow the app accessing your Google Drive.
    1. Copy the code you see in your browser, then back to the terminal, paste the code and hit enter.
