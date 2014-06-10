@@ -12,12 +12,10 @@ Tools can be used to maintain files on Google Drive.
     * gdcmdtools are developed under Python 2.7.3, I would suggest users to run the tools with Python 2.7.3.(OK: 2.7.2)
   * For Mac OSX
     1. sudo easy_install pip
-    1. sudo pip install --upgrade google-api-python-client
-    1. sudo pip install --upgrade requests
+    1. sudo pip install gdcmdtools
   * For Ubuntu Linux
     1. sudo apt-get install python-pip
-    1. sudo pip install --upgrade google-api-python-client
-    1. sudo pip install --upgrade requests
+    1. sudo pip install gdcmdtools
 
 # API Setup
  * Enable the following Google APIs in your Google APIs console(https://code.google.com/apis/console#:services)
@@ -198,8 +196,6 @@ BSD 2-Clause License
 Please report bugs via https://github.com/timchen86/gdcmdtools/issues
 
 ## Author
-Tim Chen
+Tien Fu Chen
 
 Email: tim.chen.86 @ gmail.com
-
-irc: ctf_ @ freenode
