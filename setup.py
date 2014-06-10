@@ -3,9 +3,9 @@
 from setuptools import setup, find_packages
 setup(
     name = "gdcmdtools",
-    version = "0.2",
+    version = "0.3",
     packages = find_packages(),
-    scripts = ['gdput.py','gdget.py'],
+    scripts = ['gdput.py','gdget.py','gdperm.py','gdauth.py'],
 
     # Project uses reStructuredText, so ensure that the docutils get
     # installed or upgraded on the target machine
