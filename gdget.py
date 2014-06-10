@@ -19,7 +19,7 @@ logger = logging.getLogger()
 
 __THIS_APP = 'gdget'
 __THIS_DESCRIPTION = 'Tool to download file from Google Drive'
-__THIS_VERSION = '0.0.1'
+__THIS_VERSION = BASE_INFO["version"]
 
 
 def test():

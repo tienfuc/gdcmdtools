@@ -23,10 +23,10 @@ logger = logging.getLogger()
 
 __THIS_APP = 'gdput'
 __THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
-__THIS_VERSION = '0.0.2'
+__THIS_VERSION = BASE_INFO["version"]
 
 def test():
-    assert True
+    assert True 
 
 
 def check_column_type(source_file, csv_column_define):

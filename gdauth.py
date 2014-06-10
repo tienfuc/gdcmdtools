@@ -19,7 +19,7 @@ logger = logging.getLogger()
 
 __THIS_APP = 'gdauth'
 __THIS_DESCRIPTION = 'Google Drive OAuth2 authentication tool'
-__THIS_VERSION = '0.0.1'
+__THIS_VERSION = BASE_INFO["version"]
 
 
 def test():

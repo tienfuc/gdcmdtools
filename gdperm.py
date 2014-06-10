@@ -17,7 +17,7 @@ logger = logging.getLogger()
 
 __THIS_APP = 'gdperm'
 __THIS_DESCRIPTION = 'Tool to change file\'s permission on Google Drive'
-__THIS_VERSION = '0.0.1'
+__THIS_VERSION = BASE_INFO["version"]
 
 def test():
     assert True

@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
+from gdcmdtools.base import BASE_INFO
 from setuptools import setup, find_packages
 setup(
     name = "gdcmdtools",
-    version = "0.3",
+    version = BASE_INFO["version"],
     packages = find_packages(),
     scripts = ['gdput.py','gdget.py','gdperm.py','gdauth.py'],
 
