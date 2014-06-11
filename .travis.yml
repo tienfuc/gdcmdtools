@@ -4,4 +4,4 @@ python:
 # command to install dependencies
 install: "pip install -r requirements.txt && pip install git+https://github.com/timchen86/gdcmdtools.git@master"
 # command to run tests
-script: nosetests -v gdput.py gdget.py gdauth.py gdperm.py
+script: "nosetests -v gdput.py gdget.py gdauth.py gdperm.py test.py"
