@@ -9,6 +9,7 @@ import filecmp
 
 
 class Test(unittest.TestCase):
+
     def setUp(self):
         pass
 
@@ -16,8 +17,27 @@ class Test(unittest.TestCase):
         client_id = os.environ['CLIENT_ID']
         client_secret = os.environ['CLIENT_SECRET']
         
-        print client_id, client_secret
-        assert False
+        secret_example_file = "./samples/gdcmdtools.secrets.EXAMPLE"
+        
+        with open(secret_example_file) as f:
+            secret_example = f.read()
+            
+        new_secret_1 = re.sub(r'"client_id":"X"',r'"client_id":"%s"' % client_id, secret_example, flags=re.MULTILINE)
+        new_secret = re.sub(r'"client_secret":"X"',r'"client_secret":"%s"' % client_secret, new_secret_1, flags=re.MULTILINE)
+
+        secret_file = "./gdcmdtools.secret"
+
+        with open(secret_file,'w') as f:
+            f.write(new_secret)
+        
+        cmd_debug = "python ./gdauth.py %s" % secret_file
+        return_value = subprocess.call(cmd_debug, shell=True)
+        os.remove(secret_file)
+        
+        if return_value == 0:
+            assert True
+        else:
+            assert False
 
     def test_01_raw_put(self):
         file = "./samples/sample.txt"
