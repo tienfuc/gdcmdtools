@@ -1,0 +1,17 @@
+{
+"_module":"oauth2client.client", 
+"token_expiry":"2014-06-11T14:31:53Z", 
+"access_token":"X",
+"token_uri":"https://accounts.google.com/o/oauth2/token", 
+"invalid":false, 
+"token_response": {
+"access_token":"X",
+"token_type":"Bearer", 
+"expires_in":3600}, 
+"client_id":"X", 
+"id_token":null, 
+"client_secret":"X", 
+"revoke_uri":"https://accounts.google.com/o/oauth2/revoke", 
+"_class":"OAuth2Credentials", 
+"refresh_token":"X", 
+"user_agent":null}

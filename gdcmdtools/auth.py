@@ -63,6 +63,7 @@ class GDAuth(object):
         storage = Storage(storage_file)
         credentials = storage.get()
 
+        # FIXME: if secret_file is given, should clean creds
         if credentials is None or credentials.invalid == True:
             #credentials_file = os.path.abspath(
             #        '%s/.%s.secrets' % (home_path,BASE_INFO["app"]))
