@@ -75,7 +75,7 @@ class Test(unittest.TestCase):
         if Test.raw_file_id:
             file_ori = "./samples/sample.txt"
             file_get = "/tmp/gdcmdtools.tmp"
-            cmd_debug = "python ./gdget.py -f raw -s %s %s" % (file_get, Test.raw_file_id)
+            cmd_debug = "python ./gdget.py --debug debug -f raw -s %s %s" % (file_get, Test.raw_file_id)
 
             response = subprocess.check_output(cmd_debug, shell=True)
             result = filecmp.cmp(file_ori, file_get)
