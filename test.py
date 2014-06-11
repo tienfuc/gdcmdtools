@@ -13,7 +13,18 @@ class Test(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_00_get_secret(self):
+    def test_00_if_travis(self):
+        if os.environ.get('TRAVIS', None) == "true":
+            Test.if_travis = True
+        else:
+            Test.if_travis = False
+
+        assert True
+
+    def test_01_get_secret(self):
+        if Test.if_travis == False:
+            return True
+
         client_id = os.environ['client_id']
         client_secret = os.environ['client_secret']
         
@@ -33,6 +44,9 @@ class Test(unittest.TestCase):
         assert True
 
     def test_01_get_credentials(self):
+        if Test.if_travis == False:
+            return True
+
         client_id = os.environ['client_id']
         client_secret = os.environ['client_secret']
         access_token = os.environ['access_token']
@@ -100,6 +114,9 @@ class Test(unittest.TestCase):
             assert False
 
     def test_99_cleanup(self):
+        if Test.if_travis == False:
+            return True
+
         try:
             os.remove(Test.secret_file)
             os.remove(Test.credentials_file)
