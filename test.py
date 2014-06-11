@@ -12,6 +12,12 @@ class Test(unittest.TestCase):
     def setUp(self):
         pass
 
+    def test_00_get_secret(self):
+        client_id = os.environ['CLIENT_ID']
+        
+        print client_id
+        assert False
+
     def test_01_raw_put(self):
         file = "./samples/sample.txt"
         cmd = "python ./gdput.py -t raw %s" % file
@@ -54,6 +60,7 @@ class Test(unittest.TestCase):
             assert True
         else:
             assert False
+    
 
 if __name__ == '__main__':
     unittest.main()
