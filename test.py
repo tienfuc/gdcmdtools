@@ -25,7 +25,7 @@ class Test(unittest.TestCase):
         new_secret_1 = re.sub(r'"client_id":"X"',r'"client_id":"%s"' % client_id, secret_example, flags=re.MULTILINE)
         new_secret = re.sub(r'"client_secret":"X"',r'"client_secret":"%s"' % client_secret, new_secret_1, flags=re.MULTILINE)
 
-        Test.secret_file = os.path.expanduser("~/.gdcmdtools.secret")
+        Test.secret_file = os.path.expanduser("~/.gdcmdtools.secrets")
 
         with open(Test.secret_file,'w') as f:
             f.write(new_secret)
