@@ -4,5 +4,4 @@ python:
 install: pip install -r requirements.txt && pip install git+https://github.com/timchen86/gdcmdtools.git@master
 script: nosetests -v gdput.py gdget.py gdauth.py gdperm.py test.py
 env:
-  gdcmdtools:
-    secure: l0SRa+aJ6Ndsv5uU7H9T+2HeXGbndEaA459JNCJC/IqZtfB0iNJ/atvVd9SuC6dE+3Nh+onF3efOBZfsgrbRHegc2tE8eHtXpITHSGs72a/kcsa79p1okB6PNmoyS7H+P5eyeOg447S9dUot9bjRQUlJjOSS/nn6h1vgDPQjUlQ=
+    - secure: l0SRa+aJ6Ndsv5uU7H9T+2HeXGbndEaA459JNCJC/IqZtfB0iNJ/atvVd9SuC6dE+3Nh+onF3efOBZfsgrbRHegc2tE8eHtXpITHSGs72a/kcsa79p1okB6PNmoyS7H+P5eyeOg447S9dUot9bjRQUlJjOSS/nn6h1vgDPQjUlQ=
