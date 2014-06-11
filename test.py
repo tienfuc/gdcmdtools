@@ -13,7 +13,26 @@ class Test(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_00_get_credentials(self):
+    def test_00_get_secret(self):
+        client_id = os.environ['client_id']
+        client_secret = os.environ['client_secret']
+        
+        secret_example_file = "./samples/gdcmdtools.secrets.EXAMPLE"
+        
+        with open(secret_example_file) as f:
+            secret_example = f.read()
+            
+        new_secret_1 = re.sub(r'"client_id":"X"',r'"client_id":"%s"' % client_id, secret_example, flags=re.MULTILINE)
+        new_secret = re.sub(r'"client_secret":"X"',r'"client_secret":"%s"' % client_secret, new_secret_1, flags=re.MULTILINE)
+
+        Test.secret_file = os.path.expanduser("~/.gdcmdtools.secret")
+
+        with open(Test.secret_file,'w') as f:
+            f.write(new_secret)
+
+        assert True
+
+    def test_01_get_credentials(self):
         client_id = os.environ['client_id']
         client_secret = os.environ['client_secret']
         access_token = os.environ['access_token']
@@ -36,7 +55,7 @@ class Test(unittest.TestCase):
         
         assert True
 
-    def test_01_raw_put(self):
+    def test_10_raw_put(self):
         file = "./samples/sample.txt"
         cmd = "python ./gdput.py -t raw %s" % file
         cmd_debug = "python ./gdput.py --debug debug -t raw %s" % file
@@ -51,7 +70,7 @@ class Test(unittest.TestCase):
         else:
             assert False
 
-    def test_02_raw_get(self):
+    def test_11_raw_get(self):
 
         if Test.raw_file_id:
             file_ori = "./samples/sample.txt"
@@ -65,7 +84,7 @@ class Test(unittest.TestCase):
         else:
             assert False
 
-    def test_03_converted_put(self):
+    def test_12_converted_put(self):
         file = "./samples/sample.txt"
         cmd = "python ./gdput.py -t doc %s" % file
         cmd_debug = "python ./gdput.py --debug debug -t doc %s" % file
@@ -82,6 +101,7 @@ class Test(unittest.TestCase):
 
     def test_99_cleanup(self):
         try:
+            os.remove(Test.secret_file)
             os.remove(Test.credentials_file)
         except:
             assert False
