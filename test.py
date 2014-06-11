@@ -14,8 +14,9 @@ class Test(unittest.TestCase):
 
     def test_00_get_secret(self):
         client_id = os.environ['CLIENT_ID']
+        client_secret = os.environ['CLIENT_SECRET']
         
-        print client_id
+        print client_id, client_secret
         assert False
 
     def test_01_raw_put(self):
