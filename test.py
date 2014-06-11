@@ -19,8 +19,6 @@ class Test(unittest.TestCase):
         else:
             Test.if_travis = False
 
-        assert True
-
     def test_01_get_secret(self):
         if Test.if_travis == False:
             return True
