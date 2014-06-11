@@ -30,7 +30,7 @@ Tools can be used to maintain files on Google Drive.
    * Fusion Tables API
 
  * Make sure your application has an application name in "APIs & auth/Consent screen"
-   1. Find "PRODUCT NAME" field. Make sure it's not blank.
+   * Find "PRODUCT NAME" field. Make sure it's not blank.
 
  * Grant access to Google Drive for gdcmdtools in "APIs & auth/Credentials"
    1. Click "Create new Client ID", APPLICATION TYPE: Installed application, INSTALLED APPLICATION TYPE: Other
