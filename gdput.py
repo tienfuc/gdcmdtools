@@ -207,6 +207,13 @@ if __name__ == '__main__':
     if not args.no_print_id:
         print "id: %s" % response['id']
         print "drive url: %s" % response[u'alternateLink']
-        print "download url: %s" % response[u'webContentLink']
+
+        if response.get(u'webContentLink'):
+            print "download url: %s" % response.get('webContentLink')
+        exports = response.get('exportLinks')
+        if exports:
+            for format, url in exports.iteritems():
+                print "%s: %s" % (format, url)
+
 
     sys.exit(0)
