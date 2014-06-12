@@ -32,8 +32,12 @@ class GDAuth(object):
         if secret_file == None:
             self.secret_file = default_secret_file
         else:
+            # should reissue the credencials
+            storage_file = os.path.expanduser('~/.%s.creds' % BASE_INFO["app"])
+            os.remove(storage_file)
+
             try:
-                shutil.copyfile(secret_file, default_secret_file)
+               shutil.copyfile(secret_file, default_secret_file)
             except:
                 logger.error('failed to copy secret file')
 
