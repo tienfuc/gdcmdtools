@@ -93,8 +93,23 @@ class GDPut:
         # ft service
         if target_type == "ft":
             self.ft_service = base.get_ft_service(self.http)
+ 
+
+    def if_folder_exist(self):
+        try:
+            response = self.service.files().get(fileId=self.folder_id).execute()
+            logger.debug(response)
+        except:
+            return False
+
+        return True
         
     def run(self):
+        # check folder_id
+        if self.folder_id:
+            if self.if_folder_exist() == False:
+                raise Exception("folder_id doesn't exist: %s" % self.folder_id)
+
         try:
             result = getattr(self, self.target_type+"_put")()
         except AttributeError as e:
