@@ -18,12 +18,19 @@ from gdcmdtools.perm import permission_resource_properties
 
 import csv
 
-import logging
-logger = logging.getLogger()
 
 __THIS_APP = 'gdput'
 __THIS_DESCRIPTION = 'Tool to upload file to Google Drive'
 __THIS_VERSION = BASE_INFO["version"]
+
+import logging
+logger = logging.getLogger(__THIS_APP)
+
+formatter = logging.Formatter('%(levelname)s:%(name)s:%(lineno)d:%(message)s')
+
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 def test():
     assert True 
@@ -146,9 +153,8 @@ if __name__ == '__main__':
 
     ## post-processing of argument parsing
     # 
-    if getattr(args, 'ft_latlng_column', None):
-        if getattr(args, 'ft_location_column', None) == None:
-             arg_parser.error("must supply --ft_location_column with --ft_latlng_column")
+    if (getattr(args, 'ft_latlng_column', None) == None) != (getattr(args, 'ft_location_column', None) == None):
+        arg_parser.error("must supply --ft_location_column with --ft_latlng_column")
 
     # check source file if exists
     try:

@@ -40,6 +40,14 @@ if __name__ == '__main__':
             [ (k+": "+DICT_OF_REDIRECT_URI[k]) for k in DICT_OF_REDIRECT_URI] 
     help_redirect_uri = '\n'.join(list_help_redirect_uri)
 
+    arg_parser.add_argument('-i', '--client_id',
+            help=
+            'specify the client id')
+
+    arg_parser.add_argument('-s', '--client_secret',
+            help=
+            'specify the client secret')
+
     arg_parser.add_argument('-r', '--redirect_uri', choices=choices_redirect_uri,
             default="oob",
             help=
@@ -52,6 +60,11 @@ if __name__ == '__main__':
 
     args = arg_parser.parse_args()
     logger.debug(args)
+
+    # post-processing of argument parsing
+    if getattr(args, 'ft_latlng_column', None) or getattr(args, 'ft_location_column', None):
+        arg_parser.error("must supply --ft_location_column with --ft_latlng_column")
+
 
     # set debug devel
     logger.setLevel(getattr(logging, args.debug.upper()))
