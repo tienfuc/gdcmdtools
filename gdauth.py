@@ -62,9 +62,8 @@ if __name__ == '__main__':
     logger.debug(args)
 
     # post-processing of argument parsing
-    if getattr(args, 'ft_latlng_column', None) or getattr(args, 'ft_location_column', None):
-        arg_parser.error("must supply --ft_location_column with --ft_latlng_column")
-
+    if (getattr(args, 'client_id', None) == None) != (getattr(args, 'client_secret', None) == None):
+        arg_parser.error("must supply --client_id with --client_secret")
 
     # set debug devel
     logger.setLevel(getattr(logging, args.debug.upper()))
