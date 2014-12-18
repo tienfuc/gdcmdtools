@@ -46,7 +46,7 @@ DICT_OF_CONVERTIBLE_FILE_TYPE = { \
             ['doc', 'docx', 'html', 'htm', 'txt', 'rtf']],
         'gas':[
             "GAS project",
-            []],
+            ['json']],
         }
 
 

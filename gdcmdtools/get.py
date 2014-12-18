@@ -21,7 +21,7 @@ export_format = {
     "application/vnd.google-apps.document":["pdf", "docx", "rtf", "odt", "html", "txt"],    
     "application/vnd.google-apps.presentation":["pdf", "pptx", "txt"],
     "application/vnd.google-apps.drawing":["png", "pdf", "jpeg", "svg"],
-    "application/vnd.google-apps.script+json":["js"],
+    "application/vnd.google-apps.script+json":["json"],
     }
 
 """ application/vnd.google-apps.script+json
