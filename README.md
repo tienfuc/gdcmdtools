@@ -170,7 +170,7 @@ optional arguments:
                         spreadsheet: pdf, ods, xlsx
                         drawing: png, pdf, jpeg, svg
                         document: pdf, docx, rtf, odt, html, txt
-                        script+json: js
+                        script+json: json
                         presentation: pdf, pptx, txt
   -s NEW_FILE_NAME, --save_as NEW_FILE_NAME
                         save the downloaded file as 
