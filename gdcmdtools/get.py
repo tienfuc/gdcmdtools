@@ -84,6 +84,8 @@ class GDGet:
                 j.pop("source")
                 new_json["files"].append(j)
 
+            # save the project id, we need the id to upload project
+            new_json["id"] = self.file_id
             with open(save_as, 'wb+') as f:
                 f.write(json.dumps(new_json, indent=4))
 
@@ -126,9 +128,6 @@ class GDGet:
     def get(self):
         try:
             response = self.service.files().get(fileId=self.file_id).execute()
-            # response = self.service.files(q="mimeType%3D'application%2Fvnd.google-apps.script'").execute()
-            #response = self.service.files().list(q="mimeType=application/vnd.google-apps.script").execute()
-            #response = self.service.files().list().execute()
             logger.debug(pprint.pformat(response))
             return response
 
