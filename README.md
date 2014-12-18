@@ -148,6 +148,41 @@ fusion table support (--target_type ft):
     % python ./gdput.py -t gas gas_project.json
                                               # update gas project with project file 'gas_project.json'
 
+## gdget
+get files from google drive
+
+### Usage
+<pre>
+usage: gdget.py [-h] [-f FORMAT] [-s NEW_FILE_NAME]
+                [--debug {debug,info,warning,error,critical}]
+                file_id
+
+gdget v0.91 - Tool to download file from Google Drive - gdcmdtools (Google Drive command line tools)
+
+positional arguments:
+  file_id               The id for the file you're going to download
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FORMAT, --export_format FORMAT
+                        specify the export format for downloading,
+                        google_format: export_format
+                        spreadsheet: pdf, ods, xlsx
+                        drawing: png, pdf, jpeg, svg
+                        document: pdf, docx, rtf, odt, html, txt
+                        script+json: js
+                        presentation: pdf, pptx, txt
+  -s NEW_FILE_NAME, --save_as NEW_FILE_NAME
+                        save the downloaded file as 
+  --debug {debug,info,warning,error,critical}
+                        define the debug level
+
+</pre>
+
+### Examples for gdget
+    % python ./gdget.py FILE_ID --export_format pdf -s /tmp/myfile.pdf # export the file as pdf and save as /tmp/myfile.pdf
+    % python ./gdget.py FILE_ID -f json # down files associated with GAS project
+
 
 ## gdperm
 This tool can be used to set up file's permission
@@ -180,40 +215,6 @@ optional arguments:
     % python ./gdperm.py 0B_XXXXXXXXXX --delete 5566520            # delete the permissions by permission id: 5566520
     
     
-## gdget
-get files from google drive
-
-### Usage
-<pre>
-usage: gdget.py [-h] [-f FORMAT] [-s NEW_FILE_NAME]
-                [--debug {debug,info,warning,error,critical}]
-                file_id
-
-gdget v0.91 - Tool to download file from Google Drive - gdcmdtools (Google Drive command line tools)
-
-positional arguments:
-  file_id               The id for the file you're going to download
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -f FORMAT, --export_format FORMAT
-                        specify the export format for downloading,
-                        google_format: export_format
-                        spreadsheet: pdf, ods, xlsx
-                        drawing: png, pdf, jpeg, svg
-                        document: pdf, docx, rtf, odt, html, txt
-                        script+json: js
-                        presentation: pdf, pptx, txt
-  -s NEW_FILE_NAME, --save_as NEW_FILE_NAME
-                        save the downloaded file as 
-  --debug {debug,info,warning,error,critical}
-                        define the debug level
-
-</pre>
-
-### Examples for gdperm
-    % python ./gdget.py FILE_ID --export_format pdf -s /tmp/myfile.pdf # export the file as pdf and save as /tmp/myfile.pdf
-    % python ./gdget.py FILE_ID -f json # down files associated with GAS project
 
 ## Packages
   * ubuntu PPA: https://launchpad.net/~ctf/+archive/gdcmdtools
