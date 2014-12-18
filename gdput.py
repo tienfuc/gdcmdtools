@@ -26,11 +26,11 @@ __THIS_VERSION = BASE_INFO["version"]
 import logging
 logger = logging.getLogger(__THIS_APP)
 
-formatter = logging.Formatter('%(levelname)s:%(name)s:%(lineno)d:%(message)s')
+#formatter = logging.Formatter('%(levelname)s:%(name)s:%(lineno)d:%(message)s')
 
-handler = logging.StreamHandler()
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+#handler = logging.StreamHandler()
+#handler.setFormatter(formatter)
+#logger.addHandler(handler)
 
 def test():
     assert True 

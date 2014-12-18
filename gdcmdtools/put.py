@@ -10,8 +10,8 @@ import requests
 import json
 
 import logging
-logger = logging.getLogger()
-logger.setLevel(logging.ERROR)
+logger = logging.getLogger("gdput")
+#logger.setLevel(logging.ERROR)
 
 import random
 import os
@@ -43,7 +43,10 @@ DICT_OF_CONVERTIBLE_FILE_TYPE = { \
             ['jpg', 'git', 'png', 'pdf']],
         'doc':[
             "Document",
-            ['doc', 'docx', 'html', 'htm', 'txt', 'rtf']]
+            ['doc', 'docx', 'html', 'htm', 'txt', 'rtf']],
+        'gas':[
+            "GAS project",
+            []],
         }
 
 
@@ -123,6 +126,33 @@ class GDPut:
 
     def raw_put(self):
         return self.generic_put(False)
+
+    def check_gas(self):
+        # have "id",
+        # have at least one file
+        # the file should have type, id, name items.
+        with open(self.source_file, "rb") as f:
+            json = json.dumps(f.read())
+            
+            if_ok = False
+
+            if json["id"] and len(json["files"] > 0):
+                for j in json["files"]:
+                    if j["type"] and j["id"] and j["name"]:
+                        if_ok = True
+                    else:
+                        return False
+                        
+        return if_ok 
+
+    def gas_pack(self):
+        pass
+
+    def gas_put(self):
+        if not self.check_gas():
+            raise Exception("The target file is not a GAS project json, if you like to raw-upload a json, try '-t raw'")
+        
+        return self.generic_put(True)
 
     def check_csv(self):
         self.csv_delimiter = ','
