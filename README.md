@@ -214,4 +214,4 @@ Please report bugs via https://github.com/timchen86/gdcmdtools/issues
 ## Author
 Tien Fu Chen
 
-Email: tim.chen.86 @ gmail.com
+Email: tienfu.c @ gmail.com
