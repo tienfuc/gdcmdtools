@@ -20,9 +20,9 @@ setup(
     },
 
     # metadata for upload to PyPI
-    author = "ctf <tim.chen.86@gmail.com>",
+    author = "ctf <tienfu.c@gmail.com>",
     url = "https://github.com/timchen86/gdcmdtools",
-    author_email = "tim.chen.86@gmail.com",
+    author_email = "tienfu.c@gmail.com",
     description = "Google drive command-line tools",
     license = "BSD",
     dependency_links = ['https://github.com/timchen86/gdcmdtools/tarball/master#egg=gdcmdtools-0.0.1']
