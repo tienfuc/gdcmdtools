@@ -78,6 +78,7 @@ class GDPut:
         self.latlng_column = latlng_column
         self.permission = permission
         self.csv_column_define = csv_column_define 
+        self.file_id = None
 
         self.ft_headers = None
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
@@ -132,12 +133,16 @@ class GDPut:
         # have at least one file
         # the file should have type, id, name items.
         with open(self.source_file, "rb") as f:
-            json = json.dumps(f.read())
+            jsons = json.loads(f.read())
             
             if_ok = False
 
-            if json["id"] and len(json["files"] > 0):
-                for j in json["files"]:
+            if type(jsons) != dict:
+                return False
+            
+            self.file_id = jsons["id"]
+            if jsons["id"] and (len(jsons["files"]) > 0):
+                for j in jsons["files"]:
                     if j["type"] and j["id"] and j["name"]:
                         if_ok = True
                     else:
@@ -146,13 +151,36 @@ class GDPut:
         return if_ok 
 
     def gas_pack(self):
-        pass
+        map_type_ext = {"server_js":"js", "html":"html"}
+        json_packed = {}
+        try:
+            with open(self.source_file, "rb") as fr1:
+                jsons = json.loads(fr1.read())
+                
+                path = os.path.split(self.source_file)[0]
+                for j in jsons["files"]:
+                    file_name = os.path.join(path, "%s.%s" % (j["name"], map_type_ext[j["type"]]))
+                    with open(file_name, "rb") as fr2:
+                        file_content = fr2.read()
+
+                    j["source"] = file_content
+
+                new_json = "%s.packed" % self.source_file
+                with open(new_json, "wb+") as fw:
+                    fw.write(json.dumps(jsons, indent=4))
+        except:
+            return False
+        else:
+            return True
 
     def gas_put(self):
         if not self.check_gas():
             raise Exception("The target file is not a GAS project json, if you like to raw-upload a json, try '-t raw'")
+
+        if not self.gas_pack():
+            raise Exception("Failed to pack the GAS project files")
         
-        return self.generic_put(True)
+        return self.generic_put(True, file_name = "%s.packed" % self.source_file)
 
     def check_csv(self):
         self.csv_delimiter = ','
@@ -361,7 +389,10 @@ class GDPut:
 
         return latlng
 
-    def generic_put(self, if_convert):
+    def generic_put(self, if_convert, file_name=None):
+        if( file_name ):
+            self.source_file = file_name
+        
         media_body = MediaFileUpload(
                 self.source_file, 
                 mimetype=self.mime_type, 
@@ -380,8 +411,12 @@ class GDPut:
                 'mimeType':self.mime_type,
                 'parents':parents}
  
+        # FIXME: should impliment both update and insert for gas and non-gas file
+        if self.target_type == "gas":
+            request = self.service.files().update(body=body, fileId=self.file_id, media_body=media_body, convert=if_convert)
+        else:
+            request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
 
-        request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
         service_response = None
     
         while service_response is None:

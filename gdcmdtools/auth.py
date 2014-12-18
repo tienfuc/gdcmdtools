@@ -89,7 +89,8 @@ class GDAuth(object):
                         # then the fusion table is not seen by drive.files.list()
                         # also, drive.parents.insert() fails.
                         'https://www.googleapis.com/auth/drive',
-                        'https://www.googleapis.com/auth/fusiontables'
+                        'https://www.googleapis.com/auth/fusiontables',
+                        'https://www.googleapis.com/auth/drive.scripts'
                         ],
                     redirect_uri=redirect_uri)
             except:
