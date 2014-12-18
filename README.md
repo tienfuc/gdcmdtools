@@ -185,9 +185,11 @@ get files from google drive
 
 ### Usage
 <pre>
-usage: gdget.py [-h] -f FORMAT [-s NEW_FILE_NAME] file_id
+usage: gdget.py [-h] [-f FORMAT] [-s NEW_FILE_NAME]
+                [--debug {debug,info,warning,error,critical}]
+                file_id
 
-gdget v0.0.1 - Tool to download file from Google Drive - gdcmdtools (Google Drive command line tools)
+gdget v0.91 - Tool to download file from Google Drive - gdcmdtools (Google Drive command line tools)
 
 positional arguments:
   file_id               The id for the file you're going to download
@@ -195,13 +197,23 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -f FORMAT, --export_format FORMAT
-                        specify the format for downloading
+                        specify the export format for downloading,
+                        google_format: export_format
+                        spreadsheet: pdf, ods, xlsx
+                        drawing: png, pdf, jpeg, svg
+                        document: pdf, docx, rtf, odt, html, txt
+                        script+json: js
+                        presentation: pdf, pptx, txt
   -s NEW_FILE_NAME, --save_as NEW_FILE_NAME
                         save the downloaded file as 
+  --debug {debug,info,warning,error,critical}
+                        define the debug level
+
 </pre>
 
 ### Examples for gdperm
-    % python ./gdget.py 0B_XXXXXXXXXX --export_format pdf -s /tmp/myfile.pdf # export the file as pdf and save as /tmp/myfile.pdf
+    % python ./gdget.py FILE_ID --export_format pdf -s /tmp/myfile.pdf # export the file as pdf and save as /tmp/myfile.pdf
+    % python ./gdget.py FILE_ID -f json # down files associated with GAS project
 
 ## Packages
   * ubuntu PPA: https://launchpad.net/~ctf/+archive/gdcmdtools
