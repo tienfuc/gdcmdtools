@@ -76,15 +76,15 @@ This tool can be used to upload files to Google drive as Spreadsheet,csv,fusion 
 ### Usage
 <pre>
 usage: gdput.py [-h] [-s SOURCE_TYPE] [-l TARGET_TITLE]
-                [-d TARGET_DESCRIPTION] [-f FOLDER_ID] [-p TYPE ROLE VALUE]
-                [-t {ft,pt,ss,doc,raw,ocr,dr}]
+                [-d TARGET_DESCRIPTION] [--no_print_id] [-f FOLDER_ID]
+                [--debug {debug,info,warning,error,critical}]
+                [-p TYPE ROLE VALUE] [-t {raw,ft,pt,ss,doc,ocr,dr,gas}]
                 [--ft_latlng_column FT_LATLNG_COLUMN]
                 [--ft_location_column FT_LOCATION_COLUMN]
                 [--csv_column_define define1_define2_defineN...]
-                [-r {local,oob}]
                 source_file
 
-gdput v0.0.1 - gdcmdtools (Google Drive command line tools)
+gdput v0.91 - Tool to upload file to Google Drive - gdcmdtools (Google Drive command line tools)
 
 positional arguments:
   source_file           The file you're going to upload to Google Drive
@@ -98,17 +98,20 @@ optional arguments:
                         specify the title of the target file
   -d TARGET_DESCRIPTION, --target_description TARGET_DESCRIPTION
                         specify the description of the target file
+  --no_print_id         set if you like not to print the file id after file being uploaded
   -f FOLDER_ID, --folder_id FOLDER_ID
                         the target folder ID on the Google drive
+  --debug {debug,info,warning,error,critical}
+                        define the debug level
   -p TYPE ROLE VALUE, --permission TYPE ROLE VALUE
-                        set the permission of the uploaded file, could be:
+                        set the permission of the uploaded file, can be:
                         type: user, group, domain, anyone
                         role: owner, reader, writer
                         value: user or group e-mail address,
                         or 'me' to refer to the current authorized user
                         ex: -p anyone reader me # set the uploaded file public-read
-  -t {ft,pt,ss,doc,raw,ocr,dr}, --target_type {ft,pt,ss,doc,raw,ocr,dr}
-                        define the target file type on Google Drive, could be:
+  -t {raw,ft,pt,ss,doc,ocr,dr,gas}, --target_type {raw,ft,pt,ss,doc,ocr,dr,gas}
+                        define the target file type on Google Drive, can be:
                         raw: (default) the source file will uploaded without touching
                         ft: Fusion Table (for .csv)
                         pt: Presentation (for .ppt, .pps, .pptx)
@@ -116,10 +119,7 @@ optional arguments:
                         doc: Document (for .doc, .docx, .html, .htm, .txt, .rtf)
                         ocr: OCR (for .jpg, .git, .png, .pdf)
                         dr: Drawing (for .wmf)
-  -r {local,oob}, --redirect_uri {local,oob}
-                        specify the redirect URI for the oauth2 flow, could be:
-                        local: means "http://localhost"
-                        oob: (default) means "urn:ietf:wg:oauth:2.0:oob"
+                        gas: GAS project (for .json)
 
 fusion table support (--target_type ft):
   --ft_latlng_column FT_LATLNG_COLUMN
@@ -132,6 +132,7 @@ fusion table support (--target_type ft):
                         can be "string", "number", "datetime", or "location".
                         ex: has 4 columns in the csv file: "name", "age", "birthday", "address".
                         you can set --csv_column_define string_number_datetime_location
+
 </pre>
 
 ### Examples for gdput
@@ -144,6 +145,43 @@ fusion table support (--target_type ft):
                                               # upload a csv file as Spreadsheet and set the file public-read
     % python ./gdput.py -t ft --csv_column_define string_string_location_string_string_number samples/sample.csv
                                               # upload a csv file as ft with specifed column type
+    % python ./gdput.py -t gas gas_project.json
+                                              # update gas project with project file 'gas_project.json'
+
+## gdget
+get files from google drive
+
+### Usage
+<pre>
+usage: gdget.py [-h] [-f FORMAT] [-s NEW_FILE_NAME]
+                [--debug {debug,info,warning,error,critical}]
+                file_id
+
+gdget v0.91 - Tool to download file from Google Drive - gdcmdtools (Google Drive command line tools)
+
+positional arguments:
+  file_id               The id for the file you're going to download
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FORMAT, --export_format FORMAT
+                        specify the export format for downloading,
+                        google_format: export_format
+                        spreadsheet: pdf, ods, xlsx
+                        drawing: png, pdf, jpeg, svg
+                        document: pdf, docx, rtf, odt, html, txt
+                        script+json: json
+                        presentation: pdf, pptx, txt
+  -s NEW_FILE_NAME, --save_as NEW_FILE_NAME
+                        save the downloaded file as 
+  --debug {debug,info,warning,error,critical}
+                        define the debug level
+
+</pre>
+
+### Examples for gdget
+    % python ./gdget.py FILE_ID --export_format pdf -s /tmp/myfile.pdf # export the file as pdf and save as /tmp/myfile.pdf
+    % python ./gdget.py FILE_ID -f json # down files associated with GAS project
 
 
 ## gdperm
@@ -177,28 +215,6 @@ optional arguments:
     % python ./gdperm.py 0B_XXXXXXXXXX --delete 5566520            # delete the permissions by permission id: 5566520
     
     
-## gdget
-get files from google drive
-
-### Usage
-<pre>
-usage: gdget.py [-h] -f FORMAT [-s NEW_FILE_NAME] file_id
-
-gdget v0.0.1 - Tool to download file from Google Drive - gdcmdtools (Google Drive command line tools)
-
-positional arguments:
-  file_id               The id for the file you're going to download
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -f FORMAT, --export_format FORMAT
-                        specify the format for downloading
-  -s NEW_FILE_NAME, --save_as NEW_FILE_NAME
-                        save the downloaded file as 
-</pre>
-
-### Examples for gdperm
-    % python ./gdget.py 0B_XXXXXXXXXX --export_format pdf -s /tmp/myfile.pdf # export the file as pdf and save as /tmp/myfile.pdf
 
 ## Packages
   * ubuntu PPA: https://launchpad.net/~ctf/+archive/gdcmdtools
