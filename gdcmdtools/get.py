@@ -154,7 +154,6 @@ class GDGet:
 
             if len(export_link_values) > 0 :
                 for link in export_link_values:
-                    #m = re.match(r'^.*exportFormat=(.*)$',link)
                     m = re.match(r'^.*[Ff]ormat=(.*)$',link)
                     return_format[m.group(1)] = link
 
