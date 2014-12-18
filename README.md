@@ -10,6 +10,10 @@ Google drive command-line tools
 
 Tools can be used to maintain files on Google Drive.
 
+# Features
+  * Download/Upload files to Google Drive
+  * Upload Apps Script project(GAS)
+
 # Installation
   * Check your system has Python installed
     * gdcmdtools are developed under Python 2.7.3, I would suggest users to run the tools with Python 2.7.3.(OK: 2.7.2)
@@ -210,4 +214,4 @@ Please report bugs via https://github.com/timchen86/gdcmdtools/issues
 ## Author
 Tien Fu Chen
 
-Email: tim.chen.86 @ gmail.com
+Email: tienfu.c @ gmail.com
