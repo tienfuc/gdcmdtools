@@ -145,6 +145,8 @@ fusion table support (--target_type ft):
                                               # upload a csv file as Spreadsheet and set the file public-read
     % python ./gdput.py -t ft --csv_column_define string_string_location_string_string_number samples/sample.csv
                                               # upload a csv file as ft with specifed column type
+    % python ./gdput.py -t gas gas_project.json
+                                              # update gas project with project file 'gas_project.json'
 
 
 ## gdperm
