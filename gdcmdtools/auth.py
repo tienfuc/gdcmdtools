@@ -34,7 +34,8 @@ class GDAuth(object):
         else:
             # should reissue the credencials
             storage_file = os.path.expanduser('~/.%s.creds' % BASE_INFO["app"])
-            os.remove(storage_file)
+            if os.path.isfile(storage_file):
+                os.remove(storage_file)
 
             try:
                shutil.copyfile(secret_file, default_secret_file)
