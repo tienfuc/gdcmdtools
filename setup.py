@@ -10,7 +10,7 @@ setup(
 
     # Project uses reStructuredText, so ensure that the docutils get
     # installed or upgraded on the target machine
-    install_requires = ['requests>=1.2.3','google_api_python_client>=1.1'],
+    install_requires = ['requests>=1.2.3','google_api_python_client>=1.1','requests_oauthlib>=0.4.2'],
 
     package_data = {
         # If any package contains *.txt or *.rst files, include them:
