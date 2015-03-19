@@ -8,11 +8,16 @@ logger = logging.getLogger()
 logger.setLevel(logging.ERROR)
 
 from gdcmdtools.auth import GDAuth
+from gdcmdtools.auth import SCOPE
 
 import requests
+from requests_oauthlib import OAuth2Session
+
 import re
 import os
 import json
+import io
+import sys
 
 import pprint
 
@@ -43,8 +48,8 @@ class GDGet:
     def __init__(self, file_id, format, save_as):
         # base
         auth = GDAuth()
-        creds = auth.get_credentials()
-        if creds == None:
+        self.credentials = auth.get_credentials()
+        if self.credentials == None:
             raise Exception("Failed to retrieve credentials")
 
         self.http = auth.get_authorized_http()
@@ -96,6 +101,7 @@ class GDGet:
     def run(self):
         try: 
             service_response = self.get()
+            self.file_size = service_response.get('fileSize', None)
 
             result_title_format = self.get_title_format(service_response)
             logger.debug(result_title_format)
@@ -107,23 +113,22 @@ class GDGet:
             if self.format not in return_format.keys():
                 raise Exception("The specified format \'%s\' is not allowed, available format are \"%s\", please correct option: --export_format" % (self.format, ', '.join(return_format.keys())))
 
-            file_content = self.get_by_format(return_format[self.format])
 
             if self.save_as == None:
                self.save_as = title 
 
             if self.format == "json":
+                file_content = self.get_by_format(return_format[self.format])
                 self.parse_gas_json(file_content, self.save_as)               
             else:
-                with open(self.save_as, 'wb+') as f:
-                    f.write(file_content)
+                # FIXME: handle return value
+                self.get_by_format(self.save_as, return_format[self.format])
 
         except Exception, e:
             logger.error(e)
             raise
 
         return return_format
-
 
     def get(self):
         try:
@@ -159,12 +164,27 @@ class GDGet:
 
         return title, return_format
         
-    def get_by_format(self, link):
-        resp, content = self.service._http.request(link)
+    def get_by_format(self, save_as, url):
+        fd = io.FileIO(save_as, mode='wb')
+        creds = self.credentials
+        # refresh token?
+        token = {"access_token":creds.access_token, "token_type":"Bearer"}
+        session = OAuth2Session(creds.client_id, scope=SCOPE, token=token)
+        #response = session.get(url, stream=True)
+        with open(save_as, 'wb') as f:
+            response = session.get(url, stream=True)
+            total_length = self.file_size
 
-        if resp.status == 200:
-          logger.debug('Status: %s' % resp)
-          return content
-        else:
-          logger.error('An error occurred: %s' % resp)
-          return None
+            if total_length is None: # no content length header
+                f.write(response.content)
+            else:
+                dl = 0
+                total_length = int(total_length)
+                for data in response.iter_content(chunk_size=1024*1024):
+                    dl += len(data)
+                    f.write(data)
+                    done = int(50 * dl / total_length)
+                    sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )
+                    sys.stdout.flush()
+
+        return

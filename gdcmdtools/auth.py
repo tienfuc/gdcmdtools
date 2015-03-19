@@ -24,6 +24,14 @@ DICT_OF_REDIRECT_URI = {
     "local":"means \"http://localhost\""
     }
 
+SCOPE = [
+    # if using /drive.file instead of /drive,
+    # then the fusion table is not seen by drive.files.list()
+    # also, drive.parents.insert() fails.
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/fusiontables',
+    'https://www.googleapis.com/auth/drive.scripts'
+]
 
 class GDAuth(object):
     def __init__(self, secret_file=None, if_oob=True):
@@ -85,14 +93,7 @@ class GDAuth(object):
             try: 
                 flow = flow_from_clientsecrets(
                     credentials_file,
-                    scope=[
-                        # if using /drive.file instead of /drive,
-                        # then the fusion table is not seen by drive.files.list()
-                        # also, drive.parents.insert() fails.
-                        'https://www.googleapis.com/auth/drive',
-                        'https://www.googleapis.com/auth/fusiontables',
-                        'https://www.googleapis.com/auth/drive.scripts'
-                        ],
+                    scope=SCOPE,
                     redirect_uri=redirect_uri)
             except:
                 logger.error("failed on flow_from_clientsecrets()")
