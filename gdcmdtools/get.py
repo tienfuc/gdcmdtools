@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import division
 import re
 import os
 import json
@@ -83,6 +84,7 @@ class GDGet:
     def run(self):
         try: 
             service_response = self.get()
+            # Content-Length from http header is None
             self.file_size = service_response.get('fileSize', None)
 
             result_title_format = self.get_title_format(service_response)
@@ -149,24 +151,29 @@ class GDGet:
     def get_by_format(self, save_as, url):
         fd = io.FileIO(save_as, mode='wb')
         creds = self.credentials
+
         # refresh token?
+        # move to auth.py?
         token = {"access_token":creds.access_token, "token_type":"Bearer"}
         session = OAuth2Session(creds.client_id, scope=SCOPE, token=token)
-        #response = session.get(url, stream=True)
+
         with open(save_as, 'wb') as f:
             response = session.get(url, stream=True)
             total_length = self.file_size
 
-            if total_length is None: # no content length header
+            if total_length is None:
                 f.write(response.content)
             else:
                 dl = 0
                 total_length = int(total_length)
+                total_in_mega = int(total_length/1024/1024)
                 for data in response.iter_content(chunk_size=1024*1024):
                     dl += len(data)
                     f.write(data)
                     done = int(50 * dl / total_length)
-                    sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )
+                    done_percent = int(dl/total_length*100)
+                    done_in_mega = int(dl / 1024/1024)
+                    sys.stdout.write("\r[%s%s] %3d%%, %d of %d MB" % ('=' * done, ' ' * (50-done), done_percent, done_in_mega, total_in_mega) )
                     sys.stdout.flush()
 
         return
