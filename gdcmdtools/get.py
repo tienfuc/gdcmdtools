@@ -152,7 +152,6 @@ class GDGet:
         fd = io.FileIO(save_as, mode='wb')
         creds = self.credentials
 
-        # refresh token?
         # move to auth.py?
         token = {"access_token":creds.access_token, "token_type":"Bearer"}
         session = OAuth2Session(creds.client_id, scope=SCOPE, token=token)
