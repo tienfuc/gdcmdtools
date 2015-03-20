@@ -7,6 +7,8 @@ import logging
 logger = logging.getLogger()
 logger.setLevel(logging.ERROR)
 
+from pprint import pprint
+
 from auth import GDAuth
 
 permission_resource_properties = {
@@ -77,3 +79,16 @@ class GDPerm:
         except errors.HttpError, error:
             logger.error('An error occurred: %s' % error)
         return None
+
+    def get_by_user(self):
+        permissions = self.list()
+
+        user_email = self.param.lower()
+        for p in permissions:
+            if p.has_key("emailAddress"):
+                perm_email = p["emailAddress"].lower()
+                if user_email == perm_email:
+                    return p
+
+        return None
+    
