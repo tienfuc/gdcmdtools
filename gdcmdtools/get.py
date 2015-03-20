@@ -1,25 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from apiclient import errors
-from base import GDBase
-import logging
-logger = logging.getLogger()
-logger.setLevel(logging.ERROR)
-
-from gdcmdtools.auth import GDAuth
-from gdcmdtools.auth import SCOPE
-
-import requests
-from requests_oauthlib import OAuth2Session
-
 import re
 import os
 import json
 import io
 import sys
-
 import pprint
+import logging
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+import requests
+from requests_oauthlib import OAuth2Session
+from apiclient import errors
+
+from gdcmdtools.auth import GDAuth
+from gdcmdtools.auth import SCOPE
+from base import GDBase
 
 export_format = {
     "application/vnd.google-apps.spreadsheet":["pdf", "ods", "xlsx"],
@@ -28,21 +25,6 @@ export_format = {
     "application/vnd.google-apps.drawing":["png", "pdf", "jpeg", "svg"],
     "application/vnd.google-apps.script+json":["json"],
     }
-
-""" application/vnd.google-apps.script+json
-{  
-    "files": [  
-        {  
-            "id": "bbda34aa-c700-48d9-88bd-ad2573a0620a",  
-            "name": "Code",  
-            "source": "FILE CONTENT",
-            "type": "server_js"
-        }
-    ]
-}
-
-
-"""
 
 class GDGet:
     def __init__(self, file_id, format, save_as):
