@@ -159,20 +159,20 @@ class GDGet:
 
         with open(save_as, 'wb') as f:
             response = session.get(url, stream=True)
-            total_length = self.file_size
+            total_length = int(self.file_size)
 
             if total_length is None:
                 f.write(response.content)
             else:
-                dl = 0
-                total_length = int(total_length)
-                total_in_mega = int(total_length/1024/1024)
-                for data in response.iter_content(chunk_size=1024*1024):
-                    dl += len(data)
+                mega=1048576 # 1024*1024
+                downloaded = 0
+                total_in_mega = int(total_length/mega)
+                for data in response.iter_content(chunk_size=mega):
+                    downloaded += len(data)
                     f.write(data)
-                    done = int(50 * dl / total_length)
-                    done_percent = int(dl/total_length*100)
-                    done_in_mega = int(dl / 1024/1024)
+                    done = int(50 * downloaded / total_length)
+                    done_percent = int(downloaded / total_length * 100)
+                    done_in_mega = int(downloaded / mega )
                     sys.stdout.write("\r[%s%s] %3d%%, %d of %d MB" % ('=' * done, ' ' * (50-done), done_percent, done_in_mega, total_in_mega) )
                     sys.stdout.flush()
 
