@@ -43,14 +43,15 @@ if __name__ == '__main__':
     arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
             help='define the debug level')
 
-
     args = arg_parser.parse_args()
 
     # set debug devel
     logger.setLevel(getattr(logging, args.debug.upper()))
 
-    action = args.__dict__.copy()
-    del action['file_id']
+    action = {}
+    valid_actions = ["list","get","insert","delete"]
+    for a in valid_actions:
+        action[a] = args.__dict__[a]
 
     # check which action is given by argument
     for act in action:
