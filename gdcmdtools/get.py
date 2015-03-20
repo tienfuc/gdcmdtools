@@ -106,7 +106,9 @@ class GDGet:
                 self.parse_gas_json(file_content, self.save_as)               
             else:
                 # FIXME: handle return value
-                self.get_by_format(self.save_as, return_format[self.format])
+                result, local_size = self.get_by_format(self.save_as, return_format[self.format])
+                if( result == False ):
+                    raise Exception("File size check failed, download may be incompleted. local size is %d" % local_size)
 
         except Exception, e:
             logger.error(e)
@@ -159,6 +161,7 @@ class GDGet:
         with open(save_as, 'wb') as f:
             response = session.get(url, stream=True)
             total_length = int(self.file_size)
+            print "total size = %d Bytes" % total_length
 
             if total_length is None:
                 f.write(response.content)
@@ -167,12 +170,19 @@ class GDGet:
                 downloaded = 0
                 total_in_mega = int(total_length/mega)
                 for data in response.iter_content(chunk_size=mega):
-                    downloaded += len(data)
                     f.write(data)
+                    downloaded += len(data)
                     done = int(50 * downloaded / total_length)
                     done_percent = int(downloaded / total_length * 100)
                     done_in_mega = int(downloaded / mega )
                     sys.stdout.write("\r[%s%s] %3d%%, %d of %d MB" % ('=' * done, ' ' * (50-done), done_percent, done_in_mega, total_in_mega) )
                     sys.stdout.flush()
+        # for sys.stdout.flush()
+        print ""    
 
-        return
+        # local size check
+        local_size = int(os.path.getsize(save_as))
+        if( int(self.file_size) == local_size ):
+            return True, local_size 
+        else:
+            return False, local_size
