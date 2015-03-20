@@ -8,6 +8,7 @@ import apiclient.errors
 import urllib
 import requests
 import json
+import pprint
 
 import logging
 logger = logging.getLogger("gdput")
@@ -86,6 +87,7 @@ class GDPut:
         # base
         auth = GDAuth()
         creds = auth.get_credentials()
+        self.auth_user = creds.id_token.get("email",None)
         if creds == None:
             raise Exception("Failed to retrieve credentials")
         self.http = auth.get_authorized_http()
@@ -99,20 +101,29 @@ class GDPut:
             self.ft_service = base.get_ft_service(self.http)
  
 
-    def if_folder_exist(self):
+    def if_folder_writable(self):
         try:
-            response = self.service.files().get(fileId=self.folder_id).execute()
-            logger.debug(response)
+            permissions = self.service.permissions().list(fileId=self.folder_id).execute()
+            valid_roles = ["writer", "owner"]
+            logger.debug(pprint.pformat(permissions))
+            for p in permissions["items"]:
+                email = p.get("emailAddress",None).lower()
+                role = p.get("role",None).lower()
+
+                logger.debug("email: %s, role: %s" % (email, role))
+
+                if( email == self.auth_user ) and (role in valid_roles):
+                    return True
         except:
             return False
 
-        return True
+        return False
         
     def run(self):
         # check folder_id
         if self.folder_id:
-            if self.if_folder_exist() == False:
-                raise Exception("folder_id doesn't exist: %s" % self.folder_id)
+            if self.if_folder_writable() == False:
+                raise Exception("folder_id doesn't exist or insufficient permission: %s" % self.folder_id)
 
         try:
             result = getattr(self, self.target_type+"_put")()
@@ -124,6 +135,9 @@ class GDPut:
             raise
             
         return result
+
+    def get_current_user(self):
+        pass
 
     def raw_put(self):
         return self.generic_put(False)

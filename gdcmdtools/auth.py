@@ -30,7 +30,9 @@ SCOPE = [
     # also, drive.parents.insert() fails.
     'https://www.googleapis.com/auth/drive',
     'https://www.googleapis.com/auth/fusiontables',
-    'https://www.googleapis.com/auth/drive.scripts'
+    'https://www.googleapis.com/auth/drive.scripts',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
 ]
 
 class GDAuth(object):

@@ -20,6 +20,7 @@ class GDPerm:
         # base
         auth = GDAuth()
         creds = auth.get_credentials()
+
         if creds == None:
             raise Exception("Failed to retrieve credentials")
         self.http = auth.get_authorized_http()
@@ -59,6 +60,7 @@ class GDPerm:
     def list(self):
         try:
             permissions = self.service.permissions().list(fileId=self.file_id).execute()
+            logger.debug(permissions)
             return permissions.get('items', [])
         except errors.HttpError, error:
             logger.error('An error occurred: %s' % error)
@@ -82,8 +84,8 @@ class GDPerm:
 
     def get_by_user(self):
         permissions = self.list()
-
         user_email = self.param.lower()
+
         for p in permissions:
             if p.has_key("emailAddress"):
                 perm_email = p["emailAddress"].lower()
