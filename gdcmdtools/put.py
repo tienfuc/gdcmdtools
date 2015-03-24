@@ -433,6 +433,7 @@ class GDPut:
 
         service_response = None
     
+        print "Uploading file: %s" % self.source_file
         while service_response is None:
             status, service_response = request.next_chunk(num_retries=10)
             if status:

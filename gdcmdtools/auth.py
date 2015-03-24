@@ -31,8 +31,8 @@ SCOPE = [
     'https://www.googleapis.com/auth/drive',
     'https://www.googleapis.com/auth/fusiontables',
     'https://www.googleapis.com/auth/drive.scripts',
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile'
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email'
 ]
 
 class GDAuth(object):
@@ -61,6 +61,7 @@ class GDAuth(object):
     def run(self):
         credentials = self.get_credentials()
         return credentials
+
 
     def get_credentials(self):
         #home_path = os.getenv("HOME")
@@ -125,8 +126,9 @@ class GDAuth(object):
                     return None
 
         self.credentials = credentials
-        
+       
         return self.credentials
+
 
     def get_authorized_http(self):
         self.http =  httplib2.Http()
