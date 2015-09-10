@@ -4,7 +4,7 @@
 import os
 from oauth2client.file import Storage
 from oauth2client.client import flow_from_clientsecrets
-from oauth2client.tools import run
+from oauth2client import tools
 from apiclient.discovery import build
 
 from gdcmdtools.base import BASE_INFO
@@ -120,7 +120,7 @@ class GDAuth(object):
 
             else:
                 try:
-                    credentials = run(flow, storage)
+                    credentials = tools.run(flow, storage)
                 except:
                     logger.error("failed on oauth2client.tools.run()")
                     return None
