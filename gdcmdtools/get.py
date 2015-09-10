@@ -160,15 +160,14 @@ class GDGet:
 
         with open(save_as, 'wb') as f:
             response = session.get(url, stream=True)
-            total_length = int(self.file_size)
-            print "total size = %d Bytes" % total_length
+            if self.file_size:
+                total_length = int(self.file_size)
+                print "total size = %d Bytes" % total_length
 
-            if total_length is None:
-                f.write(response.content)
-            else:
                 mega=1048576 # 1024*1024
                 downloaded = 0
                 total_in_mega = int(total_length/mega)
+
                 for data in response.iter_content(chunk_size=mega):
                     f.write(data)
                     downloaded += len(data)
@@ -177,12 +176,22 @@ class GDGet:
                     done_in_mega = int(downloaded / mega )
                     sys.stdout.write("\r[%s%s] %3d%%, %d of %d MB" % ('=' * done, ' ' * (50-done), done_percent, done_in_mega, total_in_mega) )
                     sys.stdout.flush()
+            else:
+                f.write(response.content)
+
         # for sys.stdout.flush()
         print ""    
 
         # local size check
         local_size = int(os.path.getsize(save_as))
-        if( int(self.file_size) == local_size ):
-            return True, local_size 
+        print "File location: %s" % save_as
+
+        if self.file_size:
+            if( int(self.file_size) == local_size ):
+                return True, local_size 
+                print "File size: %d" % local_size
+            else:
+                return False, local_size
         else:
-            return False, local_size
+            print "File size in bytes: %d" % local_size
+            return True, local_size
