@@ -225,7 +225,7 @@ optional arguments:
 BSD 2-Clause License
 
 ## Bug
-Please report bugs via https://github.com/timchen86/gdcmdtools/issues
+Please report bugs via https://github.com/tienfuc/gdcmdtools/issues
 
 ## Author
 Tien Fu Chen
