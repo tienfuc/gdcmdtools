@@ -60,7 +60,11 @@ class GDPut:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-        self.file_id = None
+        if( self.replace_id ):
+            self.file_id = self.replace_id
+        else:
+            self.file_id = None
+
         self.ft_headers = None
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
 
@@ -409,7 +413,10 @@ class GDPut:
         if self.target_type == "gas":
             request = self.service.files().update(body=body, fileId=self.file_id, media_body=media_body, convert=if_convert)
         else:
-            request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
+            if( self.replace_id ):
+                request = self.service.files().update(body=body, media_body=media_body, convert=if_convert, fileId=self.file_id)
+            else:
+                request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
 
         service_response = None
     

@@ -195,6 +195,7 @@ if __name__ == '__main__':
     # let's put
     puter = GDPut(
             source_file = args.source_file,
+            replace_id = args.replace_id,
             mime_type = mime_type,
             target_type = args.target_type,
             folder_id = args.folder_id,
