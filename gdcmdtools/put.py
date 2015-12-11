@@ -53,34 +53,14 @@ DICT_OF_CONVERTIBLE_FILE_TYPE = { \
 
 # FIXME: naming
 class GDPut:
-    def __init__(
-            self, 
-            source_file, 
-            mime_type, 
-            target_type, 
-            folder_id, 
-            title, 
-            description, 
-            location_column,
-            latlng_column,
-            permission,
-            csv_column_define):
+    def __init__(self, **kwargs):
 
-        logger.debug("source_file=%s, mime_type=%s, target_type=%s" % 
-                (source_file, mime_type, target_type))
+        logger.debug(kwargs)
 
-        self.source_file = source_file
-        self.mime_type = mime_type
-        self.target_type = target_type
-        self.folder_id = folder_id
-        self.title = title
-        self.description = description
-        self.location_column = location_column
-        self.latlng_column = latlng_column
-        self.permission = permission
-        self.csv_column_define = csv_column_define 
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
         self.file_id = None
-
         self.ft_headers = None
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
 
@@ -97,7 +77,7 @@ class GDPut:
         self.root = base.get_root()
 
         # ft service
-        if target_type == "ft":
+        if self.target_type == "ft":
             self.ft_service = base.get_ft_service(self.http)
  
 

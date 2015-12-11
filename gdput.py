@@ -81,6 +81,9 @@ if __name__ == '__main__':
     arg_parser.add_argument('-s', '--source_type', default="auto",
             help='define the source file type by MIME type,\nex: "text/csv", or \"auto\" to determine the file type by file name')
    
+    arg_parser.add_argument('-r', '--replace_id', default=None, 
+            help='replace the file with specifying the file id')
+
     arg_parser.add_argument('-l', '--target_title', default=None, 
             help='specify the title of the target file')
 
@@ -191,16 +194,16 @@ if __name__ == '__main__':
 
     # let's put
     puter = GDPut(
-            args.source_file, 
-            mime_type, 
-            args.target_type,
-            args.folder_id,
-            target_title,
-            args.target_description,
-			args.ft_location_column,
-			args.ft_latlng_column,
-            args.permission,
-            csv_column_define)
+            source_file = args.source_file,
+            mime_type = mime_type,
+            target_type = args.target_type,
+            folder_id = args.folder_id,
+            title = target_title,
+            description = args.target_description,
+            ft_location_column = args.ft_location_column,
+            ft_latlng_column = args.ft_latlng_column,
+            permission = args.permission,
+            csv_column_define = csv_column_define)
 
     try:
         response = puter.run()
