@@ -60,12 +60,9 @@ class GDPut:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-        if( self.replace_id ):
-            self.file_id = self.replace_id
-        else:
-            self.file_id = None
-
+        self.file_id = None
         self.ft_headers = None
+
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
 
         # base
