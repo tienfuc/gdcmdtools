@@ -36,7 +36,15 @@ if __name__ == '__main__':
     mutex_group.add_argument('--list', action='store_true', help='list the permission resource of the file') 
     mutex_group.add_argument('--get', metavar='PERMISSION_ID', help='get the permission resource by id') 
 
-    mutex_group.add_argument('--insert', nargs=3, metavar=('TYPE', 'ROLE', 'VALUE'), help='insert the permission to the file by id')
+    help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
+    #mutex_group.add_argument('--insert', nargs=3, metavar=('TYPE', 'ROLE', 'VALUE'), help='insert the permission to the file by id')
+    PERMISSION_METAVAR = ('TYPE', 'ROLE', 'VALUE')
+    mutex_group.add_argument('--insert',
+            metavar=PERMISSION_METAVAR,
+            nargs=len(PERMISSION_METAVAR),
+            help = "set the permission of the created folder, can be:\n" + '\n'.join(help_permission_text) + \
+                    '\nvalue: user or group e-mail address,\nor \'me\' to refer to the current authorized user\n'+
+                    'ex: -p anyone reader me # set the uploaded file public-read')
 
     mutex_group.add_argument('--delete', metavar='PERMISSION_ID', help='delete the permission of the file by id')
 
