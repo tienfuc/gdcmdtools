@@ -6,17 +6,15 @@ from time import localtime, strftime
 
 import argparse
 from argparse import RawTextHelpFormatter
-import mimetypes
 
 from gdcmdtools.mkdir import GDMkdir
-from gdcmdtools.auth import DICT_OF_REDIRECT_URI
 
 from gdcmdtools.base import BASE_INFO
 from gdcmdtools.base import DEBUG_LEVEL
 from gdcmdtools.perm import permission_resource_properties
 
 import csv
-
+import pprint
 
 __THIS_APP = 'gdmkdir'
 __THIS_DESCRIPTION = 'Tool to create folder on Google Drive'
@@ -42,12 +40,12 @@ if __name__ == '__main__':
             help='specify the description of the folder')
 
     arg_parser.add_argument('--no_print_id', action='store_true', 
-            help='set if you like not to print the file id after file being uploaded')
+            help='set if you like not to print the folder id after folder being created')
 
     arg_parser.add_argument('-f', '--parent_folderId', 
             help='create the new folder under the parent folder specified by Id')
 
-    arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default='info',
+    arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
             help='define the debug level')
 
     help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
@@ -72,7 +70,13 @@ if __name__ == '__main__':
         response = mkdir.run()
     except:
         raise
-        sys.exit(1)
 
-    logger.info(response['id'])
+    logger.debug(pprint.pformat(response))
+
+    if not args.no_print_id:
+        print "id: %s" % response['id']
+        driver_view_prefix = "https://drive.google.com/drive/folders"
+        print "driver view: %s/%s" % (driver_view_prefix, response[u'id'])
+        print "folder view: %s" % response[u'alternateLink']
+
     sys.exit(0)

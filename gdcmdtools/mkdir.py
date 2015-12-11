@@ -3,8 +3,6 @@
 
 import csv
 import sys
-from apiclient.http import MediaFileUpload
-import apiclient.errors
 import urllib
 import requests
 import json
@@ -22,35 +20,6 @@ from gdcmdtools.base import GDBase
 from gdcmdtools.perm import GDPerm
 from gdcmdtools.auth import GDAuth
 
-DICT_OF_CONVERTIBLE_FILE_TYPE = { \
-        'raw':[
-            "Raw file",
-            []],
-        'ss':[
-            "Spreadsheet",
-            ['xls', 'xlsx', 'ods', 'csv', 'tsv', 'tab']],
-        'ft':[
-            "Fusion Table",
-            ['csv']],
-        'pt':[
-            "Presentation",
-            ['ppt', 'pps', 'pptx']],
-        'dr':[
-            "Drawing",
-            ['wmf']],
-        'ocr':[
-            "OCR",
-            ['jpg', 'git', 'png', 'pdf']],
-        'doc':[
-            "Document",
-            ['doc', 'docx', 'html', 'htm', 'txt', 'rtf']],
-        'gas':[
-            "GAS project",
-            ['json']],
-        }
-
-
-# FIXME: naming
 class GDMkdir:
     def __init__(self, args):
 
@@ -60,7 +29,6 @@ class GDMkdir:
             setattr(self, key, value)
 
         self.mime_type = "application/vnd.google-apps.folder"
-        logger.debug(dir(self))
         auth = GDAuth()
 
         creds = auth.get_credentials()
@@ -73,13 +41,15 @@ class GDMkdir:
         self.service = base.get_drive_service(self.http)
         self.root = base.get_root()
 
+        logger.debug(self)
+
     def run(self):
         if self.parent_folderId == None:
             parents = []
         else:
             parents = [{
                 "kind":"drive#fileLink",
-                "id":self.parent_foldeId}]
+                "id":self.parent_folderId}]
 
         body = {
                 'title':self.folder_name,
@@ -87,7 +57,6 @@ class GDMkdir:
                 'mimeType':self.mime_type,
                 'parents':parents}
 
- 
         try:
             response_insert = self.service.files().insert(body=body).execute()
         except Exception, e:
@@ -95,6 +64,15 @@ class GDMkdir:
             raise
         else:
             if (self.permission != None) and response_insert.get('id') != None:
-                response_perm = GDPerm.insert(self.service, response_insert['id'], self.permission)
+                try:
+                    param = {
+                            'name':'insert',
+                            'param':self.permission}
+
+                    perm = GDPerm(response_insert['id'], param)
+                    response_perm = perm.run()
+                except Exception, e:
+                    logger.error(e)
+                    raise
 
         return response_insert

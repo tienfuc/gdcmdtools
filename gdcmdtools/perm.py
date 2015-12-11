@@ -43,7 +43,6 @@ class GDPerm:
         return result
 
     def insert(self):
-
         new_permission = {
                 'type': self.param[0],
                 'role': self.param[1], 
