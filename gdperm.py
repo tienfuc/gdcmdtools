@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from gdcmdtools.perm import GDPerm
-from gdcmdtools.perm import permission_resource_properties
+from gdcmdtools.perm import help_permission_text
 import argparse
 from argparse import RawTextHelpFormatter
 from gdcmdtools.base import BASE_INFO
@@ -36,8 +36,6 @@ if __name__ == '__main__':
     mutex_group.add_argument('--list', action='store_true', help='list the permission resource of the file') 
     mutex_group.add_argument('--get', metavar='PERMISSION_ID', help='get the permission resource by id') 
 
-    help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
-    #mutex_group.add_argument('--insert', nargs=3, metavar=('TYPE', 'ROLE', 'VALUE'), help='insert the permission to the file by id')
     PERMISSION_METAVAR = ('TYPE', 'ROLE', 'VALUE')
     mutex_group.add_argument('--insert',
             metavar=PERMISSION_METAVAR,

@@ -11,7 +11,7 @@ from gdcmdtools.mkdir import GDMkdir
 
 from gdcmdtools.base import BASE_INFO
 from gdcmdtools.base import DEBUG_LEVEL
-from gdcmdtools.perm import permission_resource_properties
+from gdcmdtools.perm import help_permission_text 
 
 import csv
 import pprint
@@ -47,8 +47,6 @@ if __name__ == '__main__':
 
     arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
             help='define the debug level')
-
-    help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
 
     PERMISSION_METAVAR = ('TYPE', 'ROLE', 'VALUE')
     arg_parser.add_argument('-p', '--permission',

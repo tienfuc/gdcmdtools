@@ -15,6 +15,8 @@ permission_resource_properties = {
         "role":["owner", "reader", "writer"],
         "type":["user", "group", "domain", "anyone"]}
 
+help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
+
 class GDPerm:
     def __init__(self, file_id, action):
         # base
