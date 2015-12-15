@@ -1,3 +1,9 @@
+gdcmdtools (1.00-1) unstable; urgency=medium
+
+  * Fixed issues in base.py
+
+ -- TienFu Chen <tienfu.c@gmail.com>  Tue, 15 Dec 2015 17:36:42 +0800
+
 gdcmdtools (0.99-1) unstable; urgency=low
 
   * source package automatically created by stdeb 0.8.5
