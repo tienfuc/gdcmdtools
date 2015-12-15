@@ -1,0 +1,17 @@
+Source: gdcmdtools
+Maintainer: TienFu Chen <tienfu.c@gmail.com>
+Section: python
+Priority: optional
+Build-Depends: python-setuptools (>= 0.6b3), python-all (>= 2.6.6-3), debhelper (>= 7.4.3)
+Standards-Version: 3.9.1
+
+
+
+Package: python-gdcmdtools
+Architecture: all
+Depends: ${misc:Depends}, python(>=2.7.3), python-googleapi, python-oauthlib, python-requests-oauthlib
+Description: Google drive command-line tools
+
+
+
+

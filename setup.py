@@ -6,7 +6,7 @@ setup(
     name = "gdcmdtools",
     version = BASE_INFO["version"],
     packages = find_packages(),
-    scripts = ['gdput.py','gdget.py','gdperm.py','gdauth.py'],
+    scripts = ['gdput.py','gdget.py','gdperm.py','gdauth.py', 'gdrm.py', 'gdmkdir.py'],
 
     # Project uses reStructuredText, so ensure that the docutils get
     # installed or upgraded on the target machine
