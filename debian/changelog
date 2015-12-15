@@ -1,5 +1,5 @@
-gdcmdtools (0.99-1) unstable; urgency=low
+gdcmdtools-0.99 (1-1) unstable; urgency=low
 
-  * source package automatically created by stdeb 0.8.5
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 
- -- TienFu Chen <tienfu.c@gmail.com>  Tue, 15 Dec 2015 16:38:16 +0800
+ -- TienFu Chen <tienfu.chen@canonical.com>  Tue, 15 Dec 2015 17:19:10 +0800

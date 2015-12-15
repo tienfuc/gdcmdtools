@@ -1,17 +1,15 @@
-Source: gdcmdtools
-Maintainer: TienFu Chen <tienfu.c@gmail.com>
-Section: python
+Source: gdcmdtools-0.99
+Section: unknown
 Priority: optional
-Build-Depends: python-setuptools (>= 0.6b3), python-all (>= 2.6.6-3), debhelper (>= 7.4.3)
-Standards-Version: 3.9.1
+Maintainer: TienFu Chen <tienfu.chen@canonical.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/gdcmdtools-0.99.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/gdcmdtools-0.99.git;a=summary
 
-
-
-Package: python-gdcmdtools
-Architecture: all
-Depends: ${misc:Depends}, python(>=2.7.3), python-googleapi, python-oauthlib, python-requests-oauthlib
-Description: Google drive command-line tools
-
-
-
-
+Package: gdcmdtools-0.99
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>
