@@ -4,6 +4,10 @@
 ## pypi
   * https://pypi.python.org/pypi/gdcmdtools
 
+## what's new
+# 0.98
+  * added gdrm.py, able to remove files and folder. 
+
 gdcmdtools
 =========
 Google drive command-line tools
