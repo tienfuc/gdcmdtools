@@ -5,8 +5,8 @@
   * https://pypi.python.org/pypi/gdcmdtools
 
 ## What's new
-  0.98
-    added gdrm.py, able to remove files and folder. 
+  * 0.98
+    * added gdrm.py, able to remove files and folder. 
 
 gdcmdtools
 =========
