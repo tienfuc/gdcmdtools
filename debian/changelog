@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 gdcmdtools (1.00-1) unstable; urgency=medium
 
   * Fixed issues in base.py
@@ -5,7 +6,10 @@ gdcmdtools (1.00-1) unstable; urgency=medium
  -- TienFu Chen <tienfu.c@gmail.com>  Tue, 15 Dec 2015 17:36:42 +0800
 
 gdcmdtools (0.99-1) unstable; urgency=low
+=======
+gdcmdtools-0.99 (1-1) unstable; urgency=low
+>>>>>>> 47ef661f948f73125c1675a14e1917af0f131b7c
 
-  * source package automatically created by stdeb 0.8.5
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 
- -- TienFu Chen <tienfu.c@gmail.com>  Tue, 15 Dec 2015 16:38:16 +0800
+ -- TienFu Chen <tienfu.chen@canonical.com>  Tue, 15 Dec 2015 17:19:10 +0800

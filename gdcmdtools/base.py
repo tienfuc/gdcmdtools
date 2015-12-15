@@ -43,17 +43,13 @@ class GDBase(object):
         return self.root_folder
 
     def get_drive_service(self, http):
-        if self.drive_service == None:
-            self.drive_service = build('drive', GDAPI_VER, 
-                discoveryServiceUrl=DISCOVERY_URL, http=http)
-        else:
-            return self.drive_service
+        self.drive_service = build('drive', GDAPI_VER, 
+            discoveryServiceUrl=DISCOVERY_URL, http=http)
+        return self.drive_service
 
     def get_ft_service(self, http):
-        if self.ft_service == None:
-            self.ft_service = build('fusiontables', FTAPI_VER, 
-                discoveryServiceUrl=DISCOVERY_URL, http=http)
-        else:
-            return self.ft_service
+        self.ft_service = build('fusiontables', FTAPI_VER, 
+            discoveryServiceUrl=DISCOVERY_URL, http=http)
+        return self.ft_service
 
 
