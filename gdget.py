@@ -44,7 +44,7 @@ if __name__ == '__main__':
             (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),
             formatter_class=RawTextHelpFormatter)
 
-    arg_parser.add_argument('file_id', help='The id for the file you\'re going to download')
+    arg_parser.add_argument('file_id', help='The file id or driver link for the file you\'re going to download')
     
     help_export_format = "\n".join([ re.search(".*google-apps\.(.*)", k ).group(1)+": "+", ".join(export_format[k]) for k in export_format.iterkeys() ])
 
