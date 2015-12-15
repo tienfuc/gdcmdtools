@@ -32,7 +32,7 @@ if __name__ == '__main__':
             (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),
             formatter_class=RawTextHelpFormatter)
 
-    arg_parser.add_argument('-d', '--delete', help='Permanently deletes the file instead of trashing it')
+    arg_parser.add_argument('-d', '--delete', action='store_true', help='Permanently deletes the file instead of trashing it')
 
     arg_parser.add_argument('file_id', help='The file id or drive link for the file you\'re going to remove')
 
