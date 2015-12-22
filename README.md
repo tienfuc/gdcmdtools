@@ -12,7 +12,7 @@ gdcmdtools
 =========
 Google drive command-line tools
 
-Tools can be used to maintain files on Google Drive.
+Tools to maintain files on Google Drive.
 
 # Features
   * Download/Upload files to Google Drive
@@ -21,15 +21,20 @@ Tools can be used to maintain files on Google Drive.
 # Installation
   * Check your system has Python installed
     * gdcmdtools are developed under Python 2.7.3, I would suggest users to run the tools with Python 2.7.3.(OK: 2.7.2)
-  * For Mac OSX
-    1. sudo easy_install pip
-    1. sudo pip install google-api-python-client
-    1. sudo pip install gdcmdtools
-  * For Ubuntu Linux
-    1. sudo apt-get install python-pip
-    1. sudo pip install google-api-python-client
-    1. sudo pip install gdcmdtools
-  * After the installation, you will see gd\*.py under /usr/local/bin.
+  * PIP
+    * For Mac OSX
+      1. sudo easy_install pip
+      1. sudo pip install google-api-python-client
+      1. sudo pip install gdcmdtools
+    * For Ubuntu Linux
+      1. sudo apt-get install python-pip
+      1. sudo pip install google-api-python-client
+      1. sudo pip install gdcmdtools
+    * After the installation, you will see gd\*.py under /usr/local/bin.
+  * Ubuntu Linux PPA
+    1. sudo apt-add-repository ppa:ctf/gdcmdtools
+    1. sudo apt-get update
+    1. sudo apt-get install python-gdcmdtools
 
 # API Setup
  * Create a new project for this tool to access your Google drive
