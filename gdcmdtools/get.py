@@ -74,7 +74,7 @@ class GDGet:
                 file_fullname = "%s.%s" % (file_name, file_ext) 
 
                 with open(file_fullname, 'wb+') as f:
-                    f.write(file_source)
+                    f.write(file_source.encode('utf8')) # We need unicode!
                 
                 j.pop("source")
                 new_json["files"].append(j)
@@ -109,11 +109,11 @@ class GDGet:
                self.save_as = title 
 
             if self.format == "json":
-                file_content = self.get_by_format(return_format[self.format])
+                result,file_content,local_size = self.get_by_format(self.save_as,return_format[self.format])
                 self.parse_gas_json(file_content, self.save_as)               
             else:
                 # FIXME: handle return value
-                result, local_size = self.get_by_format(self.save_as, return_format[self.format])
+                result,content,local_size = self.get_by_format(self.save_as, return_format[self.format])
                 if( result == False ):
                     raise Exception("File size check failed, download may be incompleted. local size is %d" % local_size)
 
@@ -158,6 +158,10 @@ class GDGet:
         return title, return_format
         
     def get_by_format(self, save_as, url):
+        '''Get file from URL and save to save_as.
+
+        Return result,content,filesize
+        '''
         fd = io.FileIO(save_as, mode='wb')
         creds = self.credentials
 
@@ -195,10 +199,10 @@ class GDGet:
 
         if self.file_size:
             if( int(self.file_size) == local_size ):
-                return True, local_size 
+                return True, response.content, local_size 
                 print "File size: %d" % local_size
             else:
-                return False, local_size
+                return False, response.content, local_size
         else:
             print "File size in bytes: %d" % local_size
-            return True, local_size
+            return True, response.content, local_size
