@@ -93,6 +93,9 @@ if __name__ == '__main__':
 
     arg_parser.add_argument('--no_print_id', action='store_true', 
             help='set if you like not to print the file id after file being uploaded')
+    
+    arg_parser.add_argument('--gas_new', action='store_true', 
+            help='set if you like to upload GAS project as new project(ignore the file id in GAS JSON')
 
     arg_parser.add_argument('-f', '--folder_id', 
             help='the target folder ID on the Google drive')
@@ -196,6 +199,7 @@ if __name__ == '__main__':
     puter = GDPut(
             source_file = args.source_file,
             replace_id = args.replace_id,
+            gas_new = args.gas_new,
             mime_type = mime_type,
             target_type = args.target_type,
             folder_id = args.folder_id,

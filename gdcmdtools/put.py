@@ -9,6 +9,7 @@ import urllib
 import requests
 import json
 import pprint
+import re
 
 import logging
 logger = logging.getLogger("gdput")
@@ -61,6 +62,14 @@ class GDPut:
             setattr(self, key, value)
 
         self.file_id = None
+        if self.replace_id:
+            file_id_from_link = re.search("^.*/d/([\w\-]*)", self.replace_id)
+            
+            if file_id_from_link == None:
+                self.file_id = self.replace_id
+            else:
+                self.file_id = file_id_from_link.group(1)
+
         self.ft_headers = None
 
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
@@ -406,14 +415,13 @@ class GDPut:
                 'mimeType':self.mime_type,
                 'parents':parents}
  
-        # FIXME: should impliment both update and insert for gas and non-gas file
-        if self.target_type == "gas":
-            request = self.service.files().update(body=body, fileId=self.file_id, media_body=media_body, convert=if_convert)
-        else:
-            if( self.replace_id ):
-                request = self.service.files().update(body=body, media_body=media_body, convert=if_convert, fileId=self.file_id)
-            else:
+        if( self.file_id ):
+            if( self.gas_new ):
                 request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
+            else:
+                request = self.service.files().update(body=body, media_body=media_body, convert=if_convert, fileId=self.file_id)
+        else:
+            request = self.service.files().insert(body=body, media_body=media_body, convert=if_convert)
 
         service_response = None
     
