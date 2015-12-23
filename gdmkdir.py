@@ -73,8 +73,8 @@ if __name__ == '__main__':
 
     if not args.no_print_id:
         print "id: %s" % response['id']
-        driver_view_prefix = "https://drive.google.com/drive/folders"
-        print "driver view: %s/%s" % (driver_view_prefix, response[u'id'])
+        drive_view_prefix = "https://drive.google.com/drive/folders"
+        print "drive view: %s/%s" % (drive_view_prefix, response[u'id'])
         print "folder view: %s" % response[u'alternateLink']
 
     sys.exit(0)
