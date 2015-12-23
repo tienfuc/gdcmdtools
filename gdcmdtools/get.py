@@ -99,7 +99,9 @@ class GDGet:
 
             title, return_format = result_title_format
             if self.format != "raw":
-                title = title +"." +self.format
+                _, ext = os.path.splitext(title)
+                if(self.format != ext[1:]):
+                    title = title +"." +self.format
 
             if self.format not in return_format.keys():
                 raise Exception("The specified format \'%s\' is not allowed, available format are \"%s\", please correct option: --export_format" % (self.format, ', '.join(return_format.keys())))

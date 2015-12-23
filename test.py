@@ -84,6 +84,8 @@ class Test(unittest.TestCase):
 
     def test_11_raw_get(self):
 
+        assert Test.raw_file_id
+
         if Test.raw_file_id:
             file_ori = "./samples/sample.txt"
             file_get = "/tmp/gdcmdtools.tmp"
@@ -110,6 +112,39 @@ class Test(unittest.TestCase):
             assert True
         else:
             assert False
+
+    def test_20_gas_put(self):
+        file = "./samples/gas/gas.json"
+        cmd = "python ./gdput.py -t gas --gas_new %s" % file
+        cmd_debug = "python ./gdput.py --debug debug -t gas --gas_new %s" % file
+        
+        response = subprocess.check_output(cmd_debug, shell=True)
+        m = re.search("id: (.*)", response, re.MULTILINE)
+        #print response
+        #print m.group(1)
+        if m:
+            Test.gas_file_id = m.group(1)
+            assert True
+        else:
+            assert False
+
+    def test_21_gas_get(self):
+
+        assert Test.gas_file_id
+
+        if Test.gas_file_id:
+            file_ori = "./samples/gas/Code.js"
+            file_get = "./Code.js"
+            cmd_debug = "python ./gdget.py --debug debug -f json %s" % (Test.gas_file_id)
+
+            response = subprocess.check_output(cmd_debug, shell=True)
+            result = filecmp.cmp(file_ori, file_get)
+
+            assert result
+        else:
+            assert False
+
+  
 
     def test_99_cleanup(self):
         if Test.if_travis == False:
