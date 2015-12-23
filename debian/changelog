@@ -1,3 +1,10 @@
+gdcmdtools (1.01-1) trusty; urgency=medium
+
+  * bumps version
+  * #73 fixed 
+
+ -- TienFu Chen <tienfu.chen@canonical.com>  Wed, 23 Dec 2015 11:24:18 +0800
+
 gdcmdtools (1.00-7) trusty; urgency=medium
 
   * added more depends

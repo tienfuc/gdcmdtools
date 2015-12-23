@@ -17,7 +17,7 @@ logger.setLevel(logging.INFO)
 BASE_INFO = {
         "app":"gdcmdtools",
         "description":'Google Drive command line tools',
-        "version":'1.00'}
+        "version":'1.01'}
 
 GDAPI_VER = 'v2'
 FTAPI_VER = 'v1'
