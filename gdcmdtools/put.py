@@ -144,10 +144,13 @@ class GDPut:
             if type(jsons) != dict:
                 return False
             
-            self.file_id = jsons["id"]
-            if jsons["id"] and (len(jsons["files"]) > 0):
+            if not self.gas_new:
+                assert(jsons.get("id"))
+                self.file_id = jsons.get("id")
+           
+            if(len(jsons["files"]) > 0):
                 for j in jsons["files"]:
-                    if j["type"] and j["id"] and j["name"]:
+                    if j["type"] and j["name"]:
                         if_ok = True
                     else:
                         return False
