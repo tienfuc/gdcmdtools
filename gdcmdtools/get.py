@@ -113,7 +113,7 @@ class GDGet:
                 self.parse_gas_json(file_content, self.save_as)               
             else:
                 # FIXME: handle return value
-                result,content,local_size = self.get_by_format(self.save_as, return_format[self.format])
+                result,file_content,local_size = self.get_by_format(self.save_as, return_format[self.format])
                 if( result == False ):
                     raise Exception("File size check failed, download may be incompleted. local size is %d" % local_size)
 
@@ -158,7 +158,8 @@ class GDGet:
         return title, return_format
         
     def get_by_format(self, save_as, url):
-        '''Get file from URL and save to save_as.
+        '''
+        Get file from URL and save to save_as.
 
         Return result,content,filesize
         '''
@@ -171,6 +172,7 @@ class GDGet:
 
         with open(save_as, 'wb') as f:
             response = session.get(url, stream=True)
+            return_content = response.content
             if self.file_size:
                 total_length = int(self.file_size)
                 print "total size = %d Bytes" % total_length
@@ -188,7 +190,7 @@ class GDGet:
                     sys.stdout.write("\r[%s%s] %3d%%, %d of %d MB" % ('=' * done, ' ' * (50-done), done_percent, done_in_mega, total_in_mega) )
                     sys.stdout.flush()
             else:
-                f.write(response.content)
+                f.write(return_content)
 
         # for sys.stdout.flush()
         print ""    
@@ -199,10 +201,9 @@ class GDGet:
 
         if self.file_size:
             if( int(self.file_size) == local_size ):
-                return True, response.content, local_size 
-                print "File size: %d" % local_size
+                return True, return_content, local_size 
             else:
-                return False, response.content, local_size
+                return False, return_content, local_size
         else:
             print "File size in bytes: %d" % local_size
-            return True, response.content, local_size
+            return True, return_content, local_size
