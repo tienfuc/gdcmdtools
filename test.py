@@ -158,7 +158,7 @@ class Test(unittest.TestCase):
         assert m 
         
         if m:
-           Test.dir_file_id = m.group(1)
+            Test.dir_file_id = m.group(1)
             assert True
         else:
             assert False
