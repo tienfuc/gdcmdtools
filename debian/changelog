@@ -1,3 +1,9 @@
+gdcmdtools (1.03-1) trusty; urgency=medium
+
+  * fixed gas upload/download
+
+ -- TienFu Chen <tienfu.c@gmail.com>  Wed, 23 Dec 2015 21:29:34 +0800
+
 gdcmdtools (1.01-1) trusty; urgency=medium
 
   * bumps version
