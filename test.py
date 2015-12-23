@@ -150,7 +150,7 @@ class Test(unittest.TestCase):
 
     def test_30_mkdir(self):
         dir_name = "a dir"
-        cmd_debug = "python ./gdmkdir.py --debug debug %s" % dir_name
+        cmd_debug = "python ./gdmkdir.py --debug debug \"%s\"" % dir_name
 
         response = subprocess.check_output(cmd_debug, shell=True)
         m = re.search("id: (.*)", response, re.MULTILINE)
