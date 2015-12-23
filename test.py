@@ -76,6 +76,8 @@ class Test(unittest.TestCase):
         m = re.search("id: (.*)", response, re.MULTILINE)
         #print response
         #print m.group(1)
+        assert m
+
         if m:
             Test.raw_file_id = m.group(1)
             assert True
@@ -107,6 +109,7 @@ class Test(unittest.TestCase):
         m = re.search("id: (.*)", response, re.MULTILINE)
         #print response
         #print m.group(1)
+        assert m
         if m:
             Test.converted_file_id = m.group(1)
             assert True
@@ -122,6 +125,7 @@ class Test(unittest.TestCase):
         m = re.search("id: (.*)", response, re.MULTILINE)
         #print response
         #print m.group(1)
+        assert m
         if m:
             Test.gas_file_id = m.group(1)
             assert True
@@ -144,7 +148,28 @@ class Test(unittest.TestCase):
         else:
             assert False
 
-  
+    def test_30_mkdir(self):
+        dir_name = "a dir"
+        cmd_debug = "python ./gdmkdir.py --debug debug %s" % dir_name
+
+        response = subprocess.check_output(cmd_debug, shell=True)
+        m = re.search("id: (.*)", response, re.MULTILINE)
+
+        assert m 
+        
+        if m:
+           Test.dir_file_id = m.group(1)
+            assert True
+        else:
+            assert False
+        
+
+    def test_31_rm(self):
+        cmd_debug = "python ./gdrm.py --debug debug %s" % Test.dir_file_id
+        response = subprocess.check_output(cmd_debug, shell=True)
+
+        assert True
+
 
     def test_99_cleanup(self):
         if Test.if_travis == False:
