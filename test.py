@@ -17,8 +17,10 @@ class Test(unittest.TestCase):
     def test_00_if_travis(self):
         if os.environ.get('TRAVIS', None) == "true":
             Test.if_travis = True
+            Test.folder_id = os.environ['travis_test_folder_id']
         else:
             Test.if_travis = False
+            Test.folder_id = "0B60IjoJ-xHK6Rl9zMkVlNE1scTQ"
 
     def test_01_get_secret(self):
         if Test.if_travis == False:
@@ -72,7 +74,7 @@ class Test(unittest.TestCase):
         files = {"./samples/sample.txt":0, "":2, "x":1}
 
         for file, code in files.iteritems():
-            cmd_debug = "python ./gdput.py --debug debug -t raw %s" % file
+            cmd_debug = "python ./gdput.py --debug debug -f %s -t raw %s" % (Test.folder_id, file)
             print "Run %s> %s" % ("-"*30, cmd_debug)
             
             try:
@@ -112,7 +114,7 @@ class Test(unittest.TestCase):
     def test_12_converted_put(self):
         file = "./samples/sample.txt"
         cmd = "python ./gdput.py -t doc %s" % file
-        cmd_debug = "python ./gdput.py --debug debug -t doc %s" % file
+        cmd_debug = "python ./gdput.py --debug debug -f %s -t doc %s" % (Test.folder_id, file)
         print "Run %s> %s" % ("-"*30, cmd_debug)
         
         try:
@@ -132,7 +134,7 @@ class Test(unittest.TestCase):
     def test_20_gas_put(self):
         file = "./samples/gas/gas.json"
         cmd = "python ./gdput.py -t gas --gas_new %s" % file
-        cmd_debug = "python ./gdput.py --debug debug -t gas --gas_new %s" % file
+        cmd_debug = "python ./gdput.py --debug debug -t gas -f %s --gas_new %s" % (Test.folder_id, file)
         print "Run %s> %s" % ("-"*30, cmd_debug)
         
         try:
@@ -176,7 +178,7 @@ class Test(unittest.TestCase):
         assert Test.gas_file_id
 
         if Test.gas_file_id:
-            cmd_debug = "python ./gdcp.py --debug debug %s" % (Test.gas_file_id)
+            cmd_debug = "python ./gdcp.py --debug debug -f %s %s" % (Test.folder_id, Test.gas_file_id)
             print "Run %s> %s" % ("-"*30, cmd_debug)
 
             try:
@@ -198,7 +200,7 @@ class Test(unittest.TestCase):
 
     def test_30_mkdir(self):
         dir_name = "a dir"
-        cmd_debug = "python ./gdmkdir.py --debug debug \"%s\"" % dir_name
+        cmd_debug = "python ./gdmkdir.py --debug debug -f %s \"%s\"" % (Test.folder_id, dir_name)
         print "Run %s> %s" % ("-"*30, cmd_debug)
 
         try:
