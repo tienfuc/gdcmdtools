@@ -5,7 +5,7 @@ install: pip install -r requirements.txt
 script: nosetests -v gdput.py gdget.py gdauth.py gdperm.py test.py
 env:
   global:
-  - secure: Eu2Fm82YEvfJbGcTwb7mdAac70aXc4qd0oSmfhAbwgk8Unr+2MGwzot6bbMNudtOO1yU2bG6ngs+hIdrdvcCJpLvud2XhmU2a7AcJ5x3hCelgj7htYY7WbeIyCOCvtLugBHf06mpGbOS0GGqhwxttVPs7eBmVBKtHlvdplS7Unk=
-  - secure: nhxEGvgeLFZOhkMU+7xx3RgVI+zyN1BFCZnDKNxZVgnuePo0QnFQMK4UFqC7j3krZmjgIW8EZtVCNYLZHUpT5NT80LQ3JMULTWC+WHXzlcKepT2ky5+b+To4ux03T/Z13WGTx8MSyBg8pblUOrReg9Ft+U0M14LZJL2GsAxdUBM=
-  - secure: cUZah8Zjt6TZJbmU8wTUREwiogheHVcdwdE2Q3nJCGhyRlxrtHz6ujUcgJt3xJiLEBJgetNXPY45DsLbJ9W/81i23QFshgsq21RWRkawSiGH4FzL8aXF3QH6kxGBioZREaab6128MjXPbxfRaNcme5y27FzZBThaJsYUgcVE02o=
-  - secure: m2VtzdPthOhrZZbJ/ZaXJRINNHQ14Y0f4i+vNZZrVLFPxT+NSCDFssLfcekp/0zU/USCBiCD8gC/+GApWA+cdu3eHtgJVDrEIvsw3inuQk40SpoxQbd7xtqf73PJWsTgyuJ4b9HdNdX3WRKj6tP7NNx+pGEU3ojLzSHYyVxVu+s=
+  - secure: Tj8ZgAFXRCM2AvCyVZd1sWfeyLCZCnnp4FgclFUWSSSUdG9AQ4igbiUxFMUGG5wq6DG5/Hz8FcjTUhbZXalts+vnvy4mCl/jrQogf4mh9MlnM/v7z/NMlhUvFNgwuj+74NgIetfTsl9G3VlH2w0kBoIs7saIOHkR/2cJFra23EE=
+  - secure: YZucDdWmiZt8R/XK6LKXWFrPwUIffZi/8Sh3Cs2mP2uVSfWgOM7olRnKd2TOtMGcYq+NTEYwCpS5opfNzaL/LT+WWxKyY/Z3GCWWs9OsVLui42QvcLT7KhinUNY3/yAozBM+uZ/p75xjh5RgtVVu2+tnrO67tzxD/FiWyQV9RG8=
+  - secure: AZhrm1kQzScbMxIErpwMUEM00ZFa2q/goqNq4P+D/C/WHrpt5ksz4jAWbGLI/ZJWD+nEsS0DVgAIKJVXTc5J/zaUHaOJAYncUR3oI43Y6OP7x1yVwwshuZ5osLRfhFf9kC2aXmBbvuz04U6eFLYGiPvqAMZwcTT4c028CK2MjMQ=
+  - secure: XUY6DDhBm2ERdEjaIcMZ9kIs7DGG3VUOwY90wC4S7GsO4lLX6jWK322uL5vEvXTmtdi6HksMfv5u8kijIlDzHIRX+MDJDMu4jN34bwpxesJ3enJJe6TLJ0qt01loxUznvmJ1dao3dHmg8vpOpkemfb+1584TVvKpnEWN5NDT+ug=
