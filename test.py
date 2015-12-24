@@ -145,8 +145,6 @@ class Test(unittest.TestCase):
             assert e.returncode
 
         m = re.search("id: (.*)", response, re.MULTILINE)
-        #print response
-        #print m.group(1)
         assert m
         if m:
             Test.gas_file_id = m.group(1)
