@@ -85,6 +85,7 @@ class Test(unittest.TestCase):
 
                 if m:
                     Test.raw_file_id = m.group(1)
+                    Test.files_rm.append(Test.raw_file_id)
                     assert True
                 else:
                     assert False
@@ -127,6 +128,7 @@ class Test(unittest.TestCase):
         assert m
         if m:
             Test.converted_file_id = m.group(1)
+            Test.files_rm.append(Test.converted_file_id)
             assert True
         else:
             assert False
@@ -148,6 +150,7 @@ class Test(unittest.TestCase):
         assert m
         if m:
             Test.gas_file_id = m.group(1)
+            Test.files_rm.append(Test.gas_file_id)
             assert True
         else:
             assert False
