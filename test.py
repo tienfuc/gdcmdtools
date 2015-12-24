@@ -72,10 +72,13 @@ class Test(unittest.TestCase):
         cmd = "python ./gdput.py -t raw %s" % file
         cmd_debug = "python ./gdput.py --debug debug -t raw %s" % file
         
-        response = subprocess.check_output(cmd_debug, shell=True)
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError, e:
+            assert e.returncode
+
         m = re.search("id: (.*)", response, re.MULTILINE)
-        #print response
-        #print m.group(1)
+
         assert m
 
         if m:
@@ -93,7 +96,11 @@ class Test(unittest.TestCase):
             file_get = "/tmp/gdcmdtools.tmp"
             cmd_debug = "python ./gdget.py --debug debug -f raw -s %s %s" % (file_get, Test.raw_file_id)
 
-            response = subprocess.check_output(cmd_debug, shell=True)
+            try:
+                response = subprocess.check_output(cmd_debug, shell=True)
+            except subprocess.CalledProcessError, e:
+                assert e.returncode
+
             result = filecmp.cmp(file_ori, file_get)
 
             assert result
@@ -105,10 +112,13 @@ class Test(unittest.TestCase):
         cmd = "python ./gdput.py -t doc %s" % file
         cmd_debug = "python ./gdput.py --debug debug -t doc %s" % file
         
-        response = subprocess.check_output(cmd_debug, shell=True)
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError, e:
+            assert e.returncode
+
         m = re.search("id: (.*)", response, re.MULTILINE)
-        #print response
-        #print m.group(1)
+
         assert m
         if m:
             Test.converted_file_id = m.group(1)
@@ -121,7 +131,11 @@ class Test(unittest.TestCase):
         cmd = "python ./gdput.py -t gas --gas_new %s" % file
         cmd_debug = "python ./gdput.py --debug debug -t gas --gas_new %s" % file
         
-        response = subprocess.check_output(cmd_debug, shell=True)
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError, e:
+            assert e.returncode
+
         m = re.search("id: (.*)", response, re.MULTILINE)
         #print response
         #print m.group(1)
@@ -141,7 +155,11 @@ class Test(unittest.TestCase):
             file_get = "./Code.js"
             cmd_debug = "python ./gdget.py --debug debug -f json %s" % (Test.gas_file_id)
 
-            response = subprocess.check_output(cmd_debug, shell=True)
+            try:
+                response = subprocess.check_output(cmd_debug, shell=True)
+            except subprocess.CalledProcessError, e:
+                assert e.returncode
+
             result = filecmp.cmp(file_ori, file_get)
 
             assert result
@@ -152,7 +170,11 @@ class Test(unittest.TestCase):
         dir_name = "a dir"
         cmd_debug = "python ./gdmkdir.py --debug debug \"%s\"" % dir_name
 
-        response = subprocess.check_output(cmd_debug, shell=True)
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError, e:
+            assert e.returncode
+
         m = re.search("id: (.*)", response, re.MULTILINE)
 
         assert m 
@@ -166,7 +188,10 @@ class Test(unittest.TestCase):
 
     def test_31_rm(self):
         cmd_debug = "python ./gdrm.py --debug debug %s" % Test.dir_file_id
-        response = subprocess.check_output(cmd_debug, shell=True)
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError, e:
+            assert e.returncode
 
         assert True
 
