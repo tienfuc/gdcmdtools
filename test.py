@@ -68,49 +68,51 @@ class Test(unittest.TestCase):
         assert True
 
     def test_10_raw_put(self):
-        file = "./samples/sample.txt"
-        cmd = "python ./gdput.py -t raw %s" % file
-        cmd_debug = "python ./gdput.py --debug debug -t raw %s" % file
-        
-        try:
-            response = subprocess.check_output(cmd_debug, shell=True)
-        except subprocess.CalledProcessError, e:
-            assert e.returncode
+        files = {"./samples/sample.txt":0, "":2, "x":1}
 
-        m = re.search("id: (.*)", response, re.MULTILINE)
+        for file, code in files.iteritems():
+            cmd_debug = "python ./gdput.py --debug debug -t raw %s" % file
+            print "Run %s> %s" % ("-"*30, cmd_debug)
+            
+            try:
+                response = subprocess.check_output(cmd_debug, shell=True)
+                m = re.search("id: (.*)", response, re.MULTILINE)
 
-        assert m
+                assert m
 
-        if m:
-            Test.raw_file_id = m.group(1)
-            assert True
-        else:
-            assert False
+                if m:
+                    Test.raw_file_id = m.group(1)
+                    assert True
+                else:
+                    assert False
+
+            except subprocess.CalledProcessError, e:
+                assert (e.returncode == code) 
 
     def test_11_raw_get(self):
+        files = {Test.raw_file_id:0, "":2, "x":1}
 
-        assert Test.raw_file_id
-
-        if Test.raw_file_id:
-            file_ori = "./samples/sample.txt"
+        for file_id, code in files.iteritems():
+            file_ori = file_id
             file_get = "/tmp/gdcmdtools.tmp"
-            cmd_debug = "python ./gdget.py --debug debug -f raw -s %s %s" % (file_get, Test.raw_file_id)
+            cmd_debug = "python ./gdget.py --debug debug -f raw -s %s %s" % (file_get, file_id)
+            print "Run %s> %s" % ("-"*30, cmd_debug)
 
             try:
                 response = subprocess.check_output(cmd_debug, shell=True)
+                if os.path.isfile(file_ori):
+                    result = filecmp.cmp(file_ori, file_get)
+                    assert result
+
             except subprocess.CalledProcessError, e:
-                assert e.returncode
+                assert (e.returncode == code)
 
-            result = filecmp.cmp(file_ori, file_get)
-
-            assert result
-        else:
-            assert False
 
     def test_12_converted_put(self):
         file = "./samples/sample.txt"
         cmd = "python ./gdput.py -t doc %s" % file
         cmd_debug = "python ./gdput.py --debug debug -t doc %s" % file
+        print "Run %s> %s" % ("-"*30, cmd_debug)
         
         try:
             response = subprocess.check_output(cmd_debug, shell=True)
@@ -130,6 +132,7 @@ class Test(unittest.TestCase):
         file = "./samples/gas/gas.json"
         cmd = "python ./gdput.py -t gas --gas_new %s" % file
         cmd_debug = "python ./gdput.py --debug debug -t gas --gas_new %s" % file
+        print "Run %s> %s" % ("-"*30, cmd_debug)
         
         try:
             response = subprocess.check_output(cmd_debug, shell=True)
@@ -154,6 +157,7 @@ class Test(unittest.TestCase):
             file_ori = "./samples/gas/Code.js"
             file_get = "./Code.js"
             cmd_debug = "python ./gdget.py --debug debug -f json %s" % (Test.gas_file_id)
+            print "Run %s> %s" % ("-"*30, cmd_debug)
 
             try:
                 response = subprocess.check_output(cmd_debug, shell=True)
@@ -169,6 +173,7 @@ class Test(unittest.TestCase):
     def test_30_mkdir(self):
         dir_name = "a dir"
         cmd_debug = "python ./gdmkdir.py --debug debug \"%s\"" % dir_name
+        print "Run %s> %s" % ("-"*30, cmd_debug)
 
         try:
             response = subprocess.check_output(cmd_debug, shell=True)
@@ -188,6 +193,8 @@ class Test(unittest.TestCase):
 
     def test_31_rm(self):
         cmd_debug = "python ./gdrm.py --debug debug %s" % Test.dir_file_id
+        print "Run %s> %s" % ("-"*30, cmd_debug)
+
         try:
             response = subprocess.check_output(cmd_debug, shell=True)
         except subprocess.CalledProcessError, e:
