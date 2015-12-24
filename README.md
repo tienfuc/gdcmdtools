@@ -17,6 +17,7 @@ Tools to maintain files on Google Drive.
 # Features
   * Download/Upload files to Google Drive
   * Upload Apps Script project(GAS)
+  * Use [Google Drive REST API V2](https://developers.google.com/drive/v2/web/about-sdk)
 
 # Installation
   * Check your system has Python installed
