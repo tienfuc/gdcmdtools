@@ -47,13 +47,21 @@ class GDCp:
         logger.debug(self)
 
     def run(self):
-        if self.new_title:
-            copied_file = {'title': self.new_title}
-        else:
-            copied_file = {}
 
+        if self.parent_folderId == None:
+            parents = []
+        else:
+            parents = [{
+                "kind":"drive#fileLink",
+                "id":self.parent_folderId}]
+
+        body = {
+                'title':self.new_title,
+                'description':self.target_description,
+                'parents':parents}
+ 
         try:
-            response = self.service.files().copy(fileId=self.file_id, body=copied_file).execute()
+            response = self.service.files().copy(fileId=self.file_id, body=body).execute()
         except Exception, e:
             logger.error(e)
             raise

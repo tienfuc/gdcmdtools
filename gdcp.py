@@ -77,5 +77,12 @@ if __name__ == '__main__':
         print "id: %s" % response['id']
         drive_view_prefix = "https://drive.google.com/drive/folders"
         print "drive view: %s" % response[u'alternateLink']
+        if response.get(u'webContentLink'):
+            print "download url: %s" % response.get('webContentLink')
+        exports = response.get('exportLinks')
+        if exports:
+            for format, url in exports.iteritems():
+                print "%s: %s" % (format, url)
+
 
     sys.exit(0)
