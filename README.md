@@ -45,7 +45,7 @@ Tools to maintain files on Google Drive.
    * Drive API
    * Fusion Tables API
 
- * Make sure your application has an application name in "APIs & auth/Consent screen"
+ * Make sure your application has an application name in "APIs & auth/Credentials/OAuthConsent screen"
    * Find "PRODUCT NAME" field. Make sure it's not blank.
 
  * Grant access to Google Drive for gdcmdtools in "APIs & auth/Credentials"
