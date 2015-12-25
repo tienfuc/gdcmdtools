@@ -39,12 +39,7 @@ class GDRm:
         self.service = base.get_drive_service(self.http)
         self.root = base.get_root()
 
-        file_id_from_link = re.search("^.*/d/([\w\-]*)|^.*/folders/([\w\-]*)", self.file_id)
-        
-        if file_id_from_link != None:
-            self.file_id = file_id_from_link.group(1) or file_id_from_link.group(2)
-
-        logger.debug(self)
+        self.file_id = base.get_id_from_url(self.file_id)
 
     def run(self):
         try:

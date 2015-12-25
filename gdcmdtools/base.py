@@ -8,11 +8,12 @@ from apiclient.discovery import build
 
 import httplib2
 import pprint
+import re
 
 import logging 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 BASE_INFO = {
         "app":"gdcmdtools",
@@ -51,5 +52,26 @@ class GDBase(object):
         self.ft_service = build('fusiontables', FTAPI_VER, 
             discoveryServiceUrl=DISCOVERY_URL, http=http)
         return self.ft_service
+    
+    @staticmethod
+    def get_id_from_url(url):
+        # normal, https://script.google.com/d/XXXXXXXXX/edit?usp=sharing
+        normal_re = "^.*/d/([\w\-]*)"
+        # folder, https://drive.google.com/folderview?id=XXXXXXXX&usp=sharing 
+        folder_share_re = "^.*/folderview\?id=([\w\-]*)"
+        # folder on drive url: https://drive.google.com/drive/u/0/folders/XXXXXXXXXXX
+        folder_url_re = "^.*/folders/([\w\-]*)"
+        # open by id, https://drive.google.com/open?id=XXXXXXXXXX
+        openbyid_re = "^.*/open\?id=([\w\-]*)"
 
+        final_re = r"%s|%s|%s|%s" % (normal_re, folder_share_re, folder_url_re, openbyid_re)
+        search = re.search(final_re, url)
+        
+        if( search ):
+            file_id = next(x for x in search.groups() if x is not None)
+        else:
+            file_id = url
 
+        logger.debug("file_id: %s" % file_id)
+
+        return file_id
