@@ -12,7 +12,9 @@ class Test(unittest.TestCase):
     files_rm = []
 
     def setUp(self):
-        pass
+        assert(os.path.isfile("~/.gdcmdtools.secrets"))
+        assert(os.path.isfile("~/.gdcmdtools.creds"))
+
 
     def test_00_if_travis(self):
         if os.environ.get('TRAVIS', None) == "true":
@@ -234,7 +236,6 @@ class Test(unittest.TestCase):
 
 
     def test_99_cleanup(self):
-        assert True
         return True
 
         if Test.if_travis == False:
