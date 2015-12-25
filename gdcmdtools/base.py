@@ -66,7 +66,7 @@ class GDBase(object):
         # webContentLink, https://docs.google.com/uc?id=XXXXXXXXXX&export=download
         webcontent_re = "^.*/uc\?id=([\w\-]*)"
         # export link, https://docs.google.com/feeds/download/documents/export/Export?id=XXXXXX&exportFormat=html
-        export_re = "^.*/Export\?id=([\w\-]*)"
+        export_re = "^.*/[Ee]xport\?id=([\w\-]*)"
 
         final_re = r"%s|%s|%s|%s|%s|%s" % \
                 (normal_re, folder_share_re, folder_url_re, openbyid_re, webcontent_re, export_re)
