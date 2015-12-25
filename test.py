@@ -218,7 +218,7 @@ class Test(unittest.TestCase):
             assert True
         else:
             assert False
-        
+
 
     def test_90_rm(self):
         for file in self.files_rm:

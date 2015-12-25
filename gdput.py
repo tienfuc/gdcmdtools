@@ -7,6 +7,7 @@ from time import localtime, strftime
 import argparse
 from argparse import RawTextHelpFormatter
 import mimetypes
+import pprint
 
 from gdcmdtools.put import GDPut 
 from gdcmdtools.put import DICT_OF_CONVERTIBLE_FILE_TYPE
@@ -216,7 +217,7 @@ if __name__ == '__main__':
         raise
         sys.exit(1)
 
-    logger.debug(response)
+    logger.debug(pprint.pformat(response))
     
     if not args.no_print_id:
         print "id: %s" % response['id']
@@ -227,6 +228,6 @@ if __name__ == '__main__':
         exports = response.get('exportLinks')
         if exports:
             for format, url in exports.iteritems():
-                print "%s: %s" % (format, url)
+                print("%s: %s" % (format, url))
 
     sys.exit(0)

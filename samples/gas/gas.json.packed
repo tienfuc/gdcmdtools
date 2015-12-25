@@ -1,0 +1,9 @@
+{
+    "files": [
+        {
+            "source": "function myFunction() {\n  //This is a test project for testing gdcmdtools.\n}\n", 
+            "type": "server_js", 
+            "name": "Code"
+        }
+    ]
+}

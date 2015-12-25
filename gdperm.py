@@ -20,7 +20,20 @@ __THIS_DESCRIPTION = 'Tool to change file\'s permission on Google Drive'
 __THIS_VERSION = BASE_INFO["version"]
 
 def test():
-    assert True
+    file_id = "https://drive.google.com/open?id=0B60IjoJ-xHK6YU1wZ2hsQVQ0SzA"
+    permission_id = "02914492818163807046i"
+
+    action1 = {'name': 'update', 'param': [permission_id, 'user', 'reader', 'test@gdcmdtools.com']}
+    action2 = {'name': 'update', 'param': [permission_id, 'user', 'writer', 'test@gdcmdtools.com']}
+
+
+    for action in [action1, action2]:
+        perm = GDPerm(file_id, action)
+        result = perm.run()
+        pprint(result)
+
+        assert result[u"role"] == action["param"][2]
+
 
 if __name__ == '__main__':
 
@@ -44,6 +57,12 @@ if __name__ == '__main__':
                     '\nvalue: user or group e-mail address,\nor \'me\' to refer to the current authorized user\n'+
                     'ex: -p anyone reader me # set the uploaded file public-read')
 
+    UPDATE_PERMISSION_METAVAR = ("PERMISSION_ID",) + PERMISSION_METAVAR
+    mutex_group.add_argument('--update',
+            metavar=UPDATE_PERMISSION_METAVAR,
+            nargs=len(UPDATE_PERMISSION_METAVAR),
+            help = "update the permission, refer to the help of --insert")
+
     mutex_group.add_argument('--delete', metavar='PERMISSION_ID', help='delete the permission of the file by id')
 
     mutex_group.add_argument('--get_by_user', metavar='USER_EMAIL', help='get the permission associated with user')
@@ -57,7 +76,7 @@ if __name__ == '__main__':
     logger.setLevel(getattr(logging, args.debug.upper()))
 
     action = {}
-    valid_actions = ["list","get","insert","delete","get_by_user"]
+    valid_actions = ["list","get","insert","update","delete","get_by_user"]
     for a in valid_actions:
         action[a] = args.__dict__[a]
 
@@ -65,8 +84,8 @@ if __name__ == '__main__':
     for act in action:
         if action[act] != mutex_group.get_default(act):
             pass_action = {"name":act, "param": action[act]}
-            file_id = args.file_id
-            perm = GDPerm(file_id, pass_action)
+            logger.debug("pass_action=%s" % pass_action)
+            perm = GDPerm(args.file_id, pass_action)
             result = perm.run()
             pprint(result)
 

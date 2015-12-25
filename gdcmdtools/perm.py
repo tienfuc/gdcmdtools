@@ -31,7 +31,7 @@ class GDPerm:
         self.service = base.get_drive_service(self.http)
         self.root = base.get_root()
 
-        self.file_id = file_id
+        self.file_id = base.get_id_from_url(file_id)
         self.action = action['name']
         self.param = action['param']
 
@@ -54,6 +54,20 @@ class GDPerm:
         try:
             return self.service.permissions().insert(
                     fileId=self.file_id, body=new_permission).execute()
+        except errors.HttpError, error:
+            logger.error('An error occurred: %s' % error)
+        return None
+
+    def update(self):
+        new_permission = {
+                'type': self.param[1],
+                'role': self.param[2], 
+                'value': self.param[3],
+                }
+
+        try:
+            return self.service.permissions().update(
+                    fileId=self.file_id, permissionId=self.param[0], body=new_permission).execute()
         except errors.HttpError, error:
             logger.error('An error occurred: %s' % error)
         return None
