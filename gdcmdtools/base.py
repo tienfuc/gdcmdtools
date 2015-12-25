@@ -63,11 +63,15 @@ class GDBase(object):
         folder_url_re = "^.*/folders/([\w\-]*)"
         # open by id, https://drive.google.com/open?id=XXXXXXXXXX
         openbyid_re = "^.*/open\?id=([\w\-]*)"
+        # webContentLink, https://docs.google.com/uc?id=XXXXXXXXXX&export=download
+        webcontent_re = "^.*/uc\?id=([\w\-]*)"
+        # export link, https://docs.google.com/feeds/download/documents/export/Export?id=XXXXXXXXX&exportFormat=html
+        export_re = "^.*/Export\?id=([\w\-]*)"
 
-        final_re = r"%s|%s|%s|%s" % (normal_re, folder_share_re, folder_url_re, openbyid_re)
+        final_re = r"%s|%s|%s|%s|%s|%s" % (normal_re, folder_share_re, folder_url_re, openbyid_re, webcontent_re, export_re)
         search = re.search(final_re, url)
         
-        if( search ):
+        if(search):
             file_id = next(x for x in search.groups() if x is not None)
         else:
             file_id = url
