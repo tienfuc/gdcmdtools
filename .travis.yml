@@ -2,7 +2,7 @@ language: python
 python:
 - '2.7'
 install: pip install -r requirements.txt
-script: nosetests -sv gdput.py gdget.py gdauth.py gdperm.py test.py
+script: nosetests -sv test.py gdput.py gdget.py gdauth.py gdperm.py
 env:
   global:
   - secure: Tj8ZgAFXRCM2AvCyVZd1sWfeyLCZCnnp4FgclFUWSSSUdG9AQ4igbiUxFMUGG5wq6DG5/Hz8FcjTUhbZXalts+vnvy4mCl/jrQogf4mh9MlnM/v7z/NMlhUvFNgwuj+74NgIetfTsl9G3VlH2w0kBoIs7saIOHkR/2cJFra23EE=

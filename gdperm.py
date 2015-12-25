@@ -26,7 +26,6 @@ def test():
     action1 = {'name': 'update', 'param': [permission_id, 'user', 'reader', 'test@gdcmdtools.com']}
     action2 = {'name': 'update', 'param': [permission_id, 'user', 'writer', 'test@gdcmdtools.com']}
 
-
     for action in [action1, action2]:
         perm = GDPerm(file_id, action)
         result = perm.run()
