@@ -234,6 +234,8 @@ class Test(unittest.TestCase):
 
 
     def test_99_cleanup(self):
+        assert True
+
         if Test.if_travis == False:
             return True
 
