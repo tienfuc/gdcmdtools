@@ -39,7 +39,7 @@ class GDCp:
         self.service = base.get_drive_service(self.http)
         self.root = base.get_root()
 
-        self.file_id = base.get_id_from_url(file_id)
+        self.file_id = base.get_id_from_url(self.file_id)
 
     def run(self):
 

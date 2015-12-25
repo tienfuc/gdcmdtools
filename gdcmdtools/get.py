@@ -40,7 +40,7 @@ class GDGet:
         base = GDBase()
         self.service = base.get_drive_service(self.http)
         
-        self.file_id = base.get_id_from_url(file_id)
+        self.file_id = base.get_id_from_url(self.file_id)
         self.format = format
 
         if save_as == None:
