@@ -40,14 +40,7 @@ class GDGet:
         base = GDBase()
         self.service = base.get_drive_service(self.http)
         
-        
-        file_id_from_link = re.search("^.*/d/([\w\-]*)", file_id)
-        
-        if file_id_from_link == None:
-            self.file_id = file_id
-        else:
-            self.file_id = file_id_from_link.group(1)
-
+        self.file_id = base.get_id_from_url(file_id)
         self.format = format
 
         if save_as == None:

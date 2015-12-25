@@ -61,15 +61,7 @@ class GDPut:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-        self.file_id = None
-        if self.replace_id:
-            file_id_from_link = re.search("^.*/d/([\w\-]*)", self.replace_id)
-            
-            if file_id_from_link == None:
-                self.file_id = self.replace_id
-            else:
-                self.file_id = file_id_from_link.group(1)
-
+        self.file_id = base.get_id_from_url(file_id)
         self.ft_headers = None
 
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
