@@ -61,7 +61,6 @@ class GDPut:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
-        self.file_id = base.get_id_from_url(self.file_id)
         self.ft_headers = None
 
         self.csv_latlng_suffix = "_latlng_%04x.csv" % random.getrandbits(16)
@@ -75,6 +74,7 @@ class GDPut:
         self.http = auth.get_authorized_http()
 
         base = GDBase()
+        self.file_id = base.get_id_from_url(self.file_id)
         self.service = base.get_drive_service(self.http)
         self.root = base.get_root()
 
