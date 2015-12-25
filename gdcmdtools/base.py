@@ -57,10 +57,10 @@ class GDBase(object):
     def get_id_from_url(url):
         # normal, https://script.google.com/d/XXXXXXXXX/edit?usp=sharing
         normal_re = "^.*/d/([\w\-]*)"
-        # folder, https://drive.google.com/folderview?id=XXXXXXXX&usp=sharing 
-        folder_share_re = "^.*/folderview\?id=([\w\-]*)"
         # folder on drive url: https://drive.google.com/drive/u/0/folders/XXXXXXXXXXX
         folder_url_re = "^.*/folders/([\w\-]*)"
+        # folder, https://drive.google.com/folderview?id=XXXXXXXX&usp=sharing 
+        folder_share_re = "^.*/folderview\?id=([\w\-]*)"
         # open by id, https://drive.google.com/open?id=XXXXXXXXXX
         openbyid_re = "^.*/open\?id=([\w\-]*)"
         # webContentLink, https://docs.google.com/uc?id=XXXXXXXXXX&export=download
@@ -68,8 +68,12 @@ class GDBase(object):
         # export link, https://docs.google.com/feeds/download/documents/export/Export?id=XXXXXX&exportFormat=html
         export_re = "^.*/[Ee]xport\?id=([\w\-]*)"
 
-        final_re = r"%s|%s|%s|%s|%s|%s" % \
-                (normal_re, folder_share_re, folder_url_re, openbyid_re, webcontent_re, export_re)
+        # general id as parameter
+        id_parameter_re = "^.*\?id=([\w\-]*)"
+
+        final_re = r"%s|%s|%s" % \
+                (normal_re, folder_url_re, id_parameter_re)
+                #(normal_re, folder_share_re, folder_url_re, openbyid_re, webcontent_re, export_re)
         search = re.search(final_re, url)
         
         if(search):
