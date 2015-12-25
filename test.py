@@ -12,8 +12,7 @@ class Test(unittest.TestCase):
     files_rm = []
 
     def setUp(self):
-        assert(os.path.isfile("~/.gdcmdtools.secrets"))
-        assert(os.path.isfile("~/.gdcmdtools.creds"))
+        return True
 
 
     def test_00_if_travis(self):
@@ -24,6 +23,7 @@ class Test(unittest.TestCase):
             Test.if_travis = False
             Test.folder_id = "0B60IjoJ-xHK6Rl9zMkVlNE1scTQ"
     
+
     def test_01_get_secret(self):
         if Test.if_travis == False:
             return True
@@ -45,6 +45,7 @@ class Test(unittest.TestCase):
             f.write(new_secret)
 
         assert True
+
 
     def test_01_get_credentials(self):
         if Test.if_travis == False:
@@ -72,6 +73,7 @@ class Test(unittest.TestCase):
         
         assert True
 
+
     def test_10_raw_put(self):
         files = {"./samples/sample.txt":0, "":2, "x":1}
 
@@ -94,6 +96,7 @@ class Test(unittest.TestCase):
 
             except subprocess.CalledProcessError, e:
                 assert (e.returncode == code) 
+
 
     def test_11_raw_get(self):
         files = {Test.raw_file_id:0, "":2, "x":1}
@@ -135,6 +138,7 @@ class Test(unittest.TestCase):
         else:
             assert False
 
+
     def test_20_gas_put(self):
         file = "./samples/gas/gas.json"
         cmd = "python ./gdput.py -t gas --gas_new %s" % file
@@ -154,6 +158,7 @@ class Test(unittest.TestCase):
             assert True
         else:
             assert False
+
 
     def test_21_gas_get(self):
 
@@ -175,6 +180,7 @@ class Test(unittest.TestCase):
             assert result
         else:
             assert False
+
 
     def test_22_cp(self):
 
@@ -200,6 +206,7 @@ class Test(unittest.TestCase):
 
         else:
             assert False
+
 
     def test_30_mkdir(self):
         dir_name = "a dir"
@@ -238,16 +245,6 @@ class Test(unittest.TestCase):
     def test_99_cleanup(self):
         return True
 
-        if Test.if_travis == False:
-            return True
-
-        try:
-            os.remove(Test.secret_file)
-            os.remove(Test.credentials_file)
-        except:
-            assert False
-        else:
-            assert True
-
+    
 if __name__ == '__main__':
     unittest.main()
