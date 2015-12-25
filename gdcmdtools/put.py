@@ -74,7 +74,11 @@ class GDPut:
         self.http = auth.get_authorized_http()
 
         base = GDBase()
-        self.file_id = base.get_id_from_url(self.replace_id)
+
+        self.file_id = None
+        if self.replace_id:
+            self.file_id = base.get_id_from_url(self.replace_id)
+
         self.service = base.get_drive_service(self.http)
         self.root = base.get_root()
 
