@@ -145,7 +145,6 @@ class Test(unittest.TestCase):
 
     def test_12_converted_put(self):
         file = "./samples/sample.txt"
-        cmd = "python ./gdput.py -t doc %s" % file
         cmd_debug = "python ./gdput.py --debug debug -f %s -t doc %s" % (
             Test.folder_id, file)
         print "Run %s> %s" % ("-" * 30, cmd_debug)
@@ -160,6 +159,26 @@ class Test(unittest.TestCase):
         assert m
         if m:
             Test.converted_file_id = m.group(1)
+            Test.files_rm.append(Test.converted_file_id)
+            assert True
+        else:
+            assert False
+
+    def test_13_csv_to_ft_put(self):
+        file = "./samples/sample.csv"
+        cmd_debug = "python ./gdput.py --debug debug -f %s -t ft %s" % (
+            Test.folder_id, file)
+        print "Run %s> %s" % ("-" * 30, cmd_debug)
+
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError as e:
+            assert e.returncode
+
+        m = re.search("id: (.*)", response, re.MULTILINE)
+
+        assert m
+        if m:
             Test.files_rm.append(Test.converted_file_id)
             assert True
         else:
