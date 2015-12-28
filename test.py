@@ -179,7 +179,7 @@ class Test(unittest.TestCase):
 
         assert m
         if m:
-            Test.files_rm.append(Test.converted_file_id)
+            Test.files_rm.append(m.group(1))
             assert True
         else:
             assert False
