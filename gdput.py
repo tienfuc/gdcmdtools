@@ -257,8 +257,15 @@ if __name__ == '__main__':
     logger.debug(pprint.pformat(response))
 
     if not args.no_print_id:
-        print "id: %s" % response['id']
-        print "drive url: %s" % response[u'alternateLink']
+        if args.target_type == "ft":
+            id = response['tableId']
+            drive_url = "https://www.google.com/fusiontables/data?docid=%s" % id
+        else:
+            id = response['id']
+            drive_url = response[u'alternateLink']
+
+        print "id: %s" % id
+        print "drive url: %s" % drive_url
 
         if response.get(u'webContentLink'):
             print "download url: %s" % response.get('webContentLink')

@@ -208,13 +208,13 @@ class GDPut:
             csv_reader = csv.reader(csv_file)
             self.ft_headers = csv_reader.next()
 
-            if self.location_column and self.latlng_column:
-                self.ft_headers.append(self.latlng_column)
+            if self.ft_location_column and self.ft_latlng_column:
+                self.ft_headers.append(self.ft_latlng_column)
                 rows.append(self.ft_headers)
 
             # TODO: check if location in the list
-            index_latlng = self.ft_headers.index(self.latlng_column)
-            index_location = self.ft_headers.index(self.location_column)
+            index_latlng = self.ft_headers.index(self.ft_latlng_column)
+            index_location = self.ft_headers.index(self.ft_location_column)
 
             for row in csv_reader:
                 latlng = self.ft_geocoding(row[index_location])
@@ -270,15 +270,15 @@ class GDPut:
             self.ft_headers = cols
 
             # FIXME:
-            if self.location_column and self.latlng_column:
-                if self.location_column not in cols:
+            if self.ft_location_column and self.ft_latlng_column:
+                if self.ft_location_column not in cols:
                     raise Exception(
                         "Column %s not found in the csv file" %
-                        self.location_column)
+                        self.ft_location_column)
 
                 if self.csv_column_define is None:
                     for c in cols:
-                        if c == self.latlng_column:
+                        if c == self.ft_latlng_column:
                             d = {"type": "LOCATION"}
                         else:
                             d = {"type": "STRING"}
@@ -289,14 +289,14 @@ class GDPut:
                     table["columns"] = self.user_define_column(
                         cols, self.csv_column_define)
 
-            elif self.location_column and not self.latlng_column:
-                if self.location_column not in cols:
+            elif self.ft_location_column and not self.ft_latlng_column:
+                if self.ft_location_column not in cols:
                     raise Exception(
                         "Column %s not found in the csv file" %
-                        self.location_column)
+                        self.ft_location_column)
                 if self.csv_column_define is None:
                     for c in cols:
-                        if c == self.location_column:
+                        if c == self.ft_location_column:
                             d = {"type": "LOCATION"}
                         else:
                             d = {"type": "STRING"}
@@ -326,7 +326,7 @@ class GDPut:
                 self.csv_delimiter)
 
         # save new csv file with latlng data
-        if self.location_column and self.latlng_column:
+        if self.ft_location_column and self.ft_latlng_column:
             target_file = self.csv_save_latlng()
             table = self.create_ft(target_file)
         else:
@@ -353,7 +353,7 @@ class GDPut:
             except apiclient.errors.HttpError as error:
                 raise Exception('Atable_idn error occurred: %s' % error)
 
-        if self.location_column and self.latlng_column:
+        if self.ft_location_column and self.ft_latlng_column:
             url = self.ft_put_body(table_id, target_file)
         else:
             url = self.ft_put_body(table_id, self.source_file)
@@ -366,7 +366,7 @@ class GDPut:
 
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 
-        return ft_url
+        return service_response
 
     def ft_put_body(self, table_id, target_file):
         params = urllib.urlencode({'isStrict': "false"})
