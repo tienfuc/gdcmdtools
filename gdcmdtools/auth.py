@@ -14,15 +14,15 @@ import pprint
 
 import shutil
 
-import logging 
+import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 DICT_OF_REDIRECT_URI = {
-    "oob":"(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
-    "local":"means \"http://localhost\""
-    }
+    "oob": "(default) means \"urn:ietf:wg:oauth:2.0:oob\"",
+    "local": "means \"http://localhost\""
+}
 
 SCOPE = [
     # if using /drive.file instead of /drive,
@@ -35,11 +35,14 @@ SCOPE = [
     'https://www.googleapis.com/auth/userinfo.email'
 ]
 
-class GDAuth(object):
-    def __init__(self, secret_file=None, if_oob=True):
-        default_secret_file = os.path.expanduser('~/.%s.secrets' % BASE_INFO["app"])
 
-        if secret_file == None:
+class GDAuth(object):
+
+    def __init__(self, secret_file=None, if_oob=True):
+        default_secret_file = os.path.expanduser(
+            '~/.%s.secrets' % BASE_INFO["app"])
+
+        if secret_file is None:
             self.secret_file = default_secret_file
         else:
             # should reissue the credencials
@@ -48,40 +51,40 @@ class GDAuth(object):
                 os.remove(storage_file)
 
             try:
-               shutil.copyfile(secret_file, default_secret_file)
+                shutil.copyfile(secret_file, default_secret_file)
             except:
                 logger.error('failed to copy secret file')
 
             self.secret_file = default_secret_file
-            
-        os.chmod(self.secret_file, 0600)
 
-        self.if_oob = if_oob 
+        os.chmod(self.secret_file, 0o600)
+
+        self.if_oob = if_oob
 
     def run(self):
         credentials = self.get_credentials()
         return credentials
 
-
     def get_credentials(self):
         #home_path = os.getenv("HOME")
-        #storage_file = os.path.abspath(
+        # storage_file = os.path.abspath(
         #        '%s/.%s.creds' % (home_path,BASE_INFO["app"]))
         storage_file = os.path.expanduser('~/.%s.creds' % BASE_INFO["app"])
         logger.debug('storage_file=%s' % storage_file)
 
         try:
-            with open(storage_file): pass
+            with open(storage_file):
+                pass
         except IOError:
             logger.error('storage_file: %s not exists' % storage_file)
-            #return None
+            # return None
 
         storage = Storage(storage_file)
         credentials = storage.get()
 
         # FIXME: if secret_file is given, should clean creds
-        if credentials is None or credentials.invalid == True:
-            #credentials_file = os.path.abspath(
+        if credentials is None or credentials.invalid:
+            # credentials_file = os.path.abspath(
             #        '%s/.%s.secrets' % (home_path,BASE_INFO["app"]))
             credentials_file = self.secret_file
 
@@ -92,8 +95,7 @@ class GDAuth(object):
             else:
                 redirect_uri = None
 
-
-            try: 
+            try:
                 flow = flow_from_clientsecrets(
                     credentials_file,
                     scope=SCOPE,
@@ -102,11 +104,11 @@ class GDAuth(object):
                 logger.error("failed on flow_from_clientsecrets()")
                 return None
 
-
-                        
             if self.if_oob:
                 auth_uri = flow.step1_get_authorize_url()
-                logger.info('Please visit the URL in your browser: %s' % auth_uri)
+                logger.info(
+                    'Please visit the URL in your browser: %s' %
+                    auth_uri)
                 code = raw_input('Insert the given code: ')
 
                 try:
@@ -126,12 +128,11 @@ class GDAuth(object):
                     return None
 
         self.credentials = credentials
-       
+
         return self.credentials
 
-
     def get_authorized_http(self):
-        self.http =  httplib2.Http()
+        self.http = httplib2.Http()
         self.credentials.authorize(self.http)
         #wrapped_request = self.http.request
 
@@ -147,5 +148,3 @@ class GDAuth(object):
 
         #self.http.request = _Wrapper
         return self.http
-
-
