@@ -20,7 +20,9 @@ from gdcmdtools.base import GDBase
 from gdcmdtools.perm import GDPerm
 from gdcmdtools.auth import GDAuth
 
+
 class GDMkdir:
+
     def __init__(self, args):
 
         logger.debug(vars(args))
@@ -32,8 +34,8 @@ class GDMkdir:
         auth = GDAuth()
 
         creds = auth.get_credentials()
-        self.auth_user = creds.id_token.get("email",None)
-        if creds == None:
+        self.auth_user = creds.id_token.get("email", None)
+        if creds is None:
             raise Exception("Failed to retrieve credentials")
         self.http = auth.get_authorized_http()
 
@@ -44,34 +46,34 @@ class GDMkdir:
         logger.debug(self)
 
     def run(self):
-        if self.parent_folderId == None:
+        if self.parent_folderId is None:
             parents = []
         else:
             parents = [{
-                "kind":"drive#fileLink",
-                "id":self.parent_folderId}]
+                "kind": "drive#fileLink",
+                "id": self.parent_folderId}]
 
         body = {
-                'title':self.folder_name,
-                'description':self.target_description,
-                'mimeType':self.mime_type,
-                'parents':parents}
+            'title': self.folder_name,
+            'description': self.target_description,
+            'mimeType': self.mime_type,
+            'parents': parents}
 
         try:
             response_insert = self.service.files().insert(body=body).execute()
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
             raise
         else:
-            if (self.permission != None) and response_insert.get('id') != None:
+            if (self.permission is not None) and response_insert.get('id') != None:
                 try:
                     param = {
-                            'name':'insert',
-                            'param':self.permission}
+                        'name': 'insert',
+                        'param': self.permission}
 
                     perm = GDPerm(response_insert['id'], param)
                     response_perm = perm.run()
-                except Exception, e:
+                except Exception as e:
                     logger.error(e)
                     raise
 
