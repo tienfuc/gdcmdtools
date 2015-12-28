@@ -11,7 +11,7 @@ from gdcmdtools.rm import GDRm
 
 from gdcmdtools.base import BASE_INFO
 from gdcmdtools.base import DEBUG_LEVEL
-from gdcmdtools.perm import help_permission_text 
+from gdcmdtools.perm import help_permission_text
 
 import csv
 import pprint
@@ -23,21 +23,34 @@ __THIS_VERSION = BASE_INFO["version"]
 import logging
 logger = logging.getLogger(__THIS_APP)
 
+
 def test():
-    assert True 
-   
+    assert True
+
 if __name__ == '__main__':
-    arg_parser = argparse.ArgumentParser( \
-            description='%s v%s - %s - %s (%s)' % 
-            (__THIS_APP, __THIS_VERSION, __THIS_DESCRIPTION, BASE_INFO["app"], BASE_INFO["description"]),
-            formatter_class=RawTextHelpFormatter)
+    arg_parser = argparse.ArgumentParser(
+        description='%s v%s - %s - %s (%s)' %
+        (__THIS_APP,
+         __THIS_VERSION,
+         __THIS_DESCRIPTION,
+         BASE_INFO["app"],
+         BASE_INFO["description"]),
+        formatter_class=RawTextHelpFormatter)
 
-    arg_parser.add_argument('-d', '--delete', action='store_true', help='Permanently deletes the file instead of trashing it')
+    arg_parser.add_argument(
+        '-d',
+        '--delete',
+        action='store_true',
+        help='Permanently deletes the file instead of trashing it')
 
-    arg_parser.add_argument('file_id', help='The file id or drive link for the file you\'re going to remove')
+    arg_parser.add_argument(
+        'file_id',
+        help='The file id or drive link for the file you\'re going to remove')
 
-    arg_parser.add_argument('--debug', choices=DEBUG_LEVEL, default=DEBUG_LEVEL[-1],
-            help='define the debug level')
+    arg_parser.add_argument('--debug',
+                            choices=DEBUG_LEVEL,
+                            default=DEBUG_LEVEL[-1],
+                            help='define the debug level')
 
     args = arg_parser.parse_args()
 
