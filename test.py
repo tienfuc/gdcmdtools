@@ -145,7 +145,7 @@ class Test(unittest.TestCase):
 
     def test_12_converted_put(self):
         file = "./samples/sample.txt"
-        cmd_debug = "python ./gdput.py --debug debug -f %s -t doc %s" % (
+        cmd_debug = "python ./gdput.py --debug debug -p anyone reader me -f %s -t doc %s" % (
             Test.folder_id, file)
         print "Run %s> %s" % ("-" * 30, cmd_debug)
 
@@ -166,7 +166,7 @@ class Test(unittest.TestCase):
 
     def test_13_csv_to_ft_put(self):
         file = "./samples/sample.csv"
-        cmd_debug = "python ./gdput.py --debug debug --ft_location_column address  --ft_latlng_column latlng -f %s -t ft %s" % (
+        cmd_debug = "python ./gdput.py --debug debug -p anyone writer me --ft_location_column address  --ft_latlng_column latlng -f %s -t ft %s" % (
             Test.folder_id, file)
         print "Run %s> %s" % ("-" * 30, cmd_debug)
 
