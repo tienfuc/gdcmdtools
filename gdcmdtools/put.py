@@ -359,10 +359,13 @@ class GDPut:
             url = self.ft_put_body(table_id, self.source_file)
 
         if self.permission is not None:
-            GDPerm.insert(
-                self.service,
-                service_response['tableId'],
-                self.permission)
+                pass_action = {
+                    "name":"insert",
+                    "param":self.permission}
+
+                perm = GDPerm(table_id, pass_action)
+                result = perm.run()
+                logger.debug(result)
 
         ft_url = "https://www.google.com/fusiontables/data?docid=%s" % table_id
 
