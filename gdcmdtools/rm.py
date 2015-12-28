@@ -21,7 +21,9 @@ from gdcmdtools.base import GDBase
 from gdcmdtools.perm import GDPerm
 from gdcmdtools.auth import GDAuth
 
+
 class GDRm:
+
     def __init__(self, args):
 
         for key, value in vars(args).items():
@@ -30,8 +32,8 @@ class GDRm:
         auth = GDAuth()
 
         creds = auth.get_credentials()
-        self.auth_user = creds.id_token.get("email",None)
-        if creds == None:
+        self.auth_user = creds.id_token.get("email", None)
+        if creds is None:
             raise Exception("Failed to retrieve credentials")
         self.http = auth.get_authorized_http()
 
@@ -47,8 +49,8 @@ class GDRm:
                 response = self.service.files().delete(fileId=self.file_id).execute()
             else:
                 response = self.service.files().trash(fileId=self.file_id).execute()
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
             raise
         else:
-           return response
+            return response
