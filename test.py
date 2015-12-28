@@ -20,7 +20,6 @@ class Test(unittest.TestCase):
             Test.folder_id = os.environ['travis_test_folder_id']
         else:
             Test.if_travis = False
-            Test.folder_id = "0B60IjoJ-xHK6Rl9zMkVlNE1scTQ"
 
     def test_01_get_secret(self):
         if not Test.if_travis:
@@ -100,7 +99,29 @@ class Test(unittest.TestCase):
 
         assert True
 
-    def test_10_raw_put(self):
+    def test_02_make_test_dir(self):
+        dir_name = os.environ.get('TRAVIS_COMMIT', "TEST")
+        cmd_debug = "python ./gdmkdir.py --debug debug \"%s\"" % dir_name
+        print "Run %s> %s" % ("-" * 30, cmd_debug)
+
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError as e:
+            assert e.returncode
+
+        m = re.search("id: (.*)", response, re.MULTILINE)
+
+        assert m
+
+        if m:
+            Test.folder_id = m.group(1)
+            Test.files_rm.append(Test.folder_id)
+            assert True
+        else:
+            assert False
+
+    # 1x put, 2x get
+    def test_10_txt_to_raw(self):
         files = {"./samples/sample.txt": 0, "": 2, "x": 1}
 
         for file, code in files.iteritems():
@@ -115,8 +136,8 @@ class Test(unittest.TestCase):
                 assert m
 
                 if m:
-                    Test.raw_file_id = m.group(1)
-                    Test.files_rm.append(Test.raw_file_id)
+                    Test.id_raw = m.group(1)
+                    Test.files_rm.append(Test.id_raw)
                     assert True
                 else:
                     assert False
@@ -124,8 +145,8 @@ class Test(unittest.TestCase):
             except subprocess.CalledProcessError as e:
                 assert (e.returncode == code)
 
-    def test_11_raw_get(self):
-        files = {Test.raw_file_id: 0, "": 2, "x": 1}
+    def test_20_raw_get(self):
+        files = {Test.id_raw: 0, "": 2, "x": 1}
 
         for file_id, code in files.iteritems():
             file_ori = file_id
@@ -143,7 +164,7 @@ class Test(unittest.TestCase):
             except subprocess.CalledProcessError as e:
                 assert (e.returncode == code)
 
-    def test_12_txt_converted_put(self):
+    def test_10_txt_to_doc(self):
         file = "./samples/sample.txt"
         cmd_debug = "python ./gdput.py --debug debug -p anyone reader me -f %s -t doc %s" % (
             Test.folder_id, file)
@@ -158,13 +179,34 @@ class Test(unittest.TestCase):
 
         assert m
         if m:
-            Test.converted_file_id = m.group(1)
-            Test.files_rm.append(Test.converted_file_id)
+            Test.id_txt = m.group(1)
+            Test.files_rm.append(Test.id_txt)
             assert True
         else:
             assert False
 
-    def test_13_csv_to_ft_put(self):
+    def test_10_csv_to_ss(self):
+        file = "./samples/sample.csv"
+        cmd_debug = "python ./gdput.py --debug debug -p anyone writer me -f %s -t ss %s" % (
+            Test.folder_id, file)
+        print "Run %s> %s" % ("-" * 30, cmd_debug)
+
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError as e:
+            assert e.returncode
+
+        m = re.search("id: (.*)", response, re.MULTILINE)
+
+        assert m
+        if m:
+            Test.id_csv_to_ss = m.group(1)
+            Test.files_rm.append(Test.id_csv_to_ss)
+            assert True
+        else:
+            assert False
+
+    def test_10_csv_to_ft(self):
         file = "./samples/sample.csv"
         cmd_debug = "python ./gdput.py --debug debug -p anyone writer me --ft_location_column address  --ft_latlng_column latlng -f %s -t ft %s" % (
             Test.folder_id, file)
@@ -179,12 +221,13 @@ class Test(unittest.TestCase):
 
         assert m
         if m:
-            Test.files_rm.append(m.group(1))
+            Test.id_csv_to_ft = m.group(1)
+            Test.files_rm.append(Test.id_csv_to_ft)
             assert True
         else:
             assert False
 
-    def test_14_wmf_to_draw_put(self):
+    def test_10_wmf_to_draw(self):
         file = "./samples/sample.wmf"
         cmd_debug = "python ./gdput.py --debug debug -p anyone writer me -f %s -t dr %s" % (
             Test.folder_id, file)
@@ -199,12 +242,13 @@ class Test(unittest.TestCase):
 
         assert m
         if m:
-            Test.files_rm.append(m.group(1))
+            Test.id_wmf_to_draw = m.group(1)
+            Test.files_rm.append(Test.id_wmf_to_draw)
             assert True
         else:
             assert False
 
-    def test_15_ppt_to_presentation(self):
+    def test_10_ppt_to_pt(self):
         file = "./samples/sample.ppt"
         cmd_debug = "python ./gdput.py --debug debug -p anyone writer me -f %s -t pt %s" % (
             Test.folder_id, file)
@@ -219,12 +263,13 @@ class Test(unittest.TestCase):
 
         assert m
         if m:
-            Test.files_rm.append(m.group(1))
+            Test.id_wmf_to_draw = m.group(1)
+            Test.files_rm.append(Test.id_wmf_to_draw)
             assert True
         else:
             assert False
 
-    def test_16_docx_to_document(self):
+    def test_10_docx_to_doc(self):
         file = "./samples/sample.docx"
         cmd_debug = "python ./gdput.py --debug debug -p anyone writer me -f %s -t doc %s" % (
             Test.folder_id, file)
@@ -239,15 +284,15 @@ class Test(unittest.TestCase):
 
         assert m
         if m:
-            Test.files_rm.append(m.group(1))
+            Test.id_docx_to_doc = m.group(1)
+            Test.files_rm.append(Test.id_docx_to_doc)
             assert True
         else:
             assert False
 
-    def test_20_gas_put(self):
+    def test_10_gas_put(self):
         file = "./samples/gas/gas.json"
-        cmd = "python ./gdput.py -t gas --gas_new %s" % file
-        cmd_debug = "python ./gdput.py --debug debug -t gas -f %s --gas_new %s" % (
+        cmd_debug = "python ./gdput.py --debug debug -p anyone writer me -t gas -f %s --gas_new %s" % (
             Test.folder_id, file)
         print "Run %s> %s" % ("-" * 30, cmd_debug)
 
@@ -259,21 +304,21 @@ class Test(unittest.TestCase):
         m = re.search("id: (.*)", response, re.MULTILINE)
         assert m
         if m:
-            Test.gas_file_id = m.group(1)
-            Test.files_rm.append(Test.gas_file_id)
+            Test.id_gas = m.group(1)
+            Test.files_rm.append(Test.id_gas)
             assert True
         else:
             assert False
 
-    def test_21_gas_get(self):
+    def test_20_gas_get(self):
 
-        assert Test.gas_file_id
+        assert Test.id_gas
 
-        if Test.gas_file_id:
+        if Test.id_gas:
             file_ori = "./samples/gas/Code.js"
             file_get = "./Code.js"
             cmd_debug = "python ./gdget.py --debug debug -f json %s" % (
-                Test.gas_file_id)
+                Test.id_gas)
             print "Run %s> %s" % ("-" * 30, cmd_debug)
 
             try:
@@ -287,13 +332,13 @@ class Test(unittest.TestCase):
         else:
             assert False
 
-    def test_22_cp(self):
+    def test_30_cp(self):
 
-        assert Test.gas_file_id
+        assert Test.id_gas
 
-        if Test.gas_file_id:
+        if Test.id_gas:
             cmd_debug = "python ./gdcp.py --debug debug -f %s %s" % (
-                Test.folder_id, Test.gas_file_id)
+                Test.folder_id, Test.id_gas)
             print "Run %s> %s" % ("-" * 30, cmd_debug)
 
             try:
@@ -312,26 +357,6 @@ class Test(unittest.TestCase):
         else:
             assert False
 
-    def test_30_mkdir(self):
-        dir_name = "a dir"
-        cmd_debug = "python ./gdmkdir.py --debug debug -f %s \"%s\"" % (
-            Test.folder_id, dir_name)
-        print "Run %s> %s" % ("-" * 30, cmd_debug)
-
-        try:
-            response = subprocess.check_output(cmd_debug, shell=True)
-        except subprocess.CalledProcessError as e:
-            assert e.returncode
-
-        m = re.search("id: (.*)", response, re.MULTILINE)
-
-        assert m
-
-        if m:
-            Test.files_rm.append(m.group(1))
-            assert True
-        else:
-            assert False
 
     def test_90_rm(self):
         for file in self.files_rm:
