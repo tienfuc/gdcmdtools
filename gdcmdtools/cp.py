@@ -21,7 +21,9 @@ from gdcmdtools.base import GDBase
 from gdcmdtools.perm import GDPerm
 from gdcmdtools.auth import GDAuth
 
+
 class GDCp:
+
     def __init__(self, args):
 
         for key, value in vars(args).items():
@@ -30,8 +32,8 @@ class GDCp:
         auth = GDAuth()
 
         creds = auth.get_credentials()
-        self.auth_user = creds.id_token.get("email",None)
-        if creds == None:
+        self.auth_user = creds.id_token.get("email", None)
+        if creds is None:
             raise Exception("Failed to retrieve credentials")
         self.http = auth.get_authorized_http()
 
@@ -43,22 +45,22 @@ class GDCp:
 
     def run(self):
 
-        if self.parent_folderId == None:
+        if self.parent_folderId is None:
             parents = []
         else:
             parents = [{
-                "kind":"drive#fileLink",
-                "id":self.parent_folderId}]
+                "kind": "drive#fileLink",
+                "id": self.parent_folderId}]
 
         body = {
-                'title':self.new_title,
-                'description':self.target_description,
-                'parents':parents}
- 
+            'title': self.new_title,
+            'description': self.target_description,
+            'parents': parents}
+
         try:
             response = self.service.files().copy(fileId=self.file_id, body=body).execute()
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
             raise
         else:
-           return response
+            return response
