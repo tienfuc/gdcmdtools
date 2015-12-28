@@ -458,11 +458,14 @@ class GDPut:
                 sys.stdout.flush()
 
                 if self.permission is not None:
-                    GDPerm.insert(
-                        self.service,
-                        service_response['id'],
-                        self.permission)
+                    pass_action = {
+                        "name":"insert",
+                        "param":self.permission}
 
+                    perm = GDPerm(service_response['id'], pass_action)
+                    result = perm.run()
+                    logger.debug(result)
+                    
                 return service_response
 
     def pt_put(self):
