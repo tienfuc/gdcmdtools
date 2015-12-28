@@ -224,6 +224,26 @@ class Test(unittest.TestCase):
         else:
             assert False
 
+    def test_16_docx_to_document(self):
+        file = "./samples/sample.docx"
+        cmd_debug = "python ./gdput.py --debug debug -p anyone writer me -f %s -t doc %s" % (
+            Test.folder_id, file)
+        print "Run %s> %s" % ("-" * 30, cmd_debug)
+
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError as e:
+            assert e.returncode
+
+        m = re.search("id: (.*)", response, re.MULTILINE)
+
+        assert m
+        if m:
+            Test.files_rm.append(m.group(1))
+            assert True
+        else:
+            assert False
+
     def test_20_gas_put(self):
         file = "./samples/gas/gas.json"
         cmd = "python ./gdput.py -t gas --gas_new %s" % file
