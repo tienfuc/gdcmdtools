@@ -12,18 +12,21 @@ from pprint import pprint
 from auth import GDAuth
 
 permission_resource_properties = {
-        "role":["owner", "reader", "writer"],
-        "type":["user", "group", "domain", "anyone"]}
+    "role": ["owner", "reader", "writer"],
+    "type": ["user", "group", "domain", "anyone"]}
 
-help_permission_text = [(j+": "+', '.join(permission_resource_properties[j])) for j in permission_resource_properties.keys()]
+help_permission_text = [(j + ": " + ', '.join(permission_resource_properties[j]))
+                        for j in permission_resource_properties.keys()]
+
 
 class GDPerm:
+
     def __init__(self, file_id, action):
         # base
         auth = GDAuth()
         creds = auth.get_credentials()
 
-        if creds == None:
+        if creds is None:
             raise Exception("Failed to retrieve credentials")
         self.http = auth.get_authorized_http()
 
@@ -36,9 +39,9 @@ class GDPerm:
         self.param = action['param']
 
     def run(self):
-        try: 
+        try:
             result = getattr(self, self.action)()
-        except Exception, e:
+        except Exception as e:
             logger.error(e)
             raise
 
@@ -46,29 +49,31 @@ class GDPerm:
 
     def insert(self):
         new_permission = {
-                'type': self.param[0],
-                'role': self.param[1], 
-                'value': self.param[2],
-                }
+            'type': self.param[0],
+            'role': self.param[1],
+            'value': self.param[2],
+        }
 
         try:
             return self.service.permissions().insert(
-                    fileId=self.file_id, body=new_permission).execute()
-        except errors.HttpError, error:
+                fileId=self.file_id, body=new_permission).execute()
+        except errors.HttpError as error:
             logger.error('An error occurred: %s' % error)
         return None
 
     def update(self):
         new_permission = {
-                'type': self.param[1],
-                'role': self.param[2], 
-                'value': self.param[3],
-                }
+            'type': self.param[1],
+            'role': self.param[2],
+            'value': self.param[3],
+        }
 
         try:
             return self.service.permissions().update(
-                    fileId=self.file_id, permissionId=self.param[0], body=new_permission).execute()
-        except errors.HttpError, error:
+                fileId=self.file_id,
+                permissionId=self.param[0],
+                body=new_permission).execute()
+        except errors.HttpError as error:
             logger.error('An error occurred: %s' % error)
         return None
 
@@ -77,23 +82,25 @@ class GDPerm:
             permissions = self.service.permissions().list(fileId=self.file_id).execute()
             logger.debug(permissions)
             return permissions.get('items', [])
-        except errors.HttpError, error:
+        except errors.HttpError as error:
             logger.error('An error occurred: %s' % error)
         return None
 
     def get(self):
         try:
-            permissions = self.service.permissions().get(fileId=self.file_id, permissionId=self.param).execute()
+            permissions = self.service.permissions().get(
+                fileId=self.file_id, permissionId=self.param).execute()
             return permissions
-        except errors.HttpError, error:
+        except errors.HttpError as error:
             logger.error('An error occurred: %s' % error)
         return None
 
     def delete(self):
         try:
-            permissions = self.service.permissions().delete(fileId=self.file_id, permissionId=self.param).execute()
+            permissions = self.service.permissions().delete(
+                fileId=self.file_id, permissionId=self.param).execute()
             return permissions
-        except errors.HttpError, error:
+        except errors.HttpError as error:
             logger.error('An error occurred: %s' % error)
         return None
 
@@ -102,10 +109,9 @@ class GDPerm:
         user_email = self.param.lower()
 
         for p in permissions:
-            if p.has_key("emailAddress"):
+            if "emailAddress" in p:
                 perm_email = p["emailAddress"].lower()
                 if user_email == perm_email:
                     return p
 
         return None
-    
