@@ -164,6 +164,27 @@ class Test(unittest.TestCase):
             except subprocess.CalledProcessError as e:
                 assert (e.returncode == code)
 
+    def test_10_empty_to_raw(self):
+        file = "./samples/empty"
+        cmd_debug = "python ./gdput.py --debug debug -p anyone reader me -f %s -t raw %s" % (
+            Test.folder_id, file)
+        print "Run %s> %s" % ("-" * 30, cmd_debug)
+
+        try:
+            response = subprocess.check_output(cmd_debug, shell=True)
+        except subprocess.CalledProcessError as e:
+            assert e.returncode
+
+        m = re.search("id: (.*)", response, re.MULTILINE)
+
+        assert m
+        if m:
+            Test.id_empty = m.group(1)
+            Test.files_rm.append(Test.id_empty)
+            assert True
+        else:
+            assert False
+
     def test_10_txt_to_doc(self):
         file = "./samples/sample.txt"
         cmd_debug = "python ./gdput.py --debug debug -p anyone reader me -f %s -t doc %s" % (
