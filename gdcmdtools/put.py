@@ -87,6 +87,9 @@ class GDPut:
         if self.target_type == "ft":
             self.ft_service = base.get_ft_service(self.http)
 
+        # get file size
+        self.local_size = os.path.getsize(self.source_file)
+
     def if_folder_writable(self):
         try:
             permissions = self.service.permissions().list(fileId=self.folder_id).execute()
@@ -413,14 +416,29 @@ class GDPut:
 
         return latlng
 
+
+    @staticmethod
+    def sizeof_fmt(num, suffix='B'):
+        for unit in ['','K','M','G','T','P','E','Z']:
+            if abs(num) < 1024.0:
+                return "%3.1f%s%s" % (num, unit, suffix)
+            num /= 1024.0
+        return "%.1f%s%s" % (num, 'Y', suffix)
+
+
     def generic_put(self, if_convert, file_name=None):
         if(file_name):
             self.source_file = file_name
 
+        if self.local_size < 512*1024:
+            if_resumable = False
+        else:
+            if_resumable = True
+        
         media_body = MediaFileUpload(
             self.source_file,
             mimetype=self.mime_type,
-            resumable=True)
+            resumable=if_resumable)
 
         if self.folder_id is None:
             parents = []
@@ -449,27 +467,33 @@ class GDPut:
         service_response = None
 
         print "Uploading file: %s" % self.source_file
-        while service_response is None:
-            status, service_response = request.next_chunk(num_retries=10)
-            if status:
-                sys.stdout.write(
-                    "\rCompleted: %.2f%%" %
-                    (status.progress() * 100))
-                sys.stdout.flush()
-            else:
-                sys.stdout.write("\rCompleted!%s\n" % (" " * 10))
-                sys.stdout.flush()
+        print "File size: %s" % self.sizeof_fmt(self.local_size)
 
-                if self.permission is not None:
-                    pass_action = {
-                        "name":"insert",
-                        "param":self.permission}
+        if( if_resumable ):
+            while service_response is None:
+                status, service_response = request.next_chunk(num_retries=10)
+                if status:
+                    sys.stdout.write(
+                        "\rCompleted: %.2f%%" %
+                        (status.progress() * 100))
+                    sys.stdout.flush()
+                else:
+                    sys.stdout.write("\rCompleted!%s\n" % (" " * 10))
+                    sys.stdout.flush()
 
-                    perm = GDPerm(service_response['id'], pass_action)
-                    result = perm.run()
-                    logger.debug(result)
-                    
-                return service_response
+        else:
+            service_response = request.execute()
+
+        if self.permission is not None:
+            pass_action = {
+                "name":"insert",
+                "param":self.permission}
+
+            perm = GDPerm(service_response['id'], pass_action)
+            result = perm.run()
+            logger.debug(result)
+       
+        return service_response
 
     def pt_put(self):
         return self.generic_put(True)
