@@ -21,7 +21,6 @@ from gdcmdtools.base import GDBase
 from gdcmdtools.perm import GDPerm
 from gdcmdtools.auth import GDAuth
 
-
 class GDLs:
 
     def __init__(self, args):
@@ -33,6 +32,7 @@ class GDLs:
 
         creds = auth.get_credentials()
         self.auth_user = creds.id_token.get("email", None)
+
         if creds is None:
             raise Exception("Failed to retrieve credentials")
         self.http = auth.get_authorized_http()

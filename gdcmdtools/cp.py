@@ -43,6 +43,24 @@ class GDCp:
 
         self.id = base.get_id_from_url(self.id)
 
+    @property
+    def is_folder(self):
+        # u'mimeType': u'application/vnd.google-apps.folder'
+        # u'mimeType': u'application/vnd.google-apps.document'
+        try:
+            response = self.service.files().get(fileId=self.id).execute()
+        except Exception as e:
+            logger.error(e)
+            raise
+        else:
+            raw = response['mimeType']
+            folder_mime = 'application/vnd.google-apps.folder'
+
+            return (raw == folder_mime)
+    
+    def copy_dir(self):
+        return None
+
     def run(self):
 
         if self.parent_folderId is None:
@@ -57,8 +75,13 @@ class GDCp:
             'description': self.target_description,
             'parents': parents}
 
+        logger.debug("is_folder: %s", self.is_folder)
+
         try:
-            response = self.service.files().copy(fileId=self.id, body=body).execute()
+            if self.is_folder:
+                response = self.copy_dir()
+            else:
+                response = self.service.files().copy(fileId=self.id, body=body).execute()
         except Exception as e:
             logger.error(e)
             raise
