@@ -29,14 +29,14 @@ def test():
         'param': [
             permission_id,
             'user',
-            'reader',
+            'writer',
             'test@gdcmdtools.com']}
     action2 = {
         'name': 'update',
         'param': [
             permission_id,
             'user',
-            'writer',
+            'reader',
             'test@gdcmdtools.com']}
 
     for action in [action1, action2]:
