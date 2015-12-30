@@ -174,7 +174,7 @@ DEBUG:gdabout:{u'additionalRoleInfo': [{u'roleSets': [{u'additionalRoles': [u'co
                      {u'size': u'5242880000000', u'type': u'application/pdf'},
                      {u'size': u'5242880000000', u'type': u'*'}],
  u'name': u'App Bug',
- u'permissionId': u'16646338547538179188',
+ u'permissionId': u'XXXXXXXXXXXXXX',
  u'quotaBytesByService': [{u'bytesUsed': u'0', u'serviceName': u'DRIVE'},
                           {u'bytesUsed': u'0', u'serviceName': u'GMAIL'},
                           {u'bytesUsed': u'0', u'serviceName': u'PHOTOS'}],
