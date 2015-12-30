@@ -10,7 +10,7 @@ import pprint
 import re
 
 import logging
-logger = logging.getLogger("gdcp")
+logger = logging.getLogger("gdls")
 
 import random
 import os
@@ -22,7 +22,7 @@ from gdcmdtools.perm import GDPerm
 from gdcmdtools.auth import GDAuth
 
 
-class GDCp:
+class GDLs:
 
     def __init__(self, args):
 
@@ -45,20 +45,8 @@ class GDCp:
 
     def run(self):
 
-        if self.parent_folderId is None:
-            parents = []
-        else:
-            parents = [{
-                "kind": "drive#fileLink",
-                "id": self.parent_folderId}]
-
-        body = {
-            'title': self.new_title,
-            'description': self.target_description,
-            'parents': parents}
-
         try:
-            response = self.service.files().copy(fileId=self.id, body=body).execute()
+            response = self.service.files().get(fileId=self.id).execute()
         except Exception as e:
             logger.error(e)
             raise

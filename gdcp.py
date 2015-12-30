@@ -38,8 +38,8 @@ if __name__ == '__main__':
         formatter_class=RawTextHelpFormatter)
 
     arg_parser.add_argument(
-        'file_id',
-        help='The file id or drive link for the file you\'re going to copy')
+        'id',
+        help='The file/folder id or drive link to copy')
 
     arg_parser.add_argument(
         '-t',
