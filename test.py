@@ -17,7 +17,7 @@ class Test(unittest.TestCase):
     def test_00_if_travis(self):
         if os.environ.get('TRAVIS', None) == "true":
             Test.if_travis = True
-            Test.folder_id = os.environ['travis_test_folder_id']
+            Test.rootfolder_id = os.environ['travis_test_folder_id']
         else:
             Test.if_travis = False
 
@@ -101,7 +101,7 @@ class Test(unittest.TestCase):
 
     def test_02_make_test_dir(self):
         dir_name = os.environ.get('TRAVIS_COMMIT', "TEST")
-        cmd_debug = "python ./gdmkdir.py --debug debug \"%s\"" % dir_name
+        cmd_debug = "python ./gdmkdir.py --debug debug -f %s \"%s\"" % (Test.rootfolder_id, dir_name)
         print "Run %s> %s" % ("-" * 30, cmd_debug)
 
         try:
