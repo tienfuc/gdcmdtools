@@ -91,10 +91,10 @@ if __name__ == '__main__':
     logger.debug(pprint.pformat(response))
 
     if not args.no_print_id:
-        id = getattr(response,"id",None)
-        alternateLink = getattr(response,"alternateLink",None)
-        webContentLink = getattr(response,"webContentLink",None)
-        exportLinks = getattr(response,'exportLinks',None)
+        id = response.get("id",None)
+        alternateLink = response.get("alternateLink",None)
+        webContentLink = response.get("webContentLink",None)
+        exportLinks = response.get('exportLinks',None)
     
         if id:
             print "id: %s" % id
@@ -107,7 +107,7 @@ if __name__ == '__main__':
             print "download url: %s" % webContentLink
 
         if exportLinks:
-            for format, url in exports.iteritems():
+            for format, url in exportLinks.iteritems():
                 print "%s: %s" % (format, url)
 
     sys.exit(0)
