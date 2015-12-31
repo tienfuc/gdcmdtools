@@ -91,13 +91,22 @@ if __name__ == '__main__':
     logger.debug(pprint.pformat(response))
 
     if not args.no_print_id:
-        print "id: %s" % response['id']
-        drive_view_prefix = "https://drive.google.com/drive/folders"
-        print "drive view: %s" % response[u'alternateLink']
-        if response.get(u'webContentLink'):
-            print "download url: %s" % response.get('webContentLink')
-        exports = response.get('exportLinks')
-        if exports:
+        id = getattr(response,"id",None)
+        alternateLink = getattr(response,"alternateLink",None)
+        webContentLink = getattr(response,"webContentLink",None)
+        exportLinks = getattr(response,'exportLinks',None)
+    
+        if id:
+            print "id: %s" % id
+
+        if alternateLink:
+            drive_view_prefix = "https://drive.google.com/drive/folders"
+            print "drive view: %s" % alternateLink
+
+        if webContentLink:
+            print "download url: %s" % webContentLink
+
+        if exportLinks:
             for format, url in exports.iteritems():
                 print "%s: %s" % (format, url)
 
