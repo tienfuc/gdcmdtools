@@ -91,23 +91,26 @@ if __name__ == '__main__':
     logger.debug(pprint.pformat(response))
 
     if not args.no_print_id:
-        id = response.get("id",None)
-        alternateLink = response.get("alternateLink",None)
-        webContentLink = response.get("webContentLink",None)
-        exportLinks = response.get('exportLinks',None)
-    
-        if id:
-            print "id: %s" % id
+        if is_folder:
+            print "Total files copied: %d" % response["total"]
+        else:
+            id = response.get("id",None)
+            alternateLink = response.get("alternateLink",None)
+            webContentLink = response.get("webContentLink",None)
+            exportLinks = response.get('exportLinks',None)
+        
+            if id:
+                print "id: %s" % id
 
-        if alternateLink:
-            drive_view_prefix = "https://drive.google.com/drive/folders"
-            print "drive view: %s" % alternateLink
+            if alternateLink:
+                drive_view_prefix = "https://drive.google.com/drive/folders"
+                print "drive view: %s" % alternateLink
 
-        if webContentLink:
-            print "download url: %s" % webContentLink
+            if webContentLink:
+                print "download url: %s" % webContentLink
 
-        if exportLinks:
-            for format, url in exportLinks.iteritems():
-                print "%s: %s" % (format, url)
+            if exportLinks:
+                for format, url in exportLinks.iteritems():
+                    print "%s: %s" % (format, url)
 
     sys.exit(0)
