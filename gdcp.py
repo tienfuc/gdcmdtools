@@ -84,7 +84,7 @@ if __name__ == '__main__':
     cp = GDCp(args)
 
     try:
-        response = cp.run()
+        is_folder, response = cp.run()
     except:
         raise
 
