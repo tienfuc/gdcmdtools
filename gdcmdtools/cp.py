@@ -96,7 +96,9 @@ class GDCp:
         page_token = None
         while True:
             try:
-                param = {}
+                param = {
+                        'q':"trashed = false" }
+
                 if page_token:
                     param['pageToken'] = page_token
 
@@ -127,8 +129,9 @@ class GDCp:
                     else:
                         body["title"] = response[u'title']
                         mime_type = response['mimeType']
+                        is_trashed = response['explicitlyTrashed']
 
-                    logger.debug("title: %s, id: %s , file type: %s" % (body["title"], file_id, mime_type))
+                    logger.debug("title: %s, id: %s , file type: %s, is_trashed: %s" % (body["title"], file_id, mime_type, is_trashed))
 
                     if mime_type == 'application/vnd.google-apps.fusiontable':
                         # copy with fustion table api

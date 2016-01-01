@@ -75,12 +75,14 @@ class GDBase(object):
         # export link,
         # https://docs.google.com/feeds/download/documents/export/Export?id=XXXXXX&exportFormat=html
         export_re = "^.*/[Ee]xport\?id=([\w\-]*)"
-
+        # file from api dump
+        # https://www.googleapis.com/drive/v2/files/XXXXX
+        api_re = "^.*/v\d*/files/([\w\-]*)"
         # general id as parameter
         id_parameter_re = "^.*\?id=([\w\-]*)"
 
-        final_re = r"%s|%s|%s" % \
-            (normal_re, folder_url_re, id_parameter_re)
+        final_re = r"%s|%s|%s|%s" % \
+            (normal_re, folder_url_re, id_parameter_re, api_re)
         #(normal_re, folder_share_re, folder_url_re, openbyid_re, webcontent_re, export_re)
         search = re.search(final_re, url)
 
