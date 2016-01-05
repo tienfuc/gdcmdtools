@@ -50,14 +50,6 @@ class GDFind:
 
 
     def find(self, folder_id, title_folder, id_parent):
-        item = {"title":None,
-                "id":None,
-                "mime":None,
-                "parent_id":None}
-
-        file_pool = []
-        folder_pool = []
-
         # make new folder
         mime_folder = "application/vnd.google-apps.folder"
         body_folder = {

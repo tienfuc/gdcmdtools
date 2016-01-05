@@ -48,6 +48,9 @@ class GDCp:
         self.id = base.get_id_from_url(self.id)
 
         # get title and check if folder, is_folder and title are available now
+        self.is_folder = None
+        self.title = None
+
         self.get_file_meta()
 
         self.copy_dir_stat = {
@@ -67,33 +70,27 @@ class GDCp:
 
             self.is_folder = (raw == folder_mime)
             self.title = response['title']
+            if not self.parent_folderId:
+                self.parent_folderId = response["parents"][0]["id"]
 
-    def copy_dir(self, txt_folder_name, id_folder, id_parent_folder):
-        # make new dir
-        if id_parent_folder is None:
-            parents = []
-        else:
-            parents = [{
+    def copy_dir(self, folder_id, title_folder, id_parent):
+        # make new folder
+        mime_folder = "application/vnd.google-apps.folder"
+        body_folder = {
+            'title': title_folder,
+            'mimeType': mime_folder,
+            'parents': [{
                 "kind": "drive#fileLink",
-                "id": id_parent_folder}]
-
-        folder_mime_type = "application/vnd.google-apps.folder"
-
-        class args:
-            parent_folderId = id_parent_folder 
-            folder_name = txt_folder_name
-            mime_type = folder_mime_type
-            target_description = self.target_description
-            permission = self.permission
+                "id": id_parent}]
+            }
 
 
-        mkdir = GDMkdir(args)
-        
-        response = mkdir.run()
-        
-        self.id_new_folder = response["id"]
+        response_new_parent = self.service.files().insert(body=body_folder).execute()
+        id_new_parent = response_new_parent["id"]
+        #print("new folder: %s %s %s" % (title_folder, id_new_parent, id_parent))
 
         page_token = None
+        #print("title: %10s, mime: %12s, id:%s")%(title_folder[:10], ".folder", folder_id)
         while True:
             try:
                 param = {
@@ -103,22 +100,10 @@ class GDCp:
                     param['pageToken'] = page_token
 
                 children = self.service.children().list(
-                        folderId=id_folder, **param).execute()
-
-                pprint.pprint(children)
-
-                parents=[{
-                    "kind": "drive#fileLink",
-                    "id": self.id_new_folder}]
-
-                body={
-                    'title': None, 
-                    'description': self.target_description,
-                    'parents': parents}
-
+                        folderId=folder_id, **param).execute()
 
                 for child in children.get('items', []):
-                    # print 'File Id: %s' % child['id']
+
                     file_id = child[u'id']
 
                     try:
@@ -127,21 +112,38 @@ class GDCp:
                         logger.error(e)
                         raise
                     else:
-                        body["title"] = response[u'title']
-                        mime_type = response['mimeType']
+                        title = response[u'title']
+                        mime = response['mimeType']
+                        mime_short = os.path.splitext(mime)[1]
                         is_trashed = response['explicitlyTrashed']
 
-                    logger.debug("title: %s, id: %s , file type: %s, is_trashed: %s" % (body["title"], file_id, mime_type, is_trashed))
+                        body_new_parent = {
+                                'title': title,
+                                'description': None,
+                                'parents': [{
+                                    "kind": "drive#fileLink",
+                                    "id": id_new_parent
+                                    }]
+                            }
 
-                    if mime_type == 'application/vnd.google-apps.fusiontable':
+
+                    #logger.debug("title: %s, id: %s , file type: %s" % (title, file_id, mime))
+                    parent_id = folder_id
+                    if mime_short == ".folder":
+                        print("title: %8s, mime: %-15s, id:%57s, p: %10s")%(title[:8], mime_short[:15], file_id, parent_id[-10:])
+                    else:
+                        print("title: %8s, mime: %15s, id:%57s, p: %10s")%(title[:8], mime_short[:15], file_id, parent_id[-10:])
+
+                    if mime_short == '.fusiontable':
                         # copy with fustion table api
                         pass
-                    elif mime_type == 'application/vnd.google-apps.folder':
+                    elif mime_short == '.folder':
                         # recursive
-                        self.copy_dir(body["title"], file_id, self.id_new_folder)
+                        self.copy_dir(file_id, title, id_new_parent )
                     else:
                         # copy it
-                        self.service.files().copy(fileId=file_id, body=body).execute()
+                        self.service.files().copy(fileId=file_id, body=body_new_parent).execute()
+                        pass
                     
                     self.copy_dir_stat["total"] += 1
 
@@ -149,12 +151,10 @@ class GDCp:
                 if not page_token:
                     break
 
-            except errors.HttpError, error:
-                print 'An error occurred: %s' % error
-                break
+            except:
+                raise
 
         return self.copy_dir_stat
-
 
     def run(self):
 
@@ -177,7 +177,7 @@ class GDCp:
 
         try:
             if self.is_folder:
-                response=self.copy_dir(self.title, self.id, self.parent_folderId)
+                response=self.copy_dir(self.id, self.title, self.parent_folderId)
             else:
                 response=self.service.files().copy(fileId=self.id, body=body).execute()
         except Exception as e:
