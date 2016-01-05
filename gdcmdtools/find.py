@@ -42,9 +42,39 @@ class GDFind:
         self.root = base.get_root()
         
         self.folder_id = base.get_id_from_url(self.folder_id)
+        
+        # get title
+        response = self.service.files().get(fileId=self.folder_id).execute()
+        self.title_folder = response["title"]
+        self.id_parent = response["parents"][0]["id"] 
 
-    def find(self, folder_id):
+
+    def find(self, folder_id, title_folder, id_parent):
+        item = {"title":None,
+                "id":None,
+                "mime":None,
+                "parent_id":None}
+
+        file_pool = []
+        folder_pool = []
+
+        # make new folder
+        mime_folder = "application/vnd.google-apps.folder"
+        body_folder = {
+            'title': title_folder,
+            'mimeType': mime_folder,
+            'parents': [{
+                "kind": "drive#fileLink",
+                "id": id_parent}]
+            }
+
+
+        response_new_parent = self.service.files().insert(body=body_folder).execute()
+        id_new_parent = response_new_parent["id"]
+        print("new folder: %s %s %s" % (title_folder, id_new_parent, id_parent))
+
         page_token = None
+        #print("title: %10s, mime: %12s, id:%s")%(title_folder[:10], ".folder", folder_id)
         while True:
             try:
                 param = {
@@ -56,20 +86,8 @@ class GDFind:
                 children = self.service.children().list(
                         folderId=folder_id, **param).execute()
 
-                #pprint.pprint(children)
-
-                #parents=[{
-                ##    "kind": "drive#fileLink",
-                #    "id": self.id_new_folder}]
-
-                #body={
-                #    'title': None, 
-                #    'description': self.target_description,
-                #    'parents': parents}
-
-
                 for child in children.get('items', []):
-                    # print 'File Id: %s' % child['id']
+
                     file_id = child[u'id']
 
                     try:
@@ -79,20 +97,36 @@ class GDFind:
                         raise
                     else:
                         title = response[u'title']
-                        mime_type = response['mimeType']
+                        mime = response['mimeType']
+                        mime_short = os.path.splitext(mime)[1]
                         is_trashed = response['explicitlyTrashed']
 
-                    logger.debug("title: %s, id: %s , file type: %s" % (title, file_id, mime_type))
+                        body_new_parent = {
+                                'title': title,
+                                'description': None,
+                                'parents': [{
+                                    "kind": "drive#fileLink",
+                                    "id": id_new_parent
+                                    }]
+                            }
 
-                    if mime_type == 'application/vnd.google-apps.fusiontable':
+
+                    #logger.debug("title: %s, id: %s , file type: %s" % (title, file_id, mime))
+                    parent_id = folder_id
+                    if mime_short == ".folder":
+                        print("title: %8s, mime: %-15s, id:%57s, p: %10s")%(title[:8], mime_short[:15], file_id, parent_id[-10:])
+                    else:
+                        print("title: %8s, mime: %15s, id:%57s, p: %10s")%(title[:8], mime_short[:15], file_id, parent_id[-10:])
+
+                    if mime_short == '.fusiontable':
                         # copy with fustion table api
                         pass
-                    elif mime_type == 'application/vnd.google-apps.folder':
+                    elif mime_short == '.folder':
                         # recursive
-                        self.find(file_id)
+                        self.find(file_id, title, id_new_parent )
                     else:
                         # copy it
-                        #self.service.files().copy(fileId=file_id, body=body).execute()
+                        self.service.files().copy(fileId=file_id, body=body_new_parent).execute()
                         pass
                     
                     #self.copy_dir_stat["total"] += 1
@@ -109,8 +143,7 @@ class GDFind:
     def run(self):
 
         try:
-            #response = self.service.about().get().execute()
-            response = self.find(self.folder_id)
+            response = self.find(self.folder_id, self.title_folder, self.id_parent)
 
         except Exception as e:
             logger.error(e)
