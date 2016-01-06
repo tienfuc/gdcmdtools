@@ -13,6 +13,10 @@ from gdcmdtools.base import BASE_INFO
 from gdcmdtools.base import DEBUG_LEVEL
 from gdcmdtools.perm import help_permission_text
 
+from collections import OrderedDict as OD
+import json
+
+
 import csv
 import pprint
 
@@ -44,6 +48,10 @@ if __name__ == '__main__':
                             choices=DEBUG_LEVEL,
                             default=DEBUG_LEVEL[-1],
                             help='define the debug level')
+    arg_parser.add_argument(
+        '-c', '--copy_mode', 
+        action='store_true',
+        help='set if you like to copy the folder')
 
     args = arg_parser.parse_args()
 
@@ -59,6 +67,12 @@ if __name__ == '__main__':
     except:
         raise
 
-    logger.debug(pprint.pformat(response))
+    try:
+        from asciitree import LeftAligned
+    except:
+        print(json.dumps(response, indent=4))
+    else:
+        tree = LeftAligned()
+        print tree(response)
 
     sys.exit(0)
