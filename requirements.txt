@@ -1,4 +1,4 @@
 requests>=1.2.3
 google_api_python_client>=1.1
 requests_oauthlib>=0.4.2
-asciitree>=0.2
+asciitree>=0.3.1

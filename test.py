@@ -383,7 +383,7 @@ class Test(unittest.TestCase):
         assert Test.folder_id
 
         if Test.folder_id:
-            cmd_debug = "python ./gdfind.py --debug debug %s -c" % Test.folder_id
+            cmd_debug = "python ./gdfind.py --debug debug %s --copy_mode --parent_id %s" % (Test.folder_id, Test.folder_id)
             print "Run %s> %s" % ("-" * 30, cmd_debug)
 
             try:
