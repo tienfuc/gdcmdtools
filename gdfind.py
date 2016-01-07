@@ -42,6 +42,11 @@ if __name__ == '__main__':
     arg_parser.add_argument('folder_id',
                             help='Specify the folder id to walk through')
 
+    arg_parser.add_argument(
+        '-t',
+        '--new_title',
+        help='the title for the new file')
+
     arg_parser.add_argument('--debug',
                             choices=DEBUG_LEVEL,
                             default=DEBUG_LEVEL[-1],
@@ -50,6 +55,9 @@ if __name__ == '__main__':
         '-c', '--copy_mode', 
         action='store_true',
         help='set if you like to copy the folder')
+
+    arg_parser.add_argument('-f', '--parent_id',
+                            help='copy the file to folder specified by Id')
 
     args = arg_parser.parse_args()
 

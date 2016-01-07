@@ -47,13 +47,17 @@ class GDFind:
         
         # get title
         response = self.service.files().get(fileId=self.folder_id).execute()
-        self.title_folder = response["title"]
-
-        parent = response.get("parents",None)
-        if len(parent) > 0:
-            self.id_parent = parent.get("id",None)
+        pprint.pprint(response)
+        if self.new_title:
+            self.title_folder = self.new_title
         else:
-            self.id_parent = None
+            self.title_folder = response["title"]
+
+        if self.parent_id == None:
+            parents = response.get("parents",None)
+            for p in parents: 
+                if p.get("isRoot", False):
+                    self.parent_id = p["id"]
 
         # statistics
         self.stats = []
@@ -63,7 +67,7 @@ class GDFind:
         self.tree["root"] = {}
 
 
-    def find(self, folder_id, title_folder, id_parent, copy_mode, current_node):
+    def find(self, folder_id, title_folder, parent_id, copy_mode, current_node):
         # make new folder
         mime_folder = "application/vnd.google-apps.folder"
         body_folder = {
@@ -71,13 +75,13 @@ class GDFind:
             'mimeType': mime_folder
             }
 
-        if id_parent:
+        if parent_id:
             body_folder['parents'] = [{
-                "id": id_parent,
+                "id": parent_id,
                 "kind": "drive#fileLink"}]
 
         response_new_parent = self.service.files().insert(body=body_folder).execute()
-        id_new_parent = response_new_parent["id"]
+        new_parent_id = response_new_parent["id"]
 
         page_token = None
         while True:
@@ -92,11 +96,17 @@ class GDFind:
                 children = self.service.children().list(
                         folderId=folder_id, **param).execute()
 
+                if title_folder in current_node:
+                    title_folder += "^"
+
                 current_node[title_folder] = {}
 
                 for child in children.get('items', []):
 
                     file_id = child[u'id']
+
+                    if file_id == new_parent_id:
+                        continue
 
                     try:
                         response = self.service.files().get(fileId=file_id).execute()
@@ -114,19 +124,16 @@ class GDFind:
                                 'description': None,
                                 'parents': [{
                                     "kind": "drive#fileLink",
-                                    "id": id_new_parent
+                                    "id": new_parent_id
                                     }]
                             }
 
-
-                    parent_id = folder_id
-
-                    logger.debug("title: %20s, mime: %15s, id:%s\n%sparent_id:%s"%(title[:20], mime_short[:15], file_id, " "*45, parent_id))
+                    logger.debug("title: %14s, mime: %11s, id:%s\n%sparent_id:%s"%(title[:14], mime_short[:11], file_id, " "*48, folder_id))
 
                     if mime_short == '.folder':
                         # recursive
                         current_node[title_folder][title] = {}
-                        self.find(file_id, title, id_new_parent, copy_mode, current_node[title_folder])
+                        self.find(file_id, title, new_parent_id, copy_mode, current_node[title_folder])
                     else:
                         if copy_mode:
                             if mime_short == '.fusiontable':
@@ -136,11 +143,13 @@ class GDFind:
                                     self.service.files().copy(fileId=file_id, body=body_new_parent).execute()
                                 except:
                                     status = False
-                                    title = title+" (Failed)"
                                 else:
                                     status = True
 
-                        current_node[title_folder][title] = {status:{}}
+                        if status:
+                            current_node[title_folder][title] = {}
+                        else:
+                            current_node[title_folder][title] = {status:{}}
 
                 page_token=children.get('nextPageToken')
 
@@ -155,7 +164,7 @@ class GDFind:
     def run(self):
 
         try:
-            response = self.find(self.folder_id, self.title_folder, self.id_parent, self.copy_mode, self.tree["root"])
+            response = self.find(self.folder_id, self.title_folder, self.parent_id, self.copy_mode, self.tree["root"])
 
         except Exception as e:
             logger.error(e)

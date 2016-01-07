@@ -70,8 +70,8 @@ class GDCp:
 
             self.is_folder = (raw == folder_mime)
             self.title = response['title']
-            if not self.parent_folderId:
-                self.parent_folderId = response["parents"][0]["id"]
+            if not self.parent_id:
+                self.parent_id = response["parents"][0]["id"]
 
     def copy_dir(self, folder_id, title_folder, id_parent):
         # make new folder
@@ -161,12 +161,12 @@ class GDCp:
         if self.new_title:
             self.title = self.new_title
 
-        if self.parent_folderId is None:
+        if self.parent_id is None:
             parents=[]
         else:
             parents=[{
                 "kind": "drive#fileLink",
-                "id": self.parent_folderId}]
+                "id": self.parent_id}]
 
         body={
             'title': self.title,
@@ -177,7 +177,7 @@ class GDCp:
 
         try:
             if self.is_folder:
-                response=self.copy_dir(self.id, self.title, self.parent_folderId)
+                response=self.copy_dir(self.id, self.title, self.parent_id)
             else:
                 response=self.service.files().copy(fileId=self.id, body=body).execute()
         except Exception as e:

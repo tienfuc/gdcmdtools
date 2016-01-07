@@ -56,7 +56,7 @@ if __name__ == '__main__':
         action='store_true',
         help='set if you like not to print the folder id after folder being created')
 
-    arg_parser.add_argument('-f', '--parent_folderId',
+    arg_parser.add_argument('-f', '--parent_id',
                             help='copy the file to folder specified by Id')
 
     arg_parser.add_argument('--debug',
