@@ -379,6 +379,22 @@ class Test(unittest.TestCase):
             assert False
 
 
+    def test_80_find(self):
+        assert Test.folder_id
+
+        if Test.folder_id:
+            cmd_debug = "python ./gdfind.py --debug debug %s -c" % Test.folder_id
+            print "Run %s> %s" % ("-" * 30, cmd_debug)
+
+            try:
+                response = subprocess.check_output(cmd_debug, shell=True)
+            except subprocess.CalledProcessError as e:
+                assert e.returncode
+
+        else:
+            assert False
+
+
     def test_90_rm(self):
         return True
 
