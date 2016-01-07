@@ -118,16 +118,15 @@ class GDFind:
                                     }]
                             }
 
-                        # save to tree
-                        current_node[title_folder][title] = {}
 
                     parent_id = folder_id
 
                     logger.debug("title: %20s, mime: %15s, id:%s\n%sparent_id:%s"%(title[:20], mime_short[:15], file_id, " "*45, parent_id))
 
                     if mime_short == '.folder':
-                       # recursive
-                        self.find(file_id, title, id_new_parent, copy_mode, current_node[title_folder][title])
+                        # recursive
+                        current_node[title_folder][title] = {}
+                        self.find(file_id, title, id_new_parent, copy_mode, current_node[title_folder])
                     else:
                         if copy_mode:
                             if mime_short == '.fusiontable':
@@ -137,16 +136,11 @@ class GDFind:
                                     self.service.files().copy(fileId=file_id, body=body_new_parent).execute()
                                 except:
                                     status = False
+                                    title = title+" (Failed)"
                                 else:
                                     status = True
 
-                                stat = {
-                                        "id":file_id,
-                                        "title":title,
-                                        "id_parent":parent_id,
-                                        "cp_status":status}
-
-                                self.stats.append(stat)
+                        current_node[title_folder][title] = {status:{}}
 
                 page_token=children.get('nextPageToken')
 

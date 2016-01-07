@@ -13,9 +13,7 @@ from gdcmdtools.base import BASE_INFO
 from gdcmdtools.base import DEBUG_LEVEL
 from gdcmdtools.perm import help_permission_text
 
-from collections import OrderedDict as OD
 import json
-
 
 import csv
 import pprint
