@@ -394,6 +394,21 @@ class Test(unittest.TestCase):
         else:
             assert False
 
+    def test_81_cp_dir(self):
+        assert Test.folder_id
+
+        if Test.folder_id:
+            cmd_debug = "python ./gdcp.py --debug debug %s --parent_id %s" % (Test.folder_id, Test.folder_id)
+            print "Run %s> %s" % ("-" * 30, cmd_debug)
+
+            try:
+                response = subprocess.check_output(cmd_debug, shell=True)
+            except subprocess.CalledProcessError as e:
+                assert e.returncode
+
+        else:
+            assert False
+
 
     def test_90_rm(self):
         return True
