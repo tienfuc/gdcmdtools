@@ -47,7 +47,7 @@ class GDFind:
         
         # get title
         response = self.service.files().get(fileId=self.folder_id).execute()
-        pprint.pprint(response)
+        logger.debug(response)
         if self.new_title:
             self.title_folder = self.new_title
         else:
@@ -135,6 +135,7 @@ class GDFind:
                         current_node[title_folder][title] = {}
                         self.find(file_id, title, new_parent_id, copy_mode, current_node[title_folder])
                     else:
+                        status = True
                         if copy_mode:
                             if mime_short == '.fusiontable':
                                 pass
@@ -143,8 +144,6 @@ class GDFind:
                                     self.service.files().copy(fileId=file_id, body=body_new_parent).execute()
                                 except:
                                     status = False
-                                else:
-                                    status = True
 
                         if status:
                             current_node[title_folder][title] = {}
