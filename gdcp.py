@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     if not args.no_print_id:
         if is_folder:
-            print "Total files copied: %d" % response["total"]
+            pprint.pprint(response)
         else:
             id = response.get("id",None)
             alternateLink = response.get("alternateLink",None)

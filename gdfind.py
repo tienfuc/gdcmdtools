@@ -57,7 +57,7 @@ if __name__ == '__main__':
         help='set if you like to copy the folder')
 
     arg_parser.add_argument('-f', '--parent_id',
-                            help='copy the file to folder specified by Id')
+                            help='copy the file to folder specified by Id for --copy_mode')
 
     args = arg_parser.parse_args()
 
